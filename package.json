@@ -1,0 +1,22 @@
+{
+  "name": "misvideos",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Videos generados con Remotion",
+  "scripts": {
+    "dev": "remotion studio",
+    "render": "remotion render src/index.ts AuraVideo out/video.mp4 --codec=h264",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.543",
+    "@remotion/google-fonts": "4.0.543",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "remotion": "4.0.543"
+  },
+  "devDependencies": {
+    "@types/react": "19.1.8",
+    "typescript": "5.8.3"
+  }
+}
