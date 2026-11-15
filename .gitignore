@@ -1,3 +1,7 @@
 node_modules
 out
 .DS_Store
+# narración generada por scripts/generar-voz.py (se crea en GitHub Actions)
+public/audio/voz-*.mp3
+public/audio/voz.json
+__pycache__

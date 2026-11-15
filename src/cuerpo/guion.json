@@ -1,0 +1,37 @@
+{
+  "voz": "es-MX-JorgeNeural",
+  "velocidad": "+0%",
+  "escenas": [
+    {
+      "id": "s1",
+      "titulo": "Gancho",
+      "texto": "Tu cuerpo es una máquina increíble… pero tiene límites. ¿Qué le pasa si lo llevas al extremo? Vamos a averiguarlo en cuatro situaciones."
+    },
+    {
+      "id": "s2",
+      "titulo": "El espacio sin traje",
+      "texto": "Primero: el espacio, sin traje. Olvida las películas: no explotas. Como no hay presión, el agua de tu boca y de tus ojos empieza a hervir, aunque esté a la temperatura de tu cuerpo. Tu piel se hincha, pero te mantiene entero. Lo peor es la falta de oxígeno: tendrías unos 15 segundos antes de desmayarte. Y nunca contengas la respiración, porque tus pulmones podrían desgarrarse. En 1966, un técnico de la NASA pasó por algo parecido dentro de una cámara de vacío. Lo último que recordó fue sentir su saliva burbujeando en la lengua. Sobrevivió."
+    },
+    {
+      "id": "s3",
+      "titulo": "La cima del Everest",
+      "texto": "Segundo: la cima del Everest, a casi 9 mil metros. Ahí el aire tiene apenas un tercio del oxígeno que respiras al nivel del mar. Si llegaras de golpe, sin aclimatarte, podrías perder el conocimiento en pocos minutos. Por eso, a partir de los 8 mil metros, los alpinistas le llaman «la zona de la muerte»: el cuerpo ya no se adapta, solo resiste."
+    },
+    {
+      "id": "s4",
+      "titulo": "Agua helada",
+      "texto": "Tercero: caes a un lago congelado. Los expertos usan la regla 1-10-1. Durante el primer minuto, tu cuerpo jadea sin control por el choque de frío; lo importante es no tragar agua y calmar la respiración. Después tienes unos 10 minutos antes de que tus brazos y piernas dejen de responder. Y hasta una hora antes de perder el conocimiento por hipotermia. Dato curioso: la mayoría de las muertes en agua helada ocurren en los primeros minutos, por el choque y el ahogamiento, no por la hipotermia.",
+      "textoVoz": "Tercero: caes a un lago congelado. Los expertos usan la regla uno, diez, uno. Durante el primer minuto, tu cuerpo jadea sin control por el choque de frío; lo importante es no tragar agua y calmar la respiración. Después tienes unos 10 minutos antes de que tus brazos y piernas dejen de responder. Y hasta una hora antes de perder el conocimiento por hipotermia. Dato curioso: la mayoría de las muertes en agua helada ocurren en los primeros minutos, por el choque y el ahogamiento, no por la hipotermia."
+    },
+    {
+      "id": "s5",
+      "titulo": "Sin dormir",
+      "texto": "Y cuarto: no dormir. Después de 24 horas despierto, tus reflejos y tu juicio se parecen a los de alguien con más alcohol en la sangre del permitido para manejar en muchos países. Tu cerebro empieza a apagarse unos segundos sin avisarte: son los microsueños. El caso más famoso es el de Randy Gardner, un estudiante que en 1964 aguantó 11 días despierto. Al final le costaba hablar y hasta veía cosas que no estaban."
+    },
+    {
+      "id": "s6",
+      "titulo": "Cierre",
+      "texto": "Tu cuerpo aguanta más de lo que crees… pero menos de lo que te imaginas. ¿Cuál de estos crees que soportarías más tiempo? Déjalo en los comentarios y suscríbete para más."
+    }
+  ]
+}

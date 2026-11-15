@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "remotion studio",
     "render": "remotion render src/index.ts AuraVideo out/video.mp4 --codec=h264",
+    "voz": "python3 scripts/generar-voz.py",
+    "musica": "python3 scripts/generar-musica.py",
+    "render:cuerpo": "remotion render src/index.ts CuerpoExtremo out/cuerpo-extremo.mp4 --codec=h264",
     "lint": "tsc --noEmit"
   },
   "dependencies": {

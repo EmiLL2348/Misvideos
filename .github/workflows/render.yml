@@ -6,8 +6,21 @@ on:
 
 jobs:
   render:
+    name: Render ${{ matrix.id }}
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: AuraVideo
+            output: video.mp4
+            artifact: video
+            voz: false
+          - id: CuerpoExtremo
+            output: cuerpo-extremo.mp4
+            artifact: cuerpo-extremo
+            voz: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -18,6 +31,14 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install edge-tts
+        run: pip install edge-tts mutagen
+
       - name: Install system dependencies for Chrome
         run: |
           sudo apt-get update
@@ -26,12 +47,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Generate narration (edge-tts, es-MX-JorgeNeural)
+        if: ${{ matrix.voz }}
+        run: |
+          python scripts/generar-voz.py
+          test -f public/audio/voz.json
+
       - name: Render video
-        run: npx remotion render src/index.ts AuraVideo out/video.mp4 --codec=h264
+        run: npx remotion render src/index.ts ${{ matrix.id }} out/${{ matrix.output }} --codec=h264
 
       - name: Upload MP4 artifact
         uses: actions/upload-artifact@v4
         with:
-          name: video
-          path: out/video.mp4
+          name: ${{ matrix.artifact }}
+          path: out/${{ matrix.output }}
           if-no-files-found: error
