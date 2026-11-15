@@ -47,7 +47,7 @@ export const Escena1: React.FC = () => {
         >
           <Maletin ancho={560} />
           {/* mano con puño de traje que empuja */}
-          <div style={{ position: "absolute", left: 540, top: 150, width: 420, height: 70, background: "#23232B", borderRadius: 30 }} />
+          <div style={{ position: "absolute", left: 540, top: 150, width: 1600, height: 70, background: "#23232B", borderRadius: "30px 0 0 30px" }} />
           <div style={{ position: "absolute", left: 528, top: 148, width: 70, height: 74, background: "#F2EEE6", borderRadius: 10 }} />
           <div style={{ position: "absolute", left: 506, top: 156, width: 64, height: 58, background: P.piel, borderRadius: 26 }} />
         </div>

@@ -389,7 +389,6 @@ export const Butkus: React.FC<{
       <path d="M216 44 Q206 40 202 58 Q206 74 218 66 Z" fill={hocico} />
       <circle cx={250} cy={58} r={4.5} fill="#1A110D" />
       <path d="M242 50 Q250 46 258 50" stroke={sombra} strokeWidth={3} fill="none" />
-      <path d="M262 104 Q258 116 246 114" stroke={hocico} strokeWidth={6} fill="none" strokeLinecap="round" />
     </g>
   );
   return (

@@ -241,7 +241,7 @@ export const Escena6: React.FC = () => {
           return (
             <>
               <div style={{ position: "absolute", left: 960 - 120 * esc, top: y, transform: `scale(${esc})`, transformOrigin: "50% 0%" }}>
-                <Sly vista="espalda" altura={460} brazoIzq={arriba ? POSE.arriba.izq : { hombro: 20 + Math.sin(f / 3) * 30, codo: -40 }} brazoDer={arriba ? POSE.arriba.der : { hombro: 20 - Math.sin(f / 3) * 30, codo: -40 }} luz={P.dorado} style={{ transform: `translateY(${arriba ? 0 : Math.abs(Math.sin(f / 3)) * -10}px)` }} />
+                <Sly vista="espalda" altura={460} brazoIzq={arriba ? POSE.arriba.izq : { hombro: 9 + Math.sin(f / 3) * 6, codo: -22 }} brazoDer={arriba ? POSE.arriba.der : { hombro: 9 - Math.sin(f / 3) * 6, codo: -22 }} luz={P.dorado} style={{ transform: `translateY(${arriba ? 0 : Math.abs(Math.sin(f / 3)) * -10}px)` }} />
               </div>
               <div style={{ position: "absolute", left: 960 + 70 * esc, top: pies - 181 * esc, transform: `scale(${esc})`, transformOrigin: "0 0" }}>
                 <Butkus ancho={300} andar={arriba ? undefined : f / 3} sentado={arriba} />

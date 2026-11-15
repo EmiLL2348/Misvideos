@@ -84,17 +84,17 @@ export const Stallone: React.FC<StalloneProps> = ({ manifiesto, subtitulos, volu
         <Fundidos tl={tl} />
 
         {/* Música: piano (1–4) → cuerdas que crecen (5–6) → metales épicos (6–7) → piano (8) */}
-        <Sequence from={0} durationInFrames={s5.inicioF + 90} name="música · piano" layout="none">
-          <Audio src={staticFile(`${CARPETA}/piano.mp3`)} loop volume={(f) => V * 0.85 * interp(f, [0, 30, s5.inicioF, s5.inicioF + 80], [0, 1, 1, 0], ci)} />
+        <Sequence from={0} durationInFrames={s5.inicioF + 130} name="música · piano" layout="none">
+          <Audio src={staticFile(`${CARPETA}/piano.mp3`)} loop volume={(f) => V * 0.85 * interp(f, [0, 30, s5.inicioF - 60, s5.inicioF + 120], [0, 1, 1, 0], ci)} />
         </Sequence>
-        <Sequence from={s5.inicioF} durationInFrames={fanfarria - s5.inicioF + 20} name="música · cuerdas" layout="none">
+        <Sequence from={s5.inicioF - 60} durationInFrames={fanfarria - s5.inicioF + 80} name="música · cuerdas" layout="none">
           <Audio
             src={staticFile(`${CARPETA}/cuerdas.mp3`)}
             loop
             volume={(fl) => {
-              const f = fl + s5.inicioF;
-              // tensión en el despacho, silencio tras el portazo y luego crecen hasta la fanfarria
-              const tension = interp(f, [s5.inicioF, s5.inicioF + 60, puerta - 6, puerta], [0, 0.7, 0.7, 0], ci);
+              const f = fl + s5.inicioF - 60;
+              // entran suaves bajo el piano, tensión en el despacho, silencio tras el portazo y luego crecen hasta la fanfarria
+              const tension = interp(f, [s5.inicioF - 60, s5.inicioF + 120, puerta - 20, puerta], [0, 0.5, 0.5, 0], ci);
               const crece = interp(f, [puerta + 15, fanfarria - 30, fanfarria, fanfarria + 15], [0, 1.1, 0.9, 0], ci);
               return V * Math.max(tension, crece);
             }}

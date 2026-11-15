@@ -111,15 +111,27 @@ export const Escena4: React.FC = () => {
         <AbsoluteFill style={{ background: "#1A1622" }} />
         <div style={{ position: "absolute", left: 0, right: 0, top: 820, bottom: 0, background: "linear-gradient(#26202C, #141018)" }} />
         <div style={{ position: "absolute", left: 1320, top: 140, width: 420, height: 380, border: "16px solid #3A2C22", background: `linear-gradient(${cielo > 0.5 ? "#0E1424" : "#3A4A6A"}, ${cielo > 0.5 ? "#1C2A44" : "#C8873A"})` }} />
-        <div style={{ position: "absolute", left: 640, top: 250 }}>
-          <Sly altura={600} expresion="decidido" sinPiernas brazoIzq={POSE.escribir.izq} brazoDer={{ hombro: 22, codo: -100 + Math.sin(f * 1.4) * 8 }} />
-        </div>
         <div style={{ position: "absolute", left: 420, top: 690, width: 1100, height: 34, background: "#6B4630", borderRadius: 6 }} />
         <div style={{ position: "absolute", left: 460, top: 724, width: 1020, height: 400, background: "#4E3222" }} />
         <div style={{ position: "absolute", left: 760, top: 640, width: 330, height: 60, background: "#F2EAD6", transform: "skewX(-20deg)", boxShadow: "0 4px 10px rgba(0,0,0,0.4)" }}>
           {[12, 24, 36, 48].map((y) => (
             <div key={y} style={{ position: "absolute", left: 20, right: 30, top: y, height: 2, background: "#7A8AA8" }} />
           ))}
+        </div>
+        <div style={{ position: "absolute", left: 640, top: 325 }}>
+          <Sly
+            altura={600}
+            expresion="decidido"
+            sinPiernas
+            brazoIzq={{ hombro: 18, codo: -88 }}
+            brazoDer={{ hombro: 30, codo: -70 + Math.sin(f * 1.4) * 6 }}
+            objetoDer={
+              <g>
+                <line x1={-4} y1={-10} x2={-26} y2={22} stroke="#1A1A22" strokeWidth={6} strokeLinecap="round" />
+                <line x1={-22} y1={16} x2={-28} y2={25} stroke={P.dorado} strokeWidth={4} strokeLinecap="round" />
+              </g>
+            }
+          />
         </div>
         {/* vela que se consume */}
         <div style={{ position: "absolute", left: 1240, top: 690 - 150 * (1 - t * 0.85), width: 40, height: 150 * (1 - t * 0.85), background: "#EFE6D2", borderRadius: 6 }} />
