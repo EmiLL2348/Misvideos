@@ -72,7 +72,7 @@ export const Escena4: React.FC = () => {
                 <Boxeador altura={360} golpe={0} caer={caidaCampeon} borde={P.dorado} />
               </div>
               <div style={{ position: "absolute", left: 560, top: 70, opacity: prog(f, c.combate, 12) }}>
-                <Boxeador altura={360} espejo golpe={golpe} borde={P.ladrillo} caer={f > c.perdio + 10 ? 0.15 : 0} />
+                <Boxeador altura={360} espejo golpe={golpe} borde={P.ladrillo} />
               </div>
               <div style={{ position: "absolute", left: 210, top: 26, fontFamily: F_TITULO, fontWeight: 900, fontSize: 30, color: "#2A241C", letterSpacing: 3, opacity: prog(f, c.combate + 4, 12) }}>EL CAMPEÓN</div>
               <div style={{ position: "absolute", left: 640, top: 26, fontFamily: F_TITULO, fontWeight: 900, fontSize: 30, color: "#5A1E14", letterSpacing: 3, opacity: prog(f, c.combate + 10, 12) }}>EL OLVIDADO</div>

@@ -3,7 +3,7 @@ import { AbsoluteFill, useCurrentFrame } from "remotion";
 import { useEscena } from "../comun/timeline";
 import { F_CIFRA, F_TITULO, P, clampI, prog, rebote, interp } from "./estilo";
 import { Edificios, Libreta, Pelicula, Plano, Trofeo } from "./escenario";
-import { Butkus, Sly } from "./Personajes";
+import { Butkus, Sly, topButkus, topPersona } from "./Personajes";
 
 const Guante: React.FC = () => (
   <svg viewBox="0 0 120 120" width={110} height={110}>
@@ -75,7 +75,7 @@ export const Escena8: React.FC = () => {
         <div style={{ position: "absolute", left: 640, top: 360, transform: `translateX(${f >= finalIni ? -prog(f, finalIni, 20) * 0 : 0}px)` }}>
           <Sly vista="espalda" altura={520} luz={P.dorado} />
         </div>
-        <div style={{ position: "absolute", left: 860, top: 640, transform: "scaleX(-1)" }}>
+        <div style={{ position: "absolute", left: 860, top: topButkus(topPersona(0, 0) + 360 + (396 / 420) * 520, 300), transform: "scaleX(-1)" }}>
           <Butkus ancho={300} sentado />
         </div>
         {f >= finalIni ? (

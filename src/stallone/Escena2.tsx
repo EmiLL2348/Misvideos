@@ -24,12 +24,26 @@ const Calle: React.FC = () => (
 const Recuerdo: React.FC<{ p: number }> = ({ p }) => (
   <div style={{ position: "absolute", left: 1200, top: 230, width: 520, height: 520, borderRadius: "50%", overflow: "hidden", opacity: p, transform: `scale(${0.8 + 0.2 * p})`, boxShadow: "0 0 0 10px rgba(242,227,198,0.6), 0 30px 80px rgba(0,0,0,0.6)", background: "radial-gradient(circle, #E9D2A6, #B98A55)" }}>
     <svg viewBox="0 0 520 520" width={520} height={520}>
-      <path d="M90 330 Q260 420 430 330 L410 400 Q260 470 110 400 Z" fill="#7A5236" />
-      <ellipse cx={260} cy={310} rx={150} ry={64} fill="#F2E3C6" />
-      <ellipse cx={210} cy={270} rx={52} ry={48} fill={P.piel} />
-      <path d="M188 264 Q196 258 204 264 M220 264 Q228 258 236 264" stroke={P.tinta} strokeWidth={4} fill="none" strokeLinecap="round" />
-      <ellipse cx={300} cy={300} rx={110} ry={50} fill="#E8D5B0" />
-      <path d="M150 250 Q170 200 230 214" stroke="#E8D5B0" strokeWidth={30} fill="none" strokeLinecap="round" />
+      {/* cuna */}
+      <path d="M80 330 Q260 300 440 330 L420 420 Q260 460 100 420 Z" fill="#7A5236" />
+      <path d="M80 330 Q260 300 440 330" stroke="#5A3825" strokeWidth={10} fill="none" />
+      {/* manta */}
+      <path d="M150 300 Q260 250 400 290 Q420 330 390 360 Q260 380 160 360 Q130 330 150 300 Z" fill="#DCE8F2" />
+      <path d="M170 315 Q260 290 380 310" stroke="#B9CDE0" strokeWidth={6} fill="none" />
+      <path d="M175 340 Q260 318 375 335" stroke="#B9CDE0" strokeWidth={6} fill="none" />
+      {/* gorrito */}
+      <circle cx={210} cy={250} r={74} fill="#F2E3C6" />
+      {/* carita */}
+      <circle cx={214} cy={258} r={58} fill="#F1C7A4" />
+      <path d="M186 254 Q194 260 202 254" stroke={P.tinta} strokeWidth={4} fill="none" strokeLinecap="round" />
+      <path d="M224 254 Q232 260 240 254" stroke={P.tinta} strokeWidth={4} fill="none" strokeLinecap="round" />
+      <circle cx={213} cy={268} r={4} fill="#D9997A" />
+      <path d="M205 282 Q213 288 221 282" stroke="#B4645A" strokeWidth={3.5} fill="none" strokeLinecap="round" />
+      <circle cx={186} cy={274} r={9} fill="#F2A0A0" opacity={0.55} />
+      <circle cx={242} cy={274} r={9} fill="#F2A0A0" opacity={0.55} />
+      {/* manita */}
+      <circle cx={276} cy={300} r={15} fill="#F1C7A4" />
+      <path d="M150 200 Q210 160 270 200" stroke="#E2CFA8" strokeWidth={8} fill="none" />
     </svg>
     <div style={{ position: "absolute", left: 0, right: 0, top: 40, textAlign: "center", fontFamily: F_TITULO, fontWeight: 900, fontSize: 56, color: P.marron }}>1946</div>
   </div>

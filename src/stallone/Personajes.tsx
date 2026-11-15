@@ -20,6 +20,19 @@ export const POSE = {
 
 export const mezclar = (a: Brazo, b: Brazo, p: number): Brazo => ({ hombro: lerp(a.hombro, b.hombro, p), codo: lerp(a.codo, b.codo, p) });
 
+/** Mano del brazo cercano de Sly de perfil, en coordenadas del SVG (200×420). */
+export const manoPerfil = (b: Brazo): [number, number] => {
+  const r1 = (b.hombro * Math.PI) / 180;
+  const r2 = ((b.hombro + b.codo) * Math.PI) / 180;
+  return [104 + Math.sin(r1) * 64 + Math.sin(r2) * 58, 136 + Math.cos(r1) * 64 + Math.cos(r2) * 58];
+};
+/** Escala de un personaje de 420 de alto dibujado a `altura` px. */
+export const escalaPersonaje = (altura: number) => altura / 420;
+/** Butkus: la base de las patas está en y=193 del SVG (320×200). */
+export const topButkus = (suelo: number, ancho: number) => suelo - 193 * (ancho / 320);
+/** Sly / siluetas: la planta del pie está en y≈396 del SVG (200×420). */
+export const topPersona = (suelo: number, altura: number) => suelo - 396 * (altura / 420);
+
 const dir = (lado: number, ang: number) => {
   const r = (ang * Math.PI) / 180;
   return [lado * Math.sin(r), Math.cos(r)];
@@ -57,6 +70,7 @@ type PropsSly = {
   brazoIzq?: Brazo;
   brazoDer?: Brazo;
   correr?: number; // fase (perfil)
+  brazoPerfil?: Brazo; // brazo cercano en la vista de perfil (p. ej. sujetar una correa)
   giroCabeza?: number; // px (espalda: gesto de "no")
   edad?: number; // 0..1 canas
   sinPiernas?: boolean;
@@ -74,6 +88,7 @@ export const Sly: React.FC<PropsSly> = ({
   brazoIzq = POSE.reposo.izq,
   brazoDer = POSE.reposo.der,
   correr,
+  brazoPerfil,
   giroCabeza = 0,
   edad = 0,
   sinPiernas = false,
@@ -107,12 +122,14 @@ export const Sly: React.FC<PropsSly> = ({
         </g>
       );
     };
-    const brazoAtras = correr === undefined ? 10 : -s * 50;
+    // al andar, cada brazo va al contrario que la pierna de su lado y el codo se dobla hacia delante
+    const lejano: Brazo = correr === undefined ? { hombro: 4, codo: 6 } : { hombro: s * 38, codo: 50 };
+    const cercano: Brazo = brazoPerfil ?? (correr === undefined ? { hombro: 4, codo: 6 } : { hombro: -s * 38, codo: 50 });
     return (
       <svg viewBox="0 0 200 420" width={ancho} height={altura} style={{ overflow: "visible", ...style }}>
         {conSombra ? <ellipse cx={110} cy={400} rx={64} ry={11} fill="rgba(0,0,0,0.35)" /> : null}
         {!sinPiernas ? pierna(-s, "#2E3F63") : null}
-        <Brazo2 sx={104} sy={136} lado={1} b={{ hombro: brazoAtras, codo: -50 }} manga="#4E2E18" mano={P.pielSombra} />
+        <Brazo2 sx={104} sy={136} lado={1} b={lejano} manga="#4E2E18" mano={P.pielSombra} />
         {!sinPiernas ? pierna(s, P.vaquero) : null}
         <path d="M74 132 Q100 112 130 128 L136 252 L72 252 Z" fill={P.cuero} />
         <path d="M120 126 L134 140 L134 250 L124 250 Z" fill={P.cueroLuz} opacity={0.6} />
@@ -126,7 +143,7 @@ export const Sly: React.FC<PropsSly> = ({
           <path d={expresion === "euforico" ? "M118 84 Q128 92 136 82" : "M122 86 L134 84"} stroke={P.tinta} strokeWidth={3.5} fill="none" strokeLinecap="round" />
           <path d={expresion === "decidido" ? "M114 46 L130 48" : expresion === "triste" ? "M114 46 L128 42" : "M114 44 L130 44"} stroke={pelo} strokeWidth={4} strokeLinecap="round" />
         </g>
-        <Brazo2 sx={104} sy={136} lado={1} b={{ hombro: correr === undefined ? 14 : s * 50, codo: correr === undefined ? 0 : -70 }} manga={P.cueroLuz} mano={P.piel} />
+        <Brazo2 sx={104} sy={136} lado={1} b={cercano} manga={P.cueroLuz} mano={P.piel} />
         {luz ? <path d="M74 132 Q70 190 72 252" stroke={luz} strokeWidth={4} fill="none" opacity={0.7} /> : null}
       </svg>
     );
@@ -220,15 +237,14 @@ export const Sly: React.FC<PropsSly> = ({
       <Brazo2 sx={60} sy={136} lado={-1} b={brazoIzq} manga={P.cuero} mano={P.piel} />
       <Brazo2 sx={140} sy={136} lado={1} b={brazoDer} manga={P.cuero} mano={P.piel} objeto={objetoDer} />
       <rect x={88} y={92} width={24} height={26} rx={8} fill={P.pielSombra} />
-      <g transform={`translate(${giroCabeza} 0)`}>
+      <g transform={`rotate(${giroCabeza} 100 98)`}>
         <ellipse cx={100} cy={60} rx={34} ry={40} fill={P.piel} />
         <ellipse cx={66} cy={64} rx={6} ry={10} fill={P.pielSombra} />
         <ellipse cx={134} cy={64} rx={6} ry={10} fill={P.pielSombra} />
         {espalda ? (
           <>
             <path d="M65 64 Q60 18 100 16 Q140 18 135 64 Q132 92 100 96 Q68 92 65 64 Z" fill={pelo} />
-            <path d="M78 34 Q100 22 122 34" stroke="rgba(255,235,210,0.28)" strokeWidth={5} fill="none" strokeLinecap="round" />
-            <path d="M72 58 Q78 80 100 88 Q122 80 128 58" stroke="rgba(0,0,0,0.25)" strokeWidth={3} fill="none" />
+            <path d="M82 32 Q100 24 118 32" stroke="rgba(255,235,210,0.18)" strokeWidth={4} fill="none" strokeLinecap="round" />
           </>
         ) : (
           <>

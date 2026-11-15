@@ -14,7 +14,9 @@ export const Escena1: React.FC = () => {
   const valor = interp(f, [c.rech + 4, c.guion + 6], [0, 350000], clampI);
   const empuje = prog(f, c.rech - 4, 22);
   const no = c.locura - 6;
-  const giro = f > no && f < no + 34 ? Math.sin(((f - no) / 34) * Math.PI * 4) * 16 : 0;
+  // gesto de "no": la cabeza gira sobre el cuello, suave, tres veces
+  const tNo = (f - no) / 40;
+  const giro = tNo > 0 && tNo < 1 ? Math.sin(tNo * Math.PI * 3) * Math.sin(tNo * Math.PI) * 7 : 0;
   const aleja = prog(f, no + 22, 30);
 
   return (

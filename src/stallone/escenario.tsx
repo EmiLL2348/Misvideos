@@ -382,11 +382,13 @@ export const Libreta: React.FC<{ abrir: number; escribir?: number; cifra?: strin
               <div
                 style={{
                   position: "absolute",
-                  top: h * 0.27,
-                  left: 30,
+                  top: h * 0.3,
+                  left: 22,
+                  right: 10,
                   fontFamily: F_MANO,
                   fontWeight: 700,
-                  fontSize: ancho * 0.1,
+                  fontSize: ancho * 0.082,
+                  whiteSpace: "nowrap",
                   color: "#1F2F5A",
                   clipPath: `inset(0 ${100 - escribir * 100}% 0 0)`,
                   transform: "rotate(-4deg)",

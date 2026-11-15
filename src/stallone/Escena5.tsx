@@ -73,7 +73,7 @@ export const Escena5: React.FC = () => {
           </div>
           <div style={{ position: "absolute", left: 200, top: 600, width: 1520, height: 60, background: "linear-gradient(#5A3420, #3A2010)", borderRadius: 10 }} />
           <div style={{ position: "absolute", left: 240, top: 660, width: 1440, height: 440, background: "#2A170C" }} />
-          <div style={{ position: "absolute", left: 860, top: 580, width: 200, height: 36, background: "#F2EAD6", transform: "skewX(-24deg)", boxShadow: "0 4px 8px rgba(0,0,0,0.4)" }} />
+          <div style={{ position: "absolute", left: 1180, top: 580, width: 200, height: 36, background: "#F2EAD6", transform: "skewX(-24deg)", boxShadow: "0 4px 8px rgba(0,0,0,0.4)" }} />
           <Ficha nombre="BURT REYNOLDS" desde={c.burt - 4} x={300} rot={-8} />
           <Ficha nombre="RYAN O'NEAL" desde={c.ryan - 4} x={1130} rot={6} />
           <Ficha nombre="JAMES CAAN" desde={c.james - 4} x={1400} rot={-4} />
@@ -127,6 +127,8 @@ export const Escena5: React.FC = () => {
         </div>
         <div style={{ position: "absolute", left: 200, top: 600, width: 1520, height: 60, background: "linear-gradient(#5A3420, #3A2010)", borderRadius: 10 }} />
         <div style={{ position: "absolute", left: 240, top: 660, width: 1440, height: 440, background: "#2A170C" }} />
+        {/* el guion se cierra (sobre la mesa, a un lado de Sly) */}
+        <div style={{ position: "absolute", left: 1180, top: 566, width: 200, height: 40, background: "#F2EAD6", transformOrigin: "0 100%", transform: `skewX(-24deg) scaleY(${1 - prog(f, c.dijo, 10) * 0.6})` }} />
         {/* puerta a la izquierda */}
         <div style={{ position: "absolute", left: 0, top: 120, width: 200, height: 960, background: "#FFE7B0" }} />
         <div style={{ position: "absolute", left: 0, top: 120, width: 200 * (0.15 + 0.85 * cierre), height: 960, background: "linear-gradient(90deg, #4A2C1A, #6B4630)", boxShadow: "inset 0 0 0 12px #3A2010" }} />
@@ -141,8 +143,6 @@ export const Escena5: React.FC = () => {
             )}
           </div>
         ) : null}
-        {/* el guion se cierra */}
-        <div style={{ position: "absolute", left: 860, top: 560, width: 200, height: 40, background: "#F2EAD6", transformOrigin: "0 100%", transform: `skewX(-24deg) scaleY(${1 - prog(f, c.dijo, 10) * 0.6})`, opacity: 1 - sale }} />
         <Sfx archivo="audio/stallone/portazo.mp3" en={portazo - 1} vol={0.9} dur={30} />
       </Plano>
       <Pelicula vineta={0.8} />

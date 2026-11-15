@@ -3,7 +3,7 @@ import { AbsoluteFill, useCurrentFrame } from "remotion";
 import { useEscena } from "../comun/timeline";
 import { F_CIFRA, F_TITULO, P, clampI, miles, prog, rebote, interp } from "./estilo";
 import { Capa, Cielo, Destello, Edificios, Pelicula, Plano, Sfx, Tics } from "./escenario";
-import { Butkus, POSE, Sasha, Sly } from "./Personajes";
+import { Butkus, POSE, Sasha, Sly, topButkus, topPersona } from "./Personajes";
 
 /** La fanfarria empieza 8 frames después de la voz; su acorde final cae 11,1 s después. */
 export const FANFARRIA_RETRASO = 8;
@@ -187,10 +187,10 @@ export const Escena6: React.FC = () => {
       {/* C · reencuentro con Butkus */}
       <Plano desde={c.recuperar} hasta={c.pelicula}>
         <Filadelfia f={f} cam={{ x: 300, y: 0, zoom: 1.08 }} />
-        <div style={{ position: "absolute", left: 620, top: 470, transform: `rotate(${-tumba * 28}deg)`, transformOrigin: "40% 100%" }}>
+        <div style={{ position: "absolute", left: 620, top: topPersona(960, 520), transform: `rotate(${-tumba * 28}deg)`, transformOrigin: "40% 94%" }}>
           <Sly altura={520} expresion="euforico" brazoIzq={POSE.abrazo.izq} brazoDer={POSE.abrazo.der} />
         </div>
-        <div style={{ position: "absolute", left: xPerro - 150, top: 660 - salta * 120, transform: "scaleX(-1)" }}>
+        <div style={{ position: "absolute", left: xPerro - 150, top: topButkus(960, 460) - salta * 120, transform: "scaleX(-1)" }}>
           <Butkus ancho={460} andar={f < llega ? f / 6 : undefined} saltar={salta} />
         </div>
         {f >= c.costo - 4 ? (
@@ -213,11 +213,19 @@ export const Escena6: React.FC = () => {
             <div key={i} style={{ position: "absolute", left: 40 + i * 136, top: 120, width: 50, height: 220, background: "#A8988A" }} />
           ))}
         </div>
-        {/* escalinata */}
+        {/* plaza a los lados de la escalinata */}
+        <div style={{ position: "absolute", left: 0, right: 0, top: 460, bottom: 0, background: "linear-gradient(#A89480, #6E5E4E)" }} />
+        {/* escalinata con proporción natural y muros laterales */}
         {new Array(16).fill(0).map((_, i) => {
           const y = 460 + i * 40;
-          const w = 1000 + i * 70;
-          return <div key={i} style={{ position: "absolute", left: 960 - w / 2, top: y, width: w, height: 40, background: i % 2 ? "#B4A493" : "#C4B4A2", borderTop: "3px solid #D8C8B4" }} />;
+          const w = 1080 + i * 30;
+          return (
+            <div key={i}>
+              <div style={{ position: "absolute", left: 960 - w / 2, top: y, width: w, height: 40, background: i % 2 ? "#B4A493" : "#C4B4A2", borderTop: "3px solid #D8C8B4" }} />
+              <div style={{ position: "absolute", left: 960 - w / 2 - 60, top: y, width: 60, height: 40, background: "#8E7C68" }} />
+              <div style={{ position: "absolute", left: 960 + w / 2, top: y, width: 60, height: 40, background: "#8E7C68" }} />
+            </div>
+          );
         })}
         <AbsoluteFill style={{ background: `rgba(232,182,74,${0.35 * dorado})`, mixBlendMode: "screen" }} />
         {f >= golpeFinal - 2 ? (
@@ -235,7 +243,7 @@ export const Escena6: React.FC = () => {
               <div style={{ position: "absolute", left: 960 - 120 * esc, top: y, transform: `scale(${esc})`, transformOrigin: "50% 0%" }}>
                 <Sly vista="espalda" altura={460} brazoIzq={arriba ? POSE.arriba.izq : { hombro: 20 + Math.sin(f / 3) * 30, codo: -40 }} brazoDer={arriba ? POSE.arriba.der : { hombro: 20 - Math.sin(f / 3) * 30, codo: -40 }} luz={P.dorado} style={{ transform: `translateY(${arriba ? 0 : Math.abs(Math.sin(f / 3)) * -10}px)` }} />
               </div>
-              <div style={{ position: "absolute", left: 960 + 70 * esc, top: pies - 186 * esc, transform: `scale(${esc})`, transformOrigin: "0 0" }}>
+              <div style={{ position: "absolute", left: 960 + 70 * esc, top: pies - 181 * esc, transform: `scale(${esc})`, transformOrigin: "0 0" }}>
                 <Butkus ancho={300} andar={arriba ? undefined : f / 3} sentado={arriba} />
               </div>
             </>

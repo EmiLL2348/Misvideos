@@ -3,7 +3,7 @@ import { AbsoluteFill, Audio, staticFile, useCurrentFrame } from "remotion";
 import { useEscena } from "../comun/timeline";
 import { F_CIFRA, F_TITULO, P, clampI, prog, rebote, interp } from "./estilo";
 import { Billete, Edificios, Lluvia, Neon, Pelicula, Plano } from "./escenario";
-import { Butkus, POSE, Sasha, Silueta, Sly } from "./Personajes";
+import { Butkus, POSE, Sasha, Silueta, Sly, escalaPersonaje, manoPerfil, mezclar, topButkus, topPersona } from "./Personajes";
 
 const Piso: React.FC<{ f: number }> = ({ f }) => {
   const fallo = (f % 53 > 47 && f % 2 === 0) || f % 131 === 7;
@@ -59,11 +59,25 @@ export const Escena3: React.FC = () => {
   const { cue, dur, finVoz } = useEscena("s3");
   const c = { alquiler: cue("alquiler"), ya: cue("ya"), sasha: cue("sasha"), butkus: cue("butkus"), invierno: cue("invierno"), vendio: cue("vendió"), d40: cue("40") };
 
-  // Plano B: venta en la licorería
+  // Plano B: venta en la licorería. Todos pisan la misma línea de suelo.
+  const SUELO = 915;
+  const altoP = 560;
+  const kP = escalaPersonaje(altoP);
+  const anchoPerro = 380;
+  const kPerro = anchoPerro / 320;
   const entrega = prog(f, c.vendio - 6, 14);
   const marcha = Math.max(0, f - c.vendio - 16);
-  const xDesconocido = 1300 + marcha * 3.2;
-  const xPerro = f < c.vendio + 16 ? 800 : 800 + marcha * 3.2;
+  const xSly = 470;
+  const xDesconocido = 1120 + marcha * 3.2;
+  const xPerro = 740 + marcha * 3.2;
+  // Sly sujeta la correa con el brazo hacia el perro y luego la tiende al comprador
+  const brazoSly = mezclar({ hombro: 38, codo: 22 }, { hombro: 72, codo: 6 }, entrega);
+  const [hx, hy] = manoPerfil(brazoSly);
+  const manoSly: [number, number] = [xSly + hx * kP, topPersona(SUELO, altoP) + hy * kP];
+  const manoDesc: [number, number] = [xDesconocido + 44 * kP, topPersona(SUELO, altoP) + 250 * kP];
+  const collar: [number, number] = [xPerro + 202 * kPerro, topButkus(SUELO, anchoPerro) + 104 * kPerro];
+  const pasada = interp(f, [c.vendio + 2, c.vendio + 12], [0, 1]);
+  const manoCorrea: [number, number] = [manoSly[0] + (manoDesc[0] - manoSly[0]) * pasada, manoSly[1] + (manoDesc[1] - manoSly[1]) * pasada];
   // Plano C
   const cCara = c.d40 + 46;
   const negro = interp(f, [finVoz + 8, finVoz + 14], [0, 1], clampI);
@@ -159,23 +173,24 @@ export const Escena3: React.FC = () => {
           <div style={{ position: "absolute", left: 0, right: 0, top: 880, bottom: 0, background: "linear-gradient(#1A1418, #0A080A)" }} />
           <AbsoluteFill style={{ background: "radial-gradient(ellipse at 66% 30%, rgba(255,79,139,0.25), transparent 55%)" }} />
           <div style={{ position: "absolute", left: 980, top: 900, width: 600, height: 140, background: "radial-gradient(ellipse, rgba(255,79,139,0.3), transparent 70%)", filter: "blur(10px)" }} />
-          {/* correa */}
+          {/* correa: de la mano que la sujeta al collar de Butkus */}
           <svg width={1920} height={1080} style={{ position: "absolute", inset: 0 }}>
             <path
-              d={`M${f < c.vendio + 6 ? 520 : xDesconocido + 10} ${f < c.vendio + 6 ? 600 + entrega * 40 : 640} Q${(xPerro + 300 + (f < c.vendio + 6 ? 520 : xDesconocido)) / 2} 760 ${xPerro + 290} 730`}
+              d={`M${manoCorrea[0]} ${manoCorrea[1]} Q${(manoCorrea[0] + collar[0]) / 2} ${Math.max(manoCorrea[1], collar[1]) + 40} ${collar[0]} ${collar[1]}`}
               stroke="#8A2A1A"
               strokeWidth={6}
               fill="none"
+              strokeLinecap="round"
             />
           </svg>
-          <div style={{ position: "absolute", left: 260, top: 400 }}>
-            <Sly vista="perfil" altura={560} expresion="triste" />
+          <div style={{ position: "absolute", left: xSly, top: topPersona(SUELO, altoP) }}>
+            <Sly vista="perfil" altura={altoP} expresion="triste" brazoPerfil={f < c.vendio + 14 ? brazoSly : undefined} />
           </div>
-          <div style={{ position: "absolute", left: xPerro, top: 700 }}>
-            <Butkus ancho={380} andar={f > c.vendio + 16 ? f / 5 : undefined} cabeza={f > c.vendio + 16 ? 14 : 0} />
+          <div style={{ position: "absolute", left: xPerro, top: topButkus(SUELO, anchoPerro) }}>
+            <Butkus ancho={anchoPerro} andar={f > c.vendio + 16 ? f / 5 : undefined} cabeza={f > c.vendio + 16 ? 14 : 0} />
           </div>
-          <div style={{ position: "absolute", left: xDesconocido, top: 400 }}>
-            <Silueta altura={560} sombrero color="#0A0809" borde={P.neon} brazoDer={-20 - (1 - entrega) * 0} />
+          <div style={{ position: "absolute", left: xDesconocido, top: topPersona(SUELO, altoP) }}>
+            <Silueta altura={altoP} sombrero color="#0A0809" borde={P.neon} />
           </div>
           <Lluvia densidad={190} opacidad={0.5} />
         </AbsoluteFill>
@@ -185,10 +200,11 @@ export const Escena3: React.FC = () => {
       <Plano desde={c.d40} hasta={cCara}>
         <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 60%, #3A2A30, #0A080A 70%)", alignItems: "center", justifyContent: "center" }}>
           <div style={{ position: "relative", width: 900, height: 600, transform: `scale(${1 + (f - c.d40) * 0.003})` }}>
-            <div style={{ position: "absolute", left: 150, top: 220, width: 620, height: 340, borderRadius: "160px 160px 120px 120px", background: P.piel }} />
-            <Billete valor="$20" ancho={420} rot={-8} style={{ position: "absolute", left: 220, top: 180 }} />
-            <Billete valor="$20" ancho={420} rot={6} style={{ position: "absolute", left: 270, top: 240 }} />
-            <div style={{ position: "absolute", left: 300, top: 20, fontFamily: F_CIFRA, fontWeight: 800, fontSize: 140, color: P.crema, opacity: prog(f, c.d40 + 4, 12), textShadow: "0 8px 30px rgba(0,0,0,0.8)" }}>$40</div>
+            <div style={{ position: "absolute", left: 120, top: 300, width: 700, height: 280, borderRadius: "140px 140px 120px 120px", background: P.piel }} />
+            <div style={{ position: "absolute", left: 60, top: 330, width: 130, height: 90, borderRadius: 50, background: P.pielSombra, transform: "rotate(-25deg)" }} />
+            <Billete valor="$20" ancho={380} rot={-12} style={{ position: "absolute", left: 20, top: 200 }} />
+            <Billete valor="$20" ancho={380} rot={8} style={{ position: "absolute", left: 500, top: 215 }} />
+            <div style={{ position: "absolute", left: 320, top: 20, fontFamily: F_CIFRA, fontWeight: 800, fontSize: 140, color: P.crema, opacity: prog(f, c.d40 + 4, 12), textShadow: "0 8px 30px rgba(0,0,0,0.8)" }}>$40</div>
           </div>
           <Lluvia densidad={120} opacidad={0.35} />
         </AbsoluteFill>
