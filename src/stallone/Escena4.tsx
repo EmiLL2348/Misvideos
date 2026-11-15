@@ -101,7 +101,7 @@ export const Escena4: React.FC = () => {
         </div>
         {f >= c.idea - 4 ? <div style={{ position: "absolute", left: 640, top: 560 - dePie * 70, width: 420, height: 420, borderRadius: "50%", background: "radial-gradient(circle, rgba(232,182,74,0.45), transparent 70%)", opacity: prog(f, c.idea - 4, 16) }} /> : null}
         <Publico fila={1} de_pie={dePie} f={f} />
-        <Rotulo texto="24 · MARZO · 1975" desde={6} hasta={c.combate + 30} y={980} tam={46} />
+        <Rotulo texto="24 · MARZO · 1975" desde={6} hasta={c.combate + 30} y={650} tam={46} />
         <Sfx archivo="audio/stallone/multitud.mp3" en={c.publico - 6} vol={0.5} dur={140} />
         <Sfx archivo="audio/stallone/portazo.mp3" en={c.tumbar - 2} vol={0.4} dur={30} />
         <Tics desde={c.aguanto} pasos={8} cada={Math.max(3, (c.tumbar - c.aguanto) / 8)} vol={0.25} />
@@ -129,7 +129,7 @@ export const Escena4: React.FC = () => {
           const tt = ((f - c.escribio + i * 13) % 60) / 60;
           if (f - c.escribio < i * 6) return null;
           return (
-            <div key={i} style={{ position: "absolute", left: 900 - tt * 700 + i * 20, top: 620 - tt * 520 + Math.sin(tt * 8 + i) * 40, width: 120, height: 160, background: "#F2EAD6", transform: `rotate(${tt * 360 + i * 30}deg)`, opacity: 1 - tt, boxShadow: "0 4px 10px rgba(0,0,0,0.3)" }}>
+            <div key={i} style={{ position: "absolute", left: 1060 + tt * 620 + i * 14, top: 600 - tt * 520 + Math.sin(tt * 8 + i) * 40, width: 120, height: 160, background: "#F2EAD6", transform: `rotate(${tt * 360 + i * 30}deg)`, opacity: 1 - tt, boxShadow: "0 4px 10px rgba(0,0,0,0.3)" }}>
               {[30, 50, 70, 90, 110].map((y) => (
                 <div key={y} style={{ position: "absolute", left: 14, right: 14, top: y, height: 3, background: "#7A8AA8" }} />
               ))}

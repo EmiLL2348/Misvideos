@@ -144,19 +144,19 @@ export const Escena2: React.FC = () => {
           })}
           {/* sillas con aspirantes */}
           {new Array(8).fill(0).map((_, i) => (
-            <div key={i} style={{ position: "absolute", left: 180 + i * 300, top: 700 }}>
+            <div key={i} style={{ position: "absolute", left: 180 + i * 300, top: 600, transform: "scale(0.8)", transformOrigin: "50% 100%", opacity: 0.75 }}>
               <div style={{ position: "absolute", left: 0, top: 70, width: 110, height: 16, background: "#2A1C12" }} />
               <div style={{ position: "absolute", left: 6, top: 86, width: 10, height: 80, background: "#2A1C12" }} />
               <div style={{ position: "absolute", left: 94, top: 86, width: 10, height: 80, background: "#2A1C12" }} />
               {i % 3 !== 1 ? (
                 <div style={{ position: "absolute", left: 4, top: -150 }}>
-                  <Silueta altura={260} color="#1A1410" sombrero={i % 2 === 0} />
+                  <Silueta altura={260} color="#2E241C" sombrero={i % 2 === 0} />
                 </div>
               ) : null}
             </div>
           ))}
-          <div style={{ position: "absolute", left: slyX, top: 400 }}>
-            <Sly vista="perfil" altura={440} correr={andando ? f / 5 : undefined} expresion={f > golpes[1] ? "triste" : "decidido"} />
+          <div style={{ position: "absolute", left: slyX, top: 470 }}>
+            <Sly vista="perfil" altura={460} correr={andando ? f / 5 : undefined} expresion={f > golpes[1] ? "triste" : "decidido"} />
           </div>
         </AbsoluteFill>
         {golpes.map((g, i) => (

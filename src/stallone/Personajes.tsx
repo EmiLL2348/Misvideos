@@ -401,7 +401,13 @@ export const Butkus: React.FC<{
             {pata(214, 0, sombra)}
           </>
         )}
-        {mirarAtras ? <g transform="translate(424 0) scale(-1 1)">{cabezaEl}</g> : cabezaEl}
+        {mirarAtras ? (
+          <g transform="translate(-34 -6) rotate(-14 222 84)">
+            <g transform="translate(436 0) scale(-1 1)">{cabezaEl}</g>
+          </g>
+        ) : (
+          cabezaEl
+        )}
         <rect x={190} y={78} width={22} height={40} rx={8} fill="#7A4A2E" transform="rotate(-20 200 98)" />
       </g>
     </svg>

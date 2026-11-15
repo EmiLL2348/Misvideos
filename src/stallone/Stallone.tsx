@@ -11,6 +11,7 @@ import { Escena6 } from "./Escena6";
 import { Escena7 } from "./Escena7";
 import { Escena8 } from "./Escena8";
 import { F_CIFRA, P, clampI, interp } from "./estilo";
+import { FANFARRIA_RETRASO } from "./Escena6";
 import guionJson from "./guion.json";
 
 const guion = guionJson as Guion;
@@ -56,8 +57,10 @@ export const Stallone: React.FC<StalloneProps> = ({ manifiesto, subtitulos, volu
   const s5 = esc("s5");
   const s6 = esc("s6");
   const s8 = esc("s8");
+  const s7 = esc("s7");
   const puerta = Math.max(cueAbs(tl, "s5", "película") + 4, finVozAbs(tl, "s5") - 4);
-  const epicaIni = cueAbs(tl, "s6", "recuperar") - 12;
+  const fanfarria = finVozAbs(tl, "s6") + FANFARRIA_RETRASO;
+  const epicaIni = s7.inicioF - 20;
   const pianoFinal = cueAbs(tl, "s8", "todo") - 10;
   const V = volumenMusica;
   const ci = clampI;
@@ -82,22 +85,26 @@ export const Stallone: React.FC<StalloneProps> = ({ manifiesto, subtitulos, volu
 
         {/* Música: piano (1–4) → cuerdas que crecen (5–6) → metales épicos (6–7) → piano (8) */}
         <Sequence from={0} durationInFrames={s5.inicioF + 90} name="música · piano" layout="none">
-          <Audio src={staticFile(`${CARPETA}/piano.mp3`)} loop volume={(f) => V * interp(f, [0, 30, s5.inicioF, s5.inicioF + 80], [0, 1, 1, 0], ci)} />
+          <Audio src={staticFile(`${CARPETA}/piano.mp3`)} loop volume={(f) => V * 0.85 * interp(f, [0, 30, s5.inicioF, s5.inicioF + 80], [0, 1, 1, 0], ci)} />
         </Sequence>
-        <Sequence from={s5.inicioF} durationInFrames={epicaIni - s5.inicioF + 90} name="música · cuerdas" layout="none">
+        <Sequence from={s5.inicioF} durationInFrames={fanfarria - s5.inicioF + 20} name="música · cuerdas" layout="none">
           <Audio
             src={staticFile(`${CARPETA}/cuerdas.mp3`)}
             loop
             volume={(fl) => {
               const f = fl + s5.inicioF;
-              const tension = interp(f, [s5.inicioF, s5.inicioF + 60, puerta - 6, puerta], [0, 0.45, 0.45, 0], ci);
-              const crece = interp(f, [puerta + 15, epicaIni, epicaIni + 60], [0, 1.1, 0], ci);
+              // tensión en el despacho, silencio tras el portazo y luego crecen hasta la fanfarria
+              const tension = interp(f, [s5.inicioF, s5.inicioF + 60, puerta - 6, puerta], [0, 0.7, 0.7, 0], ci);
+              const crece = interp(f, [puerta + 15, fanfarria - 30, fanfarria, fanfarria + 15], [0, 1.1, 0.9, 0], ci);
               return V * Math.max(tension, crece);
             }}
           />
         </Sequence>
+        <Sequence from={fanfarria} durationInFrames={16 * 30} name="música · fanfarria" layout="none">
+          <Audio src={staticFile(`${CARPETA}/fanfarria.mp3`)} volume={V * 2.6} />
+        </Sequence>
         <Sequence from={epicaIni} durationInFrames={s8.inicioF + 120 - epicaIni} name="música · épica" layout="none">
-          <Audio src={staticFile(`${CARPETA}/epica.mp3`)} loop volume={(fl) => V * 1.15 * interp(fl + epicaIni, [epicaIni, epicaIni + 45, s8.inicioF, s8.inicioF + 110], [0, 1, 1, 0], ci)} />
+          <Audio src={staticFile(`${CARPETA}/epica.mp3`)} loop volume={(fl) => V * 0.9 * interp(fl + epicaIni, [epicaIni, epicaIni + 45, s8.inicioF, s8.inicioF + 110], [0, 1, 1, 0], ci)} />
         </Sequence>
         <Sequence from={pianoFinal} name="música · piano final" layout="none">
           <Audio src={staticFile(`${CARPETA}/piano.mp3`)} loop volume={(fl) => V * 0.9 * interp(fl + pianoFinal, [pianoFinal, pianoFinal + 45, durationInFrames - 40, durationInFrames], [0, 1, 1, 0], ci)} />

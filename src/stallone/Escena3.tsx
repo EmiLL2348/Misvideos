@@ -116,13 +116,21 @@ export const Escena3: React.FC = () => {
             <div key={x} style={{ position: "absolute", left: x, top: 676, width: 16, height: 30, background: "#B9C2C8", borderRadius: 4 }} />
           ))}
           {/* Butkus apoya la cabeza */}
-          {f >= c.butkus - 30 ? (
-            <div style={{ position: "absolute", left: interp(f, [c.butkus - 30, c.butkus + 10], [1900, 230], clampI), top: 600 }}>
-              <Butkus ancho={420} andar={f < c.butkus + 10 ? f / 4 : undefined} cabeza={f > c.butkus + 10 ? -12 + Math.sin(f / 30) * 2 : 0} />
+          {f >= c.butkus - 40 ? (
+            <div
+              style={{
+                position: "absolute",
+                left: interp(f, [c.butkus - 40, c.butkus + 10], [1900, 60], clampI),
+                top: 640,
+                // mientras camina hacia la izquierda mira hacia la izquierda; al llegar se gira hacia Sly
+                transform: f < c.butkus + 12 ? "scaleX(-1)" : "none",
+              }}
+            >
+              <Butkus ancho={400} andar={f < c.butkus + 10 ? f / 4 : undefined} sentado={f >= c.butkus + 12} cabeza={f > c.butkus + 12 ? -16 + Math.sin(f / 30) * 2 : 0} />
             </div>
           ) : null}
           {f >= c.butkus ? (
-            <div style={{ position: "absolute", left: 300, top: 560, fontFamily: F_TITULO, fontWeight: 900, fontSize: 54, color: P.dorado, opacity: Math.min(prog(f, c.butkus + 6, 12), 1 - prog(f, c.butkus + 80, 14)), textShadow: "0 4px 18px rgba(0,0,0,0.8)" }}>
+            <div style={{ position: "absolute", left: 120, top: 560, fontFamily: F_TITULO, fontWeight: 900, fontSize: 54, color: P.dorado, opacity: Math.min(prog(f, c.butkus + 6, 12), 1 - prog(f, c.butkus + 80, 14)), textShadow: "0 4px 18px rgba(0,0,0,0.8)" }}>
               BUTKUS
             </div>
           ) : null}
@@ -160,7 +168,7 @@ export const Escena3: React.FC = () => {
             <Sly vista="perfil" altura={560} expresion="triste" />
           </div>
           <div style={{ position: "absolute", left: xPerro, top: 700 }}>
-            <Butkus ancho={380} andar={f > c.vendio + 16 ? f / 5 : undefined} mirarAtras={f > c.vendio + 26} />
+            <Butkus ancho={380} andar={f > c.vendio + 16 ? f / 5 : undefined} cabeza={f > c.vendio + 16 ? 14 : 0} />
           </div>
           <div style={{ position: "absolute", left: xDesconocido, top: 400 }}>
             <Silueta altura={560} sombrero color="#0A0809" borde={P.neon} brazoDer={-20 - (1 - entrega) * 0} />

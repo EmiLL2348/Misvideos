@@ -42,7 +42,8 @@ La música ambiental y los efectos (`whoosh`, `tic`) se sintetizan con
 - Personajes ilustrados originales y reutilizables en `src/stallone/Personajes.tsx`: **Sly** (decidido, cansado, triste, eufórico; de frente, de espaldas y de perfil), **Sasha**, **Butkus** y siluetas. No imitan el parecido de personas reales.
 - Sin fotos, fotogramas, póster ni estatuilla oficial: los premios son copas doradas genéricas.
 - Voz: **es-ES-AlvaroNeural** (castellano, masculina) a -6 % de velocidad y -6 Hz de tono, generada en `public/audio/stallone/`.
-- Música original sintetizada (`scripts/generar-audio-stallone.py`), sin el tema de la película: piano melancólico (escenas 1–4) → cuerdas que crecen (5–6) → metales épicos (6–7) → piano (8). Voz y música van en pistas separadas.
+- Música original compuesta en MIDI e interpretada con instrumentos reales (FluidSynth + FluidR3_GM, licencia MIT) en `scripts/generar-musica-stallone.py`: piano melancólico (escenas 1–4) → cuerdas que crecen (5–6) → **fanfarria de trompetas estilo años 70** en la escalinata → orquesta épica (7) → piano (8). La fanfarria es una melodía propia: comparte el estilo, no las notas, del tema de la película. Voz y música van en pistas separadas.
+- Efectos (lluvia, portazos, neón, clic, público) y grano de película: `scripts/generar-audio-stallone.py`.
 
 ## Comandos
 

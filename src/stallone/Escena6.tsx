@@ -5,6 +5,10 @@ import { F_CIFRA, F_TITULO, P, clampI, miles, prog, rebote, interp } from "./est
 import { Capa, Cielo, Destello, Edificios, Pelicula, Plano, Sfx, Tics } from "./escenario";
 import { Butkus, POSE, Sasha, Sly } from "./Personajes";
 
+/** La fanfarria empieza 8 frames después de la voz; su acorde final cae 11,1 s después. */
+export const FANFARRIA_RETRASO = 8;
+export const FANFARRIA_GOLPE = Math.round(20 * (60 / 108) * 30);
+
 const Filadelfia: React.FC<{ f: number; cam: { x: number; y: number; zoom: number }; dorado?: number }> = ({ f, cam, dorado = 0 }) => (
   <>
     <Capa cam={cam} prof={0.03}>
@@ -84,10 +88,12 @@ export const Escena6: React.FC = () => {
   const salta = f >= llega ? prog(f, llega, 10) : 0;
   const tumba = f >= llega + 6 ? prog(f, llega + 6, 14) : 0;
 
-  // escalinata
-  const subir = prog(f, c.pelicula - 10, Math.max(60, finVoz - c.pelicula + 10));
-  const arriba = subir >= 0.999;
-  const dorado = arriba ? prog(f, c.pelicula - 10 + Math.max(60, finVoz - c.pelicula + 10), 30) : 0;
+  // escalinata, sincronizada con la fanfarria (empieza al terminar la voz)
+  const fan = finVoz + FANFARRIA_RETRASO;
+  const golpeFinal = fan + FANFARRIA_GOLPE;
+  const subir = interp(f, [fan, golpeFinal - 4], [0, 1]);
+  const arriba = f >= golpeFinal - 4;
+  const dorado = prog(f, golpeFinal - 2, 30);
 
   return (
     <AbsoluteFill style={{ background: P.negro }}>
@@ -214,6 +220,11 @@ export const Escena6: React.FC = () => {
           return <div key={i} style={{ position: "absolute", left: 960 - w / 2, top: y, width: w, height: 40, background: i % 2 ? "#B4A493" : "#C4B4A2", borderTop: "3px solid #D8C8B4" }} />;
         })}
         <AbsoluteFill style={{ background: `rgba(232,182,74,${0.35 * dorado})`, mixBlendMode: "screen" }} />
+        {f >= golpeFinal - 2 ? (
+          <div style={{ position: "absolute", left: 0, right: 0, top: 60, textAlign: "center", fontFamily: F_TITULO, fontWeight: 900, fontSize: 64, color: P.crema, letterSpacing: 8, opacity: prog(f, golpeFinal + 6, 20), textShadow: `0 0 40px ${P.dorado}` }}>
+            FILADELFIA · 1976
+          </div>
+        ) : null}
         {(() => {
           const y = interp(subir, [0, 1], [760, 160]);
           const esc = interp(subir, [0, 1], [1, 0.48]);

@@ -3,9 +3,7 @@
 Banda sonora original y efectos de "106 dólares y un sueño", sintetizados con
 numpy (sin derechos de autor y sin usar el tema de la película):
 
-  piano.mp3   piano melancólico en La menor (bucle)        escenas 1–4
-  cuerdas.mp3 cuerdas sostenidas que crecen (bucle)          escenas 5–6
-  epica.mp3   metales, timbales y cuerdas en Do mayor (bucle) escenas 6–7
+  (la música está en scripts/generar-musica-stallone.py)
   lluvia, portazo, zumbido (neón), clic (cámara), multitud
   y texturas de grano de película (public/stallone/grano-*.png)
 
@@ -293,9 +291,8 @@ def granos():
 
 if __name__ == "__main__":
     AUDIO.mkdir(parents=True, exist_ok=True)
-    guardar("piano", piano())
-    guardar("cuerdas", cuerdas())
-    guardar("epica", epica())
+    # la música ahora se compone en MIDI con instrumentos reales:
+    # ver scripts/generar-musica-stallone.py
     guardar("lluvia", lluvia(), "128k")
     guardar("portazo", portazo(), "128k")
     guardar("zumbido", zumbido(), "96k")
