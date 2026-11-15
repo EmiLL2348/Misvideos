@@ -31,6 +31,9 @@ export type Guion = {
   tono?: string;
   carpeta?: string; // dentro de public/, por defecto "audio"
   pantallaFinal?: number; // segundos
+  entrada?: number; // silencio antes de la voz en cada escena (s)
+  salida?: number; // silencio después de la voz en cada escena (s)
+  lufs?: number; // sonoridad objetivo de la voz (scripts/generar-voz.py)
   escenas: EscenaGuion[];
 };
 
@@ -117,6 +120,8 @@ export const calcularTimeline = (guion: Guion, m: Manifiesto | null): Timeline =
   let cursor = 0;
   let conVoz = true;
   const final = guion.pantallaFinal ?? 5;
+  const entrada = guion.entrada ?? ENTRADA_SEG;
+  const salida = guion.salida ?? SALIDA_SEG;
   const escenas: EscenaTL[] = guion.escenas.map((e, idx) => {
     const toks = e.texto.split(/\s+/).filter(Boolean);
     const voz = m?.escenas?.[e.id] ?? null;
@@ -126,18 +131,18 @@ export const calcularTimeline = (guion: Guion, m: Manifiesto | null): Timeline =
     const tokens = toks.map((texto, i) => ({
       texto,
       norm: normalizar(texto),
-      t: ENTRADA_SEG + tiempos[i].t,
-      fin: ENTRADA_SEG + tiempos[i].fin,
+      t: entrada + tiempos[i].t,
+      fin: entrada + tiempos[i].fin,
     }));
     const ultima = idx === guion.escenas.length - 1;
-    const seg = ENTRADA_SEG + durVoz + SALIDA_SEG + (e.salidaExtra ?? 0) + (ultima ? final : 0);
+    const seg = entrada + durVoz + salida + (e.salidaExtra ?? 0) + (ultima ? final : 0);
     const durF = Math.ceil(seg * FPS);
     const tl: EscenaTL = {
       id: e.id,
       titulo: e.titulo,
       inicioF: cursor,
       durF,
-      vozF: Math.round(ENTRADA_SEG * FPS),
+      vozF: Math.round(entrada * FPS),
       vozDurF: Math.ceil(durVoz * FPS),
       archivo: voz ? voz.archivo : null,
       tokens,

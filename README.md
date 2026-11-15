@@ -6,7 +6,8 @@ Videos generados con [Remotion](https://www.remotion.dev/).
 |---|---|---|
 | `AuraVideo` | 1080×1920 · 30 fps · 15 s | `src/AuraVideo.tsx` |
 | `CuerpoExtremo` | 1920×1080 · 30 fps · ~2:45 (según la narración) | `src/cuerpo/` |
-| `Stallone` | 1920×1080 · 30 fps · ~3:00 (según la narración) | `src/stallone/` |
+| `Stallone` | 1920×1080 · 30 fps · ~3:20 (según la narración) | `src/stallone/` |
+| `Downey` | 1920×1080 · 30 fps · ~3:00 (según la narración) | `src/downey/` |
 
 ## ¿Cuánto aguanta tu cuerpo? (`CuerpoExtremo`)
 
@@ -44,6 +45,19 @@ La música ambiental y los efectos (`whoosh`, `tic`) se sintetizan con
 - Voz: **es-ES-AlvaroNeural** (castellano, masculina) a -6 % de velocidad y -6 Hz de tono, generada en `public/audio/stallone/`.
 - Música original compuesta en MIDI e interpretada con instrumentos reales (FluidSynth + FluidR3_GM, licencia MIT) en `scripts/generar-musica-stallone.py`: piano melancólico (escenas 1–4) → cuerdas que crecen (5–6) → **fanfarria de trompetas estilo años 70** en la escalinata → orquesta épica (7) → piano (8). La fanfarria es una melodía propia: comparte el estilo, no las notas, del tema de la película. Voz y música van en pistas separadas.
 - Efectos (lluvia, portazos, neón, clic, público) y grano de película: `scripts/generar-audio-stallone.py`.
+
+## Recluso P50522 (`Downey`)
+
+- Guion: [`guion-downey-jr.md`](guion-downey-jr.md) · texto narrado en `src/downey/guion.json`
+- Reglas de calidad del guion aplicadas en el código:
+  - **Nada flota:** cada escena define su `SUELO` y los personajes y objetos se colocan con `topDePie`, `topSentado` o `topSobre`, con sombra de contacto.
+  - **Nada traspasa:** orden de capas fijo; las manos se colocan con cinemática inversa (`resolverBrazo`) en el punto exacto que tocan.
+  - **Movimiento creíble:** los pasos avanzan a la velocidad del pie (`AVANCE_POR_RADIAN`) y las caídas usan gravedad con un único rebote.
+  - **Imagen nítida:** vectores, sin grano y con viñeteado mínimo; exportación con H.264, CRF 17, preset `slow` y `yuv420p`.
+- Personajes originales (Robert en tres edades) y siluetas para los secundarios reales. Armadura genérica gris y máscara lisa genérica, sin logotipos.
+- Voz `es-ES-AlvaroNeural` normalizada a −16 LUFS.
+- Música original por bloques (`scripts/generar-audio-downey.py`): misterio → tensión → silencio + esperanza → épica → oscuro. Fundidos cruzados de 1 s en los cortes y bajada de −12 dB bajo la voz.
+- Fotogramas de control por escena en `control/downey/`. GitHub Actions también exporta la voz, la música y los efectos en pistas separadas (artifact `downey-recluso-p50522-pistas`).
 
 ## Comandos
 

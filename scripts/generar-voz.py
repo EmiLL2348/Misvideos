@@ -20,6 +20,8 @@ Uso:
 import asyncio
 import json
 import os
+import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -59,6 +61,19 @@ async def sintetizar(texto: str, voz: str, velocidad: str, tono: str, destino: P
     return palabras
 
 
+def normalizar(destino: Path, lufs: float):
+    """Normaliza la sonoridad de la voz (EBU R128) con pico real máximo de -1.5 dBTP."""
+    if not shutil.which("ffmpeg"):
+        print("  (ffmpeg no está instalado: la voz no se normaliza)", file=sys.stderr)
+        return
+    tmp = destino.with_suffix(".norm.mp3")
+    subprocess.run(
+        ["ffmpeg", "-y", "-loglevel", "error", "-i", str(destino), "-af", f"loudnorm=I={lufs}:TP=-1.5:LRA=11", "-ar", "24000", "-b:a", "96k", str(tmp)],
+        check=True,
+    )
+    tmp.replace(destino)
+
+
 async def con_reintentos(*args, intentos=4):
     for i in range(1, intentos + 1):
         try:
@@ -88,6 +103,8 @@ async def generar(ruta_guion: Path):
         texto = e.get("textoVoz") or e["texto"]
         print(f"[{e['id']}] {e['titulo']} → {destino.relative_to(RAIZ)}")
         palabras = await con_reintentos(texto, voz, velocidad, tono, destino)
+        if guion.get("lufs") is not None:
+            normalizar(destino, guion["lufs"])
         duracion = round(MP3(destino).info.length, 3)
         total += duracion
         print(f"  {duracion:.2f} s, {len(palabras)} palabras con tiempo")

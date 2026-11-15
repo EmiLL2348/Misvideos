@@ -31,6 +31,14 @@ jobs:
             manifiesto: public/audio/stallone/voz.json
             # el grano de película es ruido: sin límite de bitrate el MP4 pesaba 2,2 GB
             flags: --video-bitrate=6M
+          - id: Downey
+            output: downey-recluso-p50522.mp4
+            artifact: downey-recluso-p50522
+            guion: src/downey/guion.json
+            manifiesto: public/audio/downey/voz.json
+            # calidad del guion: H.264 High, CRF 17, preset slow, yuv420p (sin grano)
+            flags: --crf=17 --x264-preset=slow --pixel-format=yuv420p
+            pistas: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -65,6 +73,21 @@ jobs:
 
       - name: Render video
         run: npx remotion render src/index.ts ${{ matrix.id }} out/${{ matrix.output }} --codec=h264 ${{ matrix.flags }}
+
+      - name: Render separate audio stems (voz, música, efectos)
+        if: ${{ matrix.pistas }}
+        run: |
+          for p in voz musica efectos; do
+            npx remotion render src/index.ts ${{ matrix.id }} out/pistas/$p.wav --codec=wav --props="{\"pista\":\"$p\"}"
+          done
+
+      - name: Upload audio stems
+        if: ${{ matrix.pistas }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}-pistas
+          path: out/pistas/
+          if-no-files-found: error
 
       - name: Upload MP4 artifact
         uses: actions/upload-artifact@v4

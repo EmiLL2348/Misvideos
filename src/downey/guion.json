@@ -1,0 +1,22 @@
+{
+  "voz": "es-ES-AlvaroNeural",
+  "velocidad": "+2%",
+  "tono": "-5Hz",
+  "carpeta": "audio/downey",
+  "lufs": -16,
+  "entrada": 0.3,
+  "salida": 0.5,
+  "pantallaFinal": 5,
+  "escenas": [
+    { "id": "s1", "titulo": "Gancho", "texto": "1999. Un actor nominado al Óscar entra en una prisión de California como el recluso P50522. Nueve años después, protagoniza la película que levantó la mayor saga de superhéroes del cine.", "textoVoz": "1999. Un actor nominado al Óscar entra en una prisión de California como el recluso P, cinco, cero, cinco, dos, dos. Nueve años después, protagoniza la película que levantó la mayor saga de superhéroes del cine.", "salidaExtra": 0.6 },
+    { "id": "s2", "titulo": "Una infancia rota", "texto": "Nació en Nueva York en 1965, hijo de un director de cine independiente. Creció entre rodajes… y entre drogas. Según él mismo contó, a los ocho años ya era adicto." },
+    { "id": "s3", "titulo": "La promesa de Hollywood", "texto": "Su talento era enorme. Antes de cumplir los treinta, interpretó a Charlie Chaplin y logró su primera nominación al Óscar.", "salidaExtra": 0.8 },
+    { "id": "s4", "titulo": "La caída", "texto": "Pero en junio de 1996, la policía le paró por exceso de velocidad y encontró en su coche cocaína, heroína y una pistola. Empezó una espiral: controles antidroga que no pasaba, meses en la cárcel del condado… Y en 1999, tras saltarse otro control, un juez le condenó a tres años de prisión.", "salidaExtra": 0.6 },
+    { "id": "s5", "titulo": "La prisión", "texto": "Pasó casi un año en la prisión estatal de Corcoran, una de las más duras de California. Él mismo lo recordaría como lo peor que le había pasado.", "salidaExtra": 0.6 },
+    { "id": "s6", "titulo": "La recaída", "texto": "Salió en 2000 y tuvo otra oportunidad: un papel en una serie de éxito que le dio un Globo de Oro. Pero en abril de 2001 volvieron a detenerle y le despidieron. Ninguna productora se atrevía a contratarle.", "salidaExtra": 0.4 },
+    { "id": "s7", "titulo": "El océano", "texto": "Entonces, alguien dio la cara por él: el actor Mel Gibson, que según se ha contado avaló personalmente su seguro para que pudiera volver a rodar. En 2003, en otro rodaje, conoció a la productora Susan Levin. Ella fue clara: o las drogas, o ella. Ese julio, Robert condujo hasta la playa… y tiró todas sus drogas al océano.", "salidaExtra": 2.2 },
+    { "id": "s8", "titulo": "El héroe que nadie quería", "texto": "Pero seguía siendo «el actor problemático». Cuando el director Jon Favreau le propuso para una película de un héroe con armadura, el estudio se negó. Favreau insistió, consiguió una prueba… y Robert la bordó. Años después, el jefe del estudio admitiría que contratarle fue el mayor riesgo que habían corrido.", "salidaExtra": 0.6 },
+    { "id": "s9", "titulo": "La cima", "texto": "La película se estrenó en mayo de 2008 y recaudó unos 585 millones de dólares. El hombre al que nadie quería asegurar llegó a cobrar unos 50 millones por una sola película. En 2015, el gobernador de California le indultó. Y en 2024 ganó, por fin, el Óscar. A su mujer le dijo: «Me devolviste a la vida».", "salidaExtra": 1.0 },
+    { "id": "s10", "titulo": "Nueva máscara", "texto": "Y ahora, otro giro: el 18 de diciembre vuelve a esa misma saga… pero como el gran villano, Doom. Al anunciarlo lo resumió así: «Nueva máscara, misma misión». ¿Creéis en las segundas oportunidades? Contádnoslo en los comentarios.", "salidaExtra": 1.2 }
+  ]
+}
