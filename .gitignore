@@ -5,3 +5,5 @@ out
 public/audio/voz-*.mp3
 public/audio/voz.json
 __pycache__
+public/audio/*/voz-*.mp3
+public/audio/*/voz.json

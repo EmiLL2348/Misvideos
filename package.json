@@ -9,7 +9,10 @@
     "voz": "python3 scripts/generar-voz.py",
     "musica": "python3 scripts/generar-musica.py",
     "render:cuerpo": "remotion render src/index.ts CuerpoExtremo out/cuerpo-extremo.mp4 --codec=h264",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "voz:stallone": "python3 scripts/generar-voz.py src/stallone/guion.json",
+    "audio:stallone": "python3 scripts/generar-audio-stallone.py",
+    "render:stallone": "remotion render src/index.ts Stallone out/stallone-106-dolares.mp4 --codec=h264"
   },
   "dependencies": {
     "@remotion/cli": "4.0.543",

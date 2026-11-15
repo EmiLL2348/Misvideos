@@ -16,11 +16,17 @@ jobs:
           - id: AuraVideo
             output: video.mp4
             artifact: video
-            voz: false
+            guion: ""
           - id: CuerpoExtremo
             output: cuerpo-extremo.mp4
             artifact: cuerpo-extremo
-            voz: true
+            guion: src/cuerpo/guion.json
+            manifiesto: public/audio/voz.json
+          - id: Stallone
+            output: stallone-106-dolares.mp4
+            artifact: stallone-106-dolares
+            guion: src/stallone/guion.json
+            manifiesto: public/audio/stallone/voz.json
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -47,11 +53,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Generate narration (edge-tts, es-MX-JorgeNeural)
-        if: ${{ matrix.voz }}
+      - name: Generate narration (edge-tts)
+        if: ${{ matrix.guion != '' }}
         run: |
-          python scripts/generar-voz.py
-          test -f public/audio/voz.json
+          python scripts/generar-voz.py ${{ matrix.guion }}
+          test -f ${{ matrix.manifiesto }}
 
       - name: Render video
         run: npx remotion render src/index.ts ${{ matrix.id }} out/${{ matrix.output }} --codec=h264

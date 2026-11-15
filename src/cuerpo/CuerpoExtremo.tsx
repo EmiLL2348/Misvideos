@@ -16,7 +16,9 @@ import { Escena4 } from "./Escena4";
 import { Escena5 } from "./Escena5";
 import { Escena6 } from "./Escena6";
 import { C, FUENTE_TEXTO } from "./tema";
-import { EscenaId, FPS, Manifiesto, Timeline, TimelineContext, calcularTimeline } from "./timeline";
+import { Subtitulos } from "../comun/Subtitulos";
+import { leerManifiesto } from "../comun/timeline";
+import { Manifiesto, TimelineContext, calcularTimeline } from "./timeline";
 
 export type CuerpoProps = {
   manifiesto: Manifiesto | null;
@@ -24,7 +26,7 @@ export type CuerpoProps = {
   volumenMusica: number;
 };
 
-const COMPONENTES: Record<EscenaId, React.FC> = {
+const COMPONENTES: Record<string, React.FC> = {
   s1: Escena1,
   s2: Escena2,
   s3: Escena3,
@@ -37,13 +39,7 @@ const BARRIDO = 12; // 0.4 s
 
 /** Lee public/audio/voz.json (si existe) y fija la duración total del video. */
 export const calcularMetadatosCuerpo: CalculateMetadataFunction<CuerpoProps> = async ({ props }) => {
-  let manifiesto: Manifiesto | null = null;
-  try {
-    const r = await fetch(staticFile("audio/voz.json"));
-    if (r.ok) manifiesto = (await r.json()) as Manifiesto;
-  } catch {
-    manifiesto = null;
-  }
+  const manifiesto = await leerManifiesto(staticFile("audio/voz.json"));
   const tl = calcularTimeline(manifiesto);
   return { durationInFrames: tl.totalF, props: { ...props, manifiesto } };
 };
@@ -64,58 +60,6 @@ const Barrido: React.FC = () => {
       {banda(0, C.cian)}
       {banda(-140, C.noche)}
     </svg>
-  );
-};
-
-const Subtitulos: React.FC<{ tl: Timeline }> = ({ tl }) => {
-  const f = useCurrentFrame();
-  const frases = useMemo(() => {
-    const out: { palabras: { texto: string; t: number }[]; ini: number; fin: number }[] = [];
-    for (const e of tl.escenas) {
-      let actual: { texto: string; t: number; fin: number }[] = [];
-      const cerrar = () => {
-        if (!actual.length) return;
-        out.push({
-          palabras: actual.map((w) => ({ texto: w.texto, t: e.inicioF + w.t * FPS })),
-          ini: e.inicioF + actual[0].t * FPS,
-          fin: e.inicioF + actual[actual.length - 1].fin * FPS + 6,
-        });
-        actual = [];
-      };
-      for (const w of e.tokens) {
-        actual.push(w);
-        if (/[.?!…:;]["»”]?$/.test(w.texto) || (/,$/.test(w.texto) && actual.length >= 4) || actual.length >= 9) cerrar();
-      }
-      cerrar();
-    }
-    for (let i = 0; i < out.length - 1; i++) if (out[i + 1].ini - out[i].fin < 12) out[i].fin = out[i + 1].ini;
-    return out;
-  }, [tl]);
-  const fr = frases.find((x) => f >= x.ini && f < x.fin);
-  if (!fr) return null;
-  return (
-    <div style={{ position: "absolute", left: 0, right: 0, bottom: 36, display: "flex", justifyContent: "center", zIndex: 50 }}>
-      <div
-        style={{
-          maxWidth: 1500,
-          padding: "10px 26px",
-          borderRadius: 16,
-          background: "rgba(10,18,30,0.78)",
-          fontFamily: FUENTE_TEXTO,
-          fontWeight: 600,
-          fontSize: 40,
-          color: C.blanco,
-          textAlign: "center",
-          lineHeight: 1.3,
-        }}
-      >
-        {fr.palabras.map((w, i) => (
-          <span key={i} style={{ color: f >= w.t ? C.blanco : "rgba(244,246,248,0.55)" }}>
-            {w.texto}{" "}
-          </span>
-        ))}
-      </div>
-    </div>
   );
 };
 
@@ -159,7 +103,7 @@ export const CuerpoExtremo: React.FC<CuerpoProps> = ({ manifiesto, subtitulos, v
             })
           }
         />
-        {subtitulos ? <Subtitulos tl={tl} /> : null}
+        {subtitulos ? <Subtitulos tl={tl} fuente={FUENTE_TEXTO} /> : null}
       </AbsoluteFill>
     </TimelineContext.Provider>
   );

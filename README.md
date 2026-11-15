@@ -5,7 +5,8 @@ Videos generados con [Remotion](https://www.remotion.dev/).
 | Composición | Formato | Archivo |
 |---|---|---|
 | `AuraVideo` | 1080×1920 · 30 fps · 15 s | `src/AuraVideo.tsx` |
-| `CuerpoExtremo` | 1920×1080 · 30 fps · ~2:30 (según la narración) | `src/cuerpo/` |
+| `CuerpoExtremo` | 1920×1080 · 30 fps · ~2:45 (según la narración) | `src/cuerpo/` |
+| `Stallone` | 1920×1080 · 30 fps · ~3:00 (según la narración) | `src/stallone/` |
 
 ## ¿Cuánto aguanta tu cuerpo? (`CuerpoExtremo`)
 
@@ -34,6 +35,15 @@ Para cambiar la voz o la velocidad, edita `voz`/`velocidad` en `src/cuerpo/guion
 La música ambiental y los efectos (`whoosh`, `tic`) se sintetizan con
 `scripts/generar-musica.py`, así que no tienen derechos de autor.
 
+## 106 dólares y un sueño (`Stallone`)
+
+- Guion: [`guion-stallone-rocky.md`](guion-stallone-rocky.md) · texto narrado en `src/stallone/guion.json`
+- Estilo **Opción A**: 2D cinematográfico con parallax (ciudades por capas, lluvia, vapor, neón, grano de película y viñeteado)
+- Personajes ilustrados originales y reutilizables en `src/stallone/Personajes.tsx`: **Sly** (decidido, cansado, triste, eufórico; de frente, de espaldas y de perfil), **Sasha**, **Butkus** y siluetas. No imitan el parecido de personas reales.
+- Sin fotos, fotogramas, póster ni estatuilla oficial: los premios son copas doradas genéricas.
+- Voz: **es-ES-AlvaroNeural** (castellano, masculina) a -6 % de velocidad y -6 Hz de tono, generada en `public/audio/stallone/`.
+- Música original sintetizada (`scripts/generar-audio-stallone.py`), sin el tema de la película: piano melancólico (escenas 1–4) → cuerdas que crecen (5–6) → metales épicos (6–7) → piano (8). Voz y música van en pistas separadas.
+
 ## Comandos
 
 ```bash
@@ -43,6 +53,8 @@ npm run voz            # genera la narración (requiere internet)
 npm run dev            # Remotion Studio
 npm run render         # out/video.mp4 (AuraVideo)
 npm run render:cuerpo  # out/cuerpo-extremo.mp4
+npm run voz:stallone   # narración en castellano
+npm run render:stallone # out/stallone-106-dolares.mp4
 ```
 
 Sin `voz.json`, el video se puede previsualizar igual: los tiempos se estiman a ~150 palabras por minuto.
@@ -50,5 +62,5 @@ Sin `voz.json`, el video se puede previsualizar igual: los tiempos se estiman a 
 ## GitHub Actions
 
 `.github/workflows/render.yml` corre en cada push (o manualmente desde
-**Actions → Render video → Run workflow**), renderiza ambas composiciones en paralelo y
-sube los artifacts `video` (AuraVideo) y `cuerpo-extremo` (con la narración incluida).
+**Actions → Render video → Run workflow**), renderiza las composiciones en paralelo y
+sube los artifacts `video` (AuraVideo), `cuerpo-extremo` y `stallone-106-dolares` (con la narración incluida).

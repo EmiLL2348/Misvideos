@@ -1,0 +1,53 @@
+{
+  "voz": "es-ES-AlvaroNeural",
+  "velocidad": "-6%",
+  "tono": "-6Hz",
+  "carpeta": "audio/stallone",
+  "pantallaFinal": 5,
+  "escenas": [
+    {
+      "id": "s1",
+      "titulo": "Gancho",
+      "texto": "En 1975, un actor sin trabajo tenía 106 dólares en el banco… y rechazó más de 300.000 por un guion. Parecía una locura. Fue la mejor decisión de su vida.",
+      "salidaExtra": 0.8
+    },
+    {
+      "id": "s2",
+      "titulo": "Nueva York, el origen",
+      "texto": "Stallone nació en Nueva York en 1946. Un parto complicado le dejó parte de la cara paralizada: de ahí su labio torcido y su forma de hablar. Durante años, eso hizo que en los castings le cerraran la puerta una y otra vez."
+    },
+    {
+      "id": "s3",
+      "titulo": "La pobreza y Butkus",
+      "texto": "A principios de los setenta llegó a quedarse sin casa por no poder pagar el alquiler. Ya casado con Sasha, seguían viviendo al día en un piso diminuto. Su mayor tesoro era Butkus, un bullmastiff enorme. Pero llegó un invierno en que no le quedaba dinero ni para darle de comer… y lo vendió, en la puerta de una licorería, por unos 40 dólares.",
+      "salidaExtra": 1.8
+    },
+    {
+      "id": "s4",
+      "titulo": "El combate que lo cambió todo",
+      "texto": "El 24 de marzo de 1975, Stallone vio en una pantalla de cine el combate entre Muhammad Ali y Chuck Wepner, un boxeador del que nadie esperaba nada. Wepner aguantó hasta el último asalto y llegó a tumbar al campeón. Perdió, pero el público acabó de pie, animándole. Stallone salió de allí con una idea. Escribió el primer borrador en unos tres días y medio, a mano."
+    },
+    {
+      "id": "s5",
+      "titulo": "La oferta que rechazó",
+      "texto": "A los productores les encantó el guion… pero no querían a Stallone. Querían una estrella: Burt Reynolds, Ryan O'Neal, James Caan. Le ofrecieron cada vez más dinero, hasta unos 350.000 dólares, por vender la historia y apartarse. Él, con 106 dólares en el banco, dijo que no. O la protagonizaba él… o no había película.",
+      "salidaExtra": 1.6
+    },
+    {
+      "id": "s6",
+      "titulo": "Rodar con lo justo",
+      "texto": "Al final aceptaron, con condiciones: un millón de dólares de presupuesto y solo 28 días de rodaje. Stallone cobró poco a cambio de un porcentaje de la taquilla. Usó su propia ropa, Sasha hizo las fotos del rodaje… y en cuanto tuvo dinero, fue a recuperar a Butkus. Según contó él mismo, le costó 15.000 dólares. Y Butkus salió en la película.",
+      "salidaExtra": 2.2
+    },
+    {
+      "id": "s7",
+      "titulo": "El golpe de suerte",
+      "texto": "La película se estrenó en noviembre de 1976 y nadie la vio venir. Fue la más taquillera del año, recaudó unos 225 millones de dólares en todo el mundo y ganó tres Óscar, incluido el de mejor película. Stallone fue nominado como actor y como guionista a la vez, algo que antes solo habían logrado Charlie Chaplin y Orson Welles."
+    },
+    {
+      "id": "s8",
+      "titulo": "Cierre",
+      "texto": "Después llegaron las secuelas, Rambo… y casi cuarenta años más tarde, otra nominación al Óscar por volver a ese mismo papel. Todo empezó con un hombre que lo apostó todo a sí mismo. ¿Vosotros habríais aceptado el dinero? Contádnoslo en los comentarios y suscribíos para más historias así."
+    }
+  ]
+}
