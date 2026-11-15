@@ -40,6 +40,7 @@ const Piso: React.FC<{ f: number }> = ({ f }) => {
       <div style={{ position: "absolute", left: 940, top: 146, width: 40, height: 50, borderRadius: "50% 50% 45% 45%", background: fallo ? "#6A6050" : "#FFF1C2", boxShadow: fallo ? "none" : "0 0 50px 20px rgba(255,220,150,0.6)" }} />
       <AbsoluteFill style={{ background: `radial-gradient(ellipse at 50% 18%, rgba(255,214,140,${0.32 * luz}) 0%, transparent 55%)` }} />
       {/* nevera abierta y vacía */}
+      <div style={{ position: "absolute", left: 0, right: 0, top: 870, bottom: 0, background: "linear-gradient(#2E2A30, #1A171C)" }} />
       <div style={{ position: "absolute", left: 1500, top: 320, width: 260, height: 560, background: "#D9D4C6", borderRadius: 16 }}>
         <div style={{ position: "absolute", left: 18, top: 18, right: 18, bottom: 18, background: "#F4F1E4", boxShadow: "inset 0 0 60px rgba(200,230,255,0.9)" }}>
           {[140, 280, 400].map((y) => (
@@ -98,17 +99,20 @@ export const Escena3: React.FC = () => {
       <Plano desde={c.ya} hasta={c.invierno}>
         <AbsoluteFill style={{ transform: `scale(${1.04 - (f - c.ya) * 0.0002})` }}>
           <Piso f={f} />
-          <div style={{ position: "absolute", left: 560, top: 360 }}>
+          <div style={{ position: "absolute", left: 600, top: 420 }}>
             <Sly altura={520} expresion="cansado" sinPiernas brazoIzq={POSE.mesa.izq} brazoDer={POSE.mesa.der} />
           </div>
           {f >= c.sasha - 10 ? (
-            <div style={{ position: "absolute", left: 1040, top: 370, opacity: prog(f, c.sasha - 10, 14) }}>
+            <div style={{ position: "absolute", left: 1010, top: 432, opacity: prog(f, c.sasha - 10, 14) }}>
               <Sasha altura={500} expresion="triste" sinPiernas />
             </div>
           ) : null}
           {/* mesa con una sola lata */}
           <div style={{ position: "absolute", left: 480, top: 700, width: 860, height: 30, background: "#6B4630", borderRadius: 6 }} />
-          <div style={{ position: "absolute", left: 520, top: 730, width: 780, height: 360, background: "#4E3222" }} />
+          <div style={{ position: "absolute", left: 520, top: 730, width: 780, height: 150, background: "#4E3222" }} />
+          {[540, 1250].map((x) => (
+            <div key={x} style={{ position: "absolute", left: x, top: 880, width: 30, height: 12, background: "rgba(0,0,0,0.35)", borderRadius: "50%" }} />
+          ))}
           <div style={{ position: "absolute", left: 880, top: 640, width: 60, height: 66, borderRadius: 8, background: "linear-gradient(90deg, #9AA3A8, #DDE3E6, #8A9398)" }}>
             <div style={{ position: "absolute", left: 0, right: 0, top: 18, height: 26, background: P.ladrillo }} />
           </div>
@@ -120,7 +124,7 @@ export const Escena3: React.FC = () => {
             <div
               style={{
                 position: "absolute",
-                left: interp(f, [c.butkus - 40, c.butkus + 10], [1900, 60], clampI),
+                left: interp(f, [c.butkus - 40, c.butkus + 10], [1900, 80], clampI),
                 top: 640,
                 // mientras camina hacia la izquierda mira hacia la izquierda; al llegar se gira hacia Sly
                 transform: f < c.butkus + 12 ? "scaleX(-1)" : "none",

@@ -62,6 +62,7 @@ type PropsSly = {
   sinPiernas?: boolean;
   altura?: number;
   objetoDer?: React.ReactNode;
+  sombra?: boolean; // sombra de contacto bajo los pies
   luz?: string; // color del borde iluminado
   semilla?: number;
   style?: React.CSSProperties;
@@ -78,11 +79,13 @@ export const Sly: React.FC<PropsSly> = ({
   sinPiernas = false,
   altura = 460,
   objetoDer,
+  sombra = true,
   luz,
   semilla = 0,
   style,
 }) => {
   const f = useCurrentFrame();
+  const conSombra = sombra && !sinPiernas;
   const pelo = edad > 0 ? mezclarColor(P.pelo, "#B9B4AE", edad) : P.pelo;
   const respira = 1 + Math.sin(f / 14 + semilla) * 0.01;
   const parpadeo = (f + semilla * 41) % 120 < 4;
@@ -107,6 +110,7 @@ export const Sly: React.FC<PropsSly> = ({
     const brazoAtras = correr === undefined ? 10 : -s * 50;
     return (
       <svg viewBox="0 0 200 420" width={ancho} height={altura} style={{ overflow: "visible", ...style }}>
+        {conSombra ? <ellipse cx={110} cy={400} rx={64} ry={11} fill="rgba(0,0,0,0.35)" /> : null}
         {!sinPiernas ? pierna(-s, "#2E3F63") : null}
         <Brazo2 sx={104} sy={136} lado={1} b={{ hombro: brazoAtras, codo: -50 }} manga="#4E2E18" mano={P.pielSombra} />
         {!sinPiernas ? pierna(s, P.vaquero) : null}
@@ -186,6 +190,7 @@ export const Sly: React.FC<PropsSly> = ({
 
   return (
     <svg viewBox="0 0 200 420" width={ancho} height={altura} style={{ overflow: "visible", ...style }}>
+      {conSombra ? <ellipse cx={100} cy={396} rx={66} ry={11} fill="rgba(0,0,0,0.35)" /> : null}
       {!sinPiernas ? (
         <>
           <path d="M62 246 L138 246 L136 300 L104 300 L102 384 L70 384 L64 300 Z" fill={P.vaquero} />
@@ -277,6 +282,7 @@ export const Sasha: React.FC<{
   );
   return (
     <svg viewBox="0 0 200 420" width={(altura * 200) / 420} height={altura} style={{ overflow: "visible", ...style }}>
+      {!sinPiernas ? <ellipse cx={100} cy={398} rx={70} ry={11} fill="rgba(0,0,0,0.35)" /> : null}
       <path d="M58 60 Q56 10 100 12 Q144 10 142 60 L150 190 Q100 200 50 190 Z" fill="#6B4226" />
       {!sinPiernas ? (
         <>
@@ -372,6 +378,7 @@ export const Butkus: React.FC<{
   );
   return (
     <svg viewBox="0 0 320 200" width={ancho} height={(ancho * 200) / 320} style={{ overflow: "visible", ...style }}>
+      <ellipse cx={sentado ? 130 : 150} cy={192} rx={sentado ? 100 : 120} ry={10} fill="rgba(0,0,0,0.32)" opacity={1 - saltar * 0.6} />
       <g transform={`translate(0 ${-saltar * 40}) rotate(${-saltar * 12} 160 120)`}>
         <path d={`M44 96 Q${20 - cola} ${70 - cola / 2} ${14 - cola} 52`} stroke={canela} strokeWidth={11} fill="none" strokeLinecap="round" />
         {sentado ? (
@@ -431,6 +438,7 @@ export const Silueta: React.FC<{
   const [dx, dy] = dir(1, brazoDer);
   return (
     <svg viewBox="0 0 200 420" width={(altura * 200) / 420} height={altura} style={{ overflow: "visible", ...style }}>
+      <ellipse cx={100} cy={396} rx={62} ry={10} fill="rgba(0,0,0,0.35)" />
       <path d="M62 250 L138 250 L132 392 L104 392 L100 300 L96 392 L68 392 Z" fill={color} />
       <path d={traje ? "M44 146 Q48 114 100 108 Q152 114 156 146 L148 262 L52 262 Z" : "M56 146 Q58 116 100 110 Q142 116 144 146 L140 262 L60 262 Z"} fill={color} />
       {traje ? <path d="M90 112 L100 150 L110 112" stroke={borde ?? "#2A2A2A"} strokeWidth={4} fill="none" opacity={0.6} /> : null}

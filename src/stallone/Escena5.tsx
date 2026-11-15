@@ -91,8 +91,8 @@ export const Escena5: React.FC = () => {
             </div>
           ) : null}
           {/* Sly, pequeño, de espaldas */}
-          <div style={{ position: "absolute", left: 820, top: 690 }}>
-            <Sly vista="espalda" altura={480} sinPiernas luz="#FFD48A" />
+          <div style={{ position: "absolute", left: 830, top: 700 }}>
+            <Sly vista="espalda" altura={560} luz="#FFD48A" sombra={false} />
           </div>
         </AbsoluteFill>
         {cifras.map((x) => (
@@ -131,13 +131,13 @@ export const Escena5: React.FC = () => {
         <div style={{ position: "absolute", left: 0, top: 120, width: 200, height: 960, background: "#FFE7B0" }} />
         <div style={{ position: "absolute", left: 0, top: 120, width: 200 * (0.15 + 0.85 * cierre), height: 960, background: "linear-gradient(90deg, #4A2C1A, #6B4630)", boxShadow: "inset 0 0 0 12px #3A2010" }} />
         {sale < 1 ? (
-          <div style={{ position: "absolute", left: interp(sale, [0, 1], [820, -260]), top: 690 - levanta * 230 }}>
+          <div style={{ position: "absolute", left: interp(sale, [0, 1], [830, -260]), top: 700 - levanta * 230 }}>
             {sale > 0 ? (
               <div style={{ transform: "scaleX(-1)" }}>
                 <Sly vista="perfil" altura={720} correr={f / 6} expresion="decidido" />
               </div>
             ) : (
-              <Sly vista="espalda" altura={480 + levanta * 240} sinPiernas={levanta < 0.5} luz="#FFD48A" />
+              <Sly vista="espalda" altura={560 + levanta * 160} luz="#FFD48A" sombra={false} />
             )}
           </div>
         ) : null}

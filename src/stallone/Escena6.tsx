@@ -226,14 +226,16 @@ export const Escena6: React.FC = () => {
           </div>
         ) : null}
         {(() => {
-          const y = interp(subir, [0, 1], [760, 160]);
-          const esc = interp(subir, [0, 1], [1, 0.48]);
+          // los pies van siempre sobre un escalón: de la base (y≈1040) al rellano superior (y≈470)
+          const pies = interp(subir, [0, 1], [1040, 470]);
+          const esc = interp(subir, [0, 1], [1, 0.46]);
+          const y = pies - (390 / 420) * 460 * esc;
           return (
             <>
               <div style={{ position: "absolute", left: 960 - 120 * esc, top: y, transform: `scale(${esc})`, transformOrigin: "50% 0%" }}>
                 <Sly vista="espalda" altura={460} brazoIzq={arriba ? POSE.arriba.izq : { hombro: 20 + Math.sin(f / 3) * 30, codo: -40 }} brazoDer={arriba ? POSE.arriba.der : { hombro: 20 - Math.sin(f / 3) * 30, codo: -40 }} luz={P.dorado} style={{ transform: `translateY(${arriba ? 0 : Math.abs(Math.sin(f / 3)) * -10}px)` }} />
               </div>
-              <div style={{ position: "absolute", left: 960 + 60 * esc, top: y + 300 * esc, transform: `scale(${esc})`, transformOrigin: "0 0" }}>
+              <div style={{ position: "absolute", left: 960 + 70 * esc, top: pies - 186 * esc, transform: `scale(${esc})`, transformOrigin: "0 0" }}>
                 <Butkus ancho={300} andar={arriba ? undefined : f / 3} sentado={arriba} />
               </div>
             </>

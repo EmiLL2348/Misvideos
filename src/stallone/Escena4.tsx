@@ -109,6 +109,7 @@ export const Escena4: React.FC = () => {
 
       <Plano desde={c.escribio} hasta={dur + 10}>
         <AbsoluteFill style={{ background: "#1A1622" }} />
+        <div style={{ position: "absolute", left: 0, right: 0, top: 820, bottom: 0, background: "linear-gradient(#26202C, #141018)" }} />
         <div style={{ position: "absolute", left: 1320, top: 140, width: 420, height: 380, border: "16px solid #3A2C22", background: `linear-gradient(${cielo > 0.5 ? "#0E1424" : "#3A4A6A"}, ${cielo > 0.5 ? "#1C2A44" : "#C8873A"})` }} />
         <div style={{ position: "absolute", left: 640, top: 250 }}>
           <Sly altura={600} expresion="decidido" sinPiernas brazoIzq={POSE.escribir.izq} brazoDer={{ hombro: 22, codo: -100 + Math.sin(f * 1.4) * 8 }} />
@@ -137,8 +138,8 @@ export const Escena4: React.FC = () => {
           );
         })}
         {f >= c.mano - 20 ? (
-          <div style={{ position: "absolute", left: interp(f, [c.mano - 20, c.mano + 10], [-300, 160], clampI), top: 280 }}>
-            <Sasha altura={560} taza expresion="sonrisa" sinPiernas />
+          <div style={{ position: "absolute", left: interp(f, [c.mano - 20, c.mano + 10], [-300, 160], clampI), top: 300 }}>
+            <Sasha altura={560} taza expresion="sonrisa" />
           </div>
         ) : null}
         <div key={dia} style={{ position: "absolute", left: 120, top: 90, fontFamily: F_MANO, fontWeight: 700, fontSize: 110, color: P.crema, transform: `rotate(-6deg) scale(${0.8 + 0.2 * rebote(f, c.escribio + Math.floor(Math.min(2, t * 3)) * (L / 3))})`, textShadow: "0 6px 20px rgba(0,0,0,0.8)" }}>
