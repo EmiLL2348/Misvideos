@@ -215,9 +215,11 @@ export const Vapor: React.FC<{ x: number; y: number; escala?: number; color?: st
 /** Grano de película + viñeteado + parpadeo de exposición. */
 export const Pelicula: React.FC<{ vineta?: number; tinte?: string }> = ({ vineta = 0.75, tinte }) => {
   const f = useCurrentFrame();
-  const n = f % 4;
-  const ox = (f * 73) % 256;
-  const oy = (f * 151) % 256;
+  // el grano cambia cada 2 fotogramas: conserva la textura y comprime mucho mejor
+  const g = Math.floor(f / 2);
+  const n = g % 4;
+  const ox = (g * 73) % 256;
+  const oy = (g * 151) % 256;
   const flicker = 0.03 * Math.sin(f * 1.7) * Math.sin(f * 0.37);
   return (
     <AbsoluteFill style={{ pointerEvents: "none", zIndex: 40 }}>
@@ -227,7 +229,7 @@ export const Pelicula: React.FC<{ vineta?: number; tinte?: string }> = ({ vineta
           backgroundImage: `url(${staticFile(`stallone/grano-${n}.png`)})`,
           backgroundPosition: `${ox}px ${oy}px`,
           mixBlendMode: "overlay",
-          opacity: 0.9,
+          opacity: 0.6,
         }}
       />
       <AbsoluteFill style={{ background: `radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,${vineta}) 100%)` }} />

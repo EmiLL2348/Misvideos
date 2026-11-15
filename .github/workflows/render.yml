@@ -17,16 +17,20 @@ jobs:
             output: video.mp4
             artifact: video
             guion: ""
+            flags: ""
           - id: CuerpoExtremo
             output: cuerpo-extremo.mp4
             artifact: cuerpo-extremo
             guion: src/cuerpo/guion.json
             manifiesto: public/audio/voz.json
+            flags: ""
           - id: Stallone
             output: stallone-106-dolares.mp4
             artifact: stallone-106-dolares
             guion: src/stallone/guion.json
             manifiesto: public/audio/stallone/voz.json
+            # el grano de película es ruido: sin límite de bitrate el MP4 pesaba 2,2 GB
+            flags: --video-bitrate=6M
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -60,7 +64,7 @@ jobs:
           test -f ${{ matrix.manifiesto }}
 
       - name: Render video
-        run: npx remotion render src/index.ts ${{ matrix.id }} out/${{ matrix.output }} --codec=h264
+        run: npx remotion render src/index.ts ${{ matrix.id }} out/${{ matrix.output }} --codec=h264 ${{ matrix.flags }}
 
       - name: Upload MP4 artifact
         uses: actions/upload-artifact@v4
