@@ -9,6 +9,9 @@ import { D, lerp } from "./estilo";
  * queda en y = CADERA (236) y los pies en y = PIE_SENTADO (384).
  */
 export const PIE = 452;
+/** Brazo (hombro→codo) y antebrazo con mano, en unidades del SVG 200×460. */
+export const L_BRAZO = 74;
+export const L_ANTEBRAZO = 70;
 export const CADERA = 236;
 export const PIE_SENTADO = 384;
 export const PIE_SUELO = 262; // sentado en el suelo con las piernas cruzadas
@@ -40,7 +43,7 @@ const ROPA: Record<Ropa, { torso: string; torsoSombra: string; manga: string; pa
   casual: { torso: "#3B4A5E", torsoSombra: "#2E3B4C", manga: "#3B4A5E", pantalon: "#2F4A6E", zapato: "#2A2420", cuello: "#E6E1D6" },
   taller: { torso: "#6E7378", torsoSombra: "#5A5F64", manga: "#6E7378", pantalon: "#2F4A6E", zapato: "#2A2420" },
   nino: { torso: "#C8673A", torsoSombra: "#A9552F", manga: "#C8673A", pantalon: "#3E5A7A", zapato: "#2A2420" },
-  armadura: { torso: "#9AA4AE", torsoSombra: "#737D88", manga: "#8C96A0", pantalon: "#828C96", zapato: "#56606A" },
+  armadura: { torso: "#B3202A", torsoSombra: "#8A1720", manga: "#B3202A", pantalon: "#A51C26", zapato: "#6E1218" },
 };
 
 const rad = (g: number) => (g * Math.PI) / 180;
@@ -104,31 +107,31 @@ export const Robert: React.FC<PropsRobert> = ({
   /* ---------- brazos (dos segmentos), mano encima del objeto ---------- */
   const brazo = (sx: number, sy: number, lado: number, b: Brazo, manga: string) => {
     const [ax, ay] = dir(lado, b.hombro);
-    const ex = sx + ax * 84;
-    const ey = sy + ay * 84;
+    const ex = sx + ax * L_BRAZO;
+    const ey = sy + ay * L_BRAZO;
     const [bx, by] = dir(lado, b.hombro + b.codo);
-    const hx = ex + bx * 78;
-    const hy = ey + by * 78;
+    const hx = ex + bx * L_ANTEBRAZO;
+    const hy = ey + by * L_ANTEBRAZO;
     if (ropa === "armadura") {
       const gx = ex + bx * 44;
       const gy = ey + by * 44;
       return { seg: (
         <g>
-          <line x1={sx} y1={sy} x2={ex} y2={ey} stroke="#7E8892" strokeWidth={25} strokeLinecap="round" />
-          <line x1={sx} y1={sy} x2={ex} y2={ey} stroke="#A4AEB8" strokeWidth={9} strokeLinecap="round" opacity={0.6} />
-          <line x1={ex} y1={ey} x2={hx} y2={hy} stroke="#7E8892" strokeWidth={22} strokeLinecap="round" />
-          {/* guantelete: antebrazo más ancho con franja de luz */}
-          <line x1={gx} y1={gy} x2={hx - bx * 6} y2={hy - by * 6} stroke="#68727C" strokeWidth={29} strokeLinecap="round" />
-          <line x1={gx} y1={gy} x2={hx - bx * 10} y2={hy - by * 10} stroke={`rgba(140,220,255,${0.35 + 0.65 * brillo})`} strokeWidth={4} strokeLinecap="round" />
-          <circle cx={ex} cy={ey} r={13} fill="#5E6670" />
-          <circle cx={ex} cy={ey} r={6} fill="#A4AEB8" />
+          <line x1={sx} y1={sy} x2={ex} y2={ey} stroke="#C99A2E" strokeWidth={26} strokeLinecap="round" />
+          <line x1={sx} y1={sy} x2={ex} y2={ey} stroke="#F0C860" strokeWidth={8} strokeLinecap="round" opacity={0.7} />
+          <line x1={ex} y1={ey} x2={hx} y2={hy} stroke="#B3202A" strokeWidth={23} strokeLinecap="round" />
+          {/* guantelete: antebrazo más ancho */}
+          <line x1={gx} y1={gy} x2={hx - bx * 6} y2={hy - by * 6} stroke="#9A1A24" strokeWidth={29} strokeLinecap="round" />
+          <line x1={gx} y1={gy} x2={hx - bx * 10} y2={hy - by * 10} stroke="#E0B048" strokeWidth={4} strokeLinecap="round" />
+          <circle cx={ex} cy={ey} r={13} fill="#5A1015" />
+          <circle cx={ex} cy={ey} r={6} fill="#E0B048" />
         </g>
       ), hx, hy };
     }
     return { seg: (
       <g>
-        <line x1={sx} y1={sy} x2={ex} y2={ey} stroke={manga} strokeWidth={21} strokeLinecap="round" />
-        <line x1={ex} y1={ey} x2={hx} y2={hy} stroke={manga} strokeWidth={18} strokeLinecap="round" />
+        <line x1={sx} y1={sy} x2={ex} y2={ey} stroke={manga} strokeWidth={24} strokeLinecap="round" />
+        <line x1={ex} y1={ey} x2={hx} y2={hy} stroke={manga} strokeWidth={21} strokeLinecap="round" />
       </g>
     ), hx, hy };
   };
@@ -144,7 +147,7 @@ export const Robert: React.FC<PropsRobert> = ({
       {frente ? (
         <>
           {/* pelo */}
-          <path d="M72 52 Q64 20 94 8 Q120 2 132 22 Q136 36 128 48 Q124 32 112 28 Q96 24 86 32 Q78 40 72 52 Z" fill={D.pelo} />
+          <path d="M74 54 Q66 20 94 10 Q118 4 128 22 Q132 36 126 52 Q122 34 112 30 Q96 26 86 34 Q78 42 74 54 Z" fill={D.pelo} />
           <path d="M84 20 Q100 8 122 16" stroke="#5A4234" strokeWidth={3} fill="none" opacity={0.7} />
           <path d="M80 30 Q96 18 118 24" stroke="#5A4234" strokeWidth={2.5} fill="none" opacity={0.6} />
           <path d="M74 44 Q76 34 84 28" stroke="#5A4234" strokeWidth={2.5} fill="none" opacity={0.5} />
@@ -213,23 +216,22 @@ export const Robert: React.FC<PropsRobert> = ({
       {casco > 0 ? (
         <g transform={`translate(0 ${(1 - casco) * -80})`} opacity={Math.min(1, casco * 2)}>
           {/* casco completo: cubre pelo y barba */}
-          <path d="M64 54 Q62 4 100 2 Q138 4 136 54 Q136 92 100 100 Q64 92 64 54 Z" fill="#8A949E" />
-          <path d="M100 2 Q138 4 136 54 Q136 92 100 100 Z" fill="#6E7882" />
+          <path d="M64 54 Q62 4 100 2 Q138 4 136 54 Q136 92 100 100 Q64 92 64 54 Z" fill="#B3202A" />
+          <path d="M100 2 Q138 4 136 54 Q136 92 100 100 Z" fill="#8A1720" />
           {frente ? (
             <>
               {/* placa facial angulosa */}
-              <path d="M76 34 Q100 26 124 34 L124 70 L112 92 L88 92 L76 70 Z" fill="#B4BEC8" />
-              <path d="M100 28 Q114 28 124 34 L124 70 L112 92 L100 92 Z" fill="#949EA8" />
-              <path d="M76 34 Q100 26 124 34" stroke="#5E6670" strokeWidth={3} fill="none" />
+              <path d="M76 34 Q100 26 124 34 L124 70 L112 92 L88 92 L76 70 Z" fill="#E6B54A" />
+              <path d="M100 28 Q114 28 124 34 L124 70 L112 92 L100 92 Z" fill="#C4922E" />
+              <path d="M76 34 Q100 26 124 34" stroke="#7A5A1E" strokeWidth={3} fill="none" />
               {/* ojos: rendijas en ángulo */}
               <path d="M80 46 L97 50 L95 56 L82 54 Z M103 50 L120 46 L118 54 L105 56 Z" fill="#0E141A" />
               <path d="M80 46 L97 50 L95 56 L82 54 Z M103 50 L120 46 L118 54 L105 56 Z" fill={`rgba(190,240,255,${brillo})`} />
               <ellipse cx={89} cy={51} rx={14} ry={8} fill={`rgba(140,220,255,${0.35 * brillo})`} />
               <ellipse cx={111} cy={51} rx={14} ry={8} fill={`rgba(140,220,255,${0.35 * brillo})`} />
               {/* juntas de mejillas y mandíbula, rejilla de la boca */}
-              <path d="M78 62 L90 72 L88 90 M122 62 L110 72 L112 90" stroke="#5E6670" strokeWidth={2.5} fill="none" />
-              <path d="M93 80 L107 80 M94 85 L106 85" stroke="#4E565F" strokeWidth={2.5} strokeLinecap="round" />
-              <path d="M100 30 L100 42" stroke="#5E6670" strokeWidth={2.5} />
+              <path d="M78 62 L90 72 L88 90 M122 62 L110 72 L112 90" stroke="#8A6420" strokeWidth={2.5} fill="none" />
+              <path d="M91 82 L109 82" stroke="#6A4A18" strokeWidth={3} strokeLinecap="round" />
             </>
           ) : null}
           <path d="M72 30 Q84 10 106 8" stroke="rgba(255,255,255,0.55)" strokeWidth={4} fill="none" strokeLinecap="round" />
@@ -268,23 +270,22 @@ export const Robert: React.FC<PropsRobert> = ({
       {ropa === "armadura" ? (
         <g>
           {/* pectorales y abdomen por placas */}
-          <path d="M70 112 Q72 102 98 102 L98 150 Q80 156 70 146 Z" fill="#B0BAC4" />
-          <path d="M130 112 Q128 102 102 102 L102 150 Q120 156 130 146 Z" fill="#8E98A2" />
+          <path d="M70 112 Q72 102 98 102 L98 150 Q80 156 70 146 Z" fill="#C8303A" />
+          <path d="M130 112 Q128 102 102 102 L102 150 Q120 156 130 146 Z" fill="#9A1A24" />
           {[164, 184, 204].map((y) => (
             <g key={y}>
-              <rect x={80} y={y} width={18} height={16} rx={3} fill="#A0AAB4" />
-              <rect x={102} y={y} width={18} height={16} rx={3} fill="#848E98" />
+              <rect x={80} y={y} width={18} height={16} rx={3} fill="#E0B048" />
+              <rect x={102} y={y} width={18} height={16} rx={3} fill="#B88A2A" />
             </g>
           ))}
-          <rect x={70} y={224} width={60} height={14} rx={3} fill="#5E6670" />
+          <rect x={70} y={224} width={60} height={14} rx={3} fill="#6E1218" />
           {!espalda ? (
             <g>
-              {/* núcleo de energía hexagonal (no circular) */}
-              <path d="M100 116 L110 122 L110 134 L100 140 L90 134 L90 122 Z" fill="#2A3440" />
-              <path d="M100 119 L107 123.5 L107 132.5 L100 137 L93 132.5 L93 123.5 Z" fill={`rgba(190,240,255,${0.45 + 0.55 * brillo})`} />
-              <circle cx={100} cy={128} r={22} fill={`rgba(140,220,255,${0.25 * brillo})`} />
-              <path d="M84 150 L100 158 L116 150" stroke={`rgba(140,220,255,${0.3 + 0.7 * brillo})`} strokeWidth={3} fill="none" strokeLinecap="round" />
-              <rect x={96} y={227} width={8} height={8} fill={`rgba(140,220,255,${0.3 + 0.7 * brillo})`} />
+              {/* reactor del pecho */}
+              <circle cx={100} cy={128} r={13} fill="#3A3F46" />
+              <circle cx={100} cy={128} r={10} fill={`rgba(200,245,255,${0.55 + 0.45 * brillo})`} />
+              <circle cx={100} cy={128} r={6} fill="none" stroke="rgba(120,200,240,0.8)" strokeWidth={2} />
+              <circle cx={100} cy={128} r={26} fill={`rgba(140,220,255,${0.28 * brillo})`} />
             </g>
           ) : null}
         </g>
@@ -295,19 +296,19 @@ export const Robert: React.FC<PropsRobert> = ({
   /* ---------- piernas ---------- */
   const piernasDePie = (
     <g>
-      <path d="M72 236 L128 236 L126 300 L104 300 L103 440 L80 440 L74 300 Z" fill={R.pantalon} />
-      <path d="M104 300 L126 300 L124 440 L102 440 Z" fill={R.pantalon} />
+      <path d="M68 236 L132 236 L131 300 L104 300 L103 440 L76 440 L69 300 Z" fill={R.pantalon} />
+      <path d="M104 300 L131 300 L128 440 L102 440 Z" fill={R.pantalon} />
+      <path d="M104 300 L131 300 L128 440 L116 440 Z" fill="rgba(0,0,0,0.12)" />
       <path d="M100 244 L100 300" stroke="rgba(0,0,0,0.25)" strokeWidth={2} />
-      <path d="M78 438 Q78 452 96 452 L104 452 L104 438 Z" fill={R.zapato} />
-      <path d="M100 438 L100 452 L118 452 Q126 452 124 438 Z" fill={R.zapato} />
+      <path d="M74 438 Q72 452 94 452 L104 452 L104 438 Z" fill={R.zapato} />
+      <path d="M100 438 L100 452 L122 452 Q132 452 128 438 Z" fill={R.zapato} />
       {ropa === "armadura" ? (
         <g>
-          <path d="M76 250 L98 250 L100 296 L78 296 Z M102 250 L124 250 L124 296 L104 296 Z" fill="#A0AAB4" opacity={0.7} />
-          <ellipse cx={90} cy={318} rx={13} ry={11} fill="#5E6670" />
-          <ellipse cx={113} cy={318} rx={13} ry={11} fill="#5E6670" />
-          <path d="M84 340 L96 340 L96 420 L86 420 Z M106 340 L118 340 L117 420 L107 420 Z" fill="#9AA4AE" opacity={0.7} />
-          <path d="M91 350 L91 410 M112 350 L112 410" stroke={`rgba(140,220,255,${0.3 + 0.7 * brillo})`} strokeWidth={3} strokeLinecap="round" />
-          <path d="M74 428 L104 428 L104 452 L76 452 Q70 452 72 440 Z M100 428 L128 428 Q130 452 122 452 L100 452 Z" fill="#56606A" />
+          <path d="M76 250 L98 250 L100 296 L78 296 Z M102 250 L124 250 L124 296 L104 296 Z" fill="#C8303A" opacity={0.8} />
+          <ellipse cx={90} cy={318} rx={13} ry={11} fill="#E0B048" />
+          <ellipse cx={113} cy={318} rx={13} ry={11} fill="#B88A2A" />
+          <path d="M84 340 L96 340 L96 420 L86 420 Z M106 340 L118 340 L117 420 L107 420 Z" fill="#C99A2E" opacity={0.85} />
+          <path d="M74 428 L104 428 L104 452 L76 452 Q70 452 72 440 Z M100 428 L128 428 Q130 452 122 452 L100 452 Z" fill="#6E1218" />
         </g>
       ) : null}
     </g>
@@ -412,13 +413,13 @@ export const Robert: React.FC<PropsRobert> = ({
         {bD.seg}
         {objetoCentro ? <g transform="translate(100 196)">{objetoCentro}</g> : null}
         {objetoDer ? <g transform={`translate(${bD.hx} ${bD.hy})`}>{objetoDer}</g> : null}
-        <circle cx={bI.hx} cy={bI.hy} r={ropa === "armadura" ? 13 : 9} fill={ropa === "armadura" ? "#6E7882" : D.piel} />
-        <circle cx={bD.hx} cy={bD.hy} r={ropa === "armadura" ? 13 : 9} fill={ropa === "armadura" ? "#6E7882" : D.piel} />
+        <circle cx={bI.hx} cy={bI.hy} r={ropa === "armadura" ? 13 : 9} fill={ropa === "armadura" ? "#9A1A24" : D.piel} />
+        <circle cx={bD.hx} cy={bD.hy} r={ropa === "armadura" ? 13 : 9} fill={ropa === "armadura" ? "#9A1A24" : D.piel} />
         {ropa === "armadura" ? (
           <>
-            <ellipse cx={68} cy={114} rx={22} ry={16} fill="#A4AEB8" />
-            <ellipse cx={132} cy={114} rx={22} ry={16} fill="#848E98" />
-            <path d="M50 110 Q68 96 86 110 M114 110 Q132 96 150 110" stroke="#5E6670" strokeWidth={2.5} fill="none" />
+            <ellipse cx={68} cy={114} rx={22} ry={16} fill="#C8303A" />
+            <ellipse cx={132} cy={114} rx={22} ry={16} fill="#9A1A24" />
+            <path d="M50 110 Q68 96 86 110 M114 110 Q132 96 150 110" stroke="#6E1218" strokeWidth={2.5} fill="none" />
           </>
         ) : null}
         {repulsorIzq > 0 ? (
@@ -479,10 +480,10 @@ export const SiluetaD: React.FC<{
   const anchoT = tipo === "corpulento" ? 1.22 : tipo === "mujer" ? 0.9 : 1;
   const brazo = (sx: number, lado: number, b: Brazo) => {
     const [ax, ay] = dir(lado, b.hombro);
-    const ex = sx + ax * 84;
-    const ey = 112 + ay * 84;
+    const ex = sx + ax * L_BRAZO;
+    const ey = 112 + ay * L_BRAZO;
     const [bx, by] = dir(lado, b.hombro + b.codo);
-    return { d: `M${sx} 112 L${ex} ${ey} L${ex + bx * 78} ${ey + by * 78}`, hx: ex + bx * 78, hy: ey + by * 78 };
+    return { d: `M${sx} 112 L${ex} ${ey} L${ex + bx * L_ANTEBRAZO} ${ey + by * L_ANTEBRAZO}`, hx: ex + bx * L_ANTEBRAZO, hy: ey + by * L_ANTEBRAZO };
   };
   const ap = aplaudir !== undefined ? Math.abs(Math.sin(f / 3)) : 0;
   const bD = brazo(100 + 34 * anchoT, 1, aplaudir !== undefined ? { hombro: 30, codo: -120 + ap * 14 } : brazoDer);
@@ -499,8 +500,8 @@ export const SiluetaD: React.FC<{
         <path d="M66 112 Q68 98 100 96 Q132 98 134 112 L130 240 L70 240 Z" fill={color} />
         <rect x={90} y={76} width={20} height={24} fill={color} />
       </g>
-      <path d={bD.d} stroke={color} strokeWidth={20} fill="none" strokeLinecap="round" strokeLinejoin="round" />
-      <path d={bI.d} stroke={color} strokeWidth={20} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={bD.d} stroke={color} strokeWidth={24} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={bI.d} stroke={color} strokeWidth={24} fill="none" strokeLinecap="round" strokeLinejoin="round" />
       <ellipse cx={100} cy={52} rx={26} ry={31} fill={color} />
       {tipo === "mujer" ? <path d="M72 50 Q70 14 100 16 Q130 14 128 50 L134 130 Q100 140 66 130 Z" fill={color} /> : null}
       {gorra ? <path d="M72 38 Q74 16 100 16 Q126 16 128 38 L150 42 Q148 48 128 46 Z" fill={color} /> : null}
@@ -529,8 +530,8 @@ export const SiluetaD: React.FC<{
  * lado: -1 brazo izquierdo de la figura (a la izquierda de la pantalla), 1 derecho.
  */
 export const resolverBrazo = (sx: number, sy: number, lado: number, tx: number, ty: number, codoAfuera = true): Brazo => {
-  const L1 = 84;
-  const L2 = 78;
+  const L1 = L_BRAZO;
+  const L2 = L_ANTEBRAZO;
   const dx = (tx - sx) * lado;
   const dy = ty - sy;
   const d = Math.min(L1 + L2 - 0.5, Math.max(Math.abs(L1 - L2) + 0.5, Math.hypot(dx, dy)));
@@ -559,39 +560,45 @@ export const Encapuchado: React.FC<{ alto?: number; ojos?: number; borde?: strin
     <svg viewBox="0 0 300 460" width={(alto * 300) / 460} height={alto} style={{ overflow: "visible" }}>
       <ellipse cx={150} cy={452} rx={110} ry={10} fill="rgba(0,0,0,0.35)" />
       {/* capa abierta (detrás) */}
-      <path d="M150 70 Q40 100 22 452 L278 452 Q260 100 150 70 Z" fill="#141618" />
+      <path d="M150 70 Q40 100 22 452 L278 452 Q260 100 150 70 Z" fill="#1E3A22" />
       {/* armadura de acero */}
-      <path d="M96 150 L204 150 L196 300 L104 300 Z" fill="#7F8892" />
-      <path d="M150 150 L204 150 L196 300 L150 300 Z" fill="#6B747E" />
-      <path d="M108 190 L150 214 L192 190 M112 240 L188 240" stroke="#4E565F" strokeWidth={4} fill="none" />
-      <path d="M104 300 L196 300 L188 452 L160 452 L150 360 L140 452 L112 452 Z" fill="#2A2E33" />
+      {/* túnica verde sobre la armadura, cinturón y piernas de acero */}
+      <path d="M96 150 L204 150 L200 330 L100 330 Z" fill="#2E5A34" />
+      <path d="M150 150 L204 150 L200 330 L150 330 Z" fill="#24482A" />
+      <rect x={98} y={262} width={104} height={18} fill="#2A2E33" />
+      <circle cx={150} cy={271} r={14} fill="#B8C0C8" stroke="#5E6670" strokeWidth={3} />
+      <path d="M108 330 L192 330 L188 452 L160 452 L150 380 L140 452 L112 452 Z" fill="#8C96A0" />
+      <path d="M150 330 L192 330 L188 452 L160 452 L150 380 Z" fill="#6E7882" />
       {/* hombreras */}
       <path d="M60 170 Q66 136 108 146 L104 196 Q74 200 60 170 Z" fill="#9AA4AD" />
       <path d="M240 170 Q234 136 192 146 L196 196 Q226 200 240 170 Z" fill="#7F8892" />
       {[[80, 164], [220, 164], [118, 170], [182, 170]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r={3} fill="#C6CDD4" />)}
       {/* capa delantera a los lados */}
-      <path d="M100 150 Q70 260 60 452 L96 452 Q100 300 110 200 Z" fill="#1A1C1F" />
-      <path d="M200 150 Q230 260 240 452 L204 452 Q200 300 190 200 Z" fill="#101214" />
+      <path d="M100 150 Q70 260 60 452 L96 452 Q100 300 110 200 Z" fill="#2A5230" />
+      <path d="M200 150 Q230 260 240 452 L204 452 Q200 300 190 200 Z" fill="#1E3E24" />
       {/* gorjal de acero */}
       <path d="M112 140 L188 140 L180 168 L120 168 Z" fill="#8C96A0" />
       {/* capucha */}
-      <path d="M150 6 Q86 12 84 92 Q86 150 150 158 Q214 150 216 92 Q214 12 150 6 Z" fill="#1C1E21" />
+      <path d="M150 6 Q86 12 84 92 Q86 150 150 158 Q214 150 216 92 Q214 12 150 6 Z" fill="#2A4E2E" />
       {/* máscara */}
       <path d="M114 58 Q114 36 150 34 Q186 36 186 58 L184 112 Q170 138 150 140 Q130 138 116 112 Z" fill="#9AA4AD" />
       <path d="M150 34 Q186 36 186 58 L184 112 Q170 138 150 140 Z" fill="#7F8892" />
       <path d="M118 62 Q150 54 182 62" stroke="#5E6670" strokeWidth={5} fill="none" />
+      <path d="M120 60 Q150 52 180 60 L178 66 Q150 58 122 66 Z" fill="#5E6670" />
       <path d="M126 72 L144 74 L142 80 L126 78 Z M156 74 L174 72 L174 78 L158 80 Z" fill="#0B0D10" />
       <path d="M126 72 L144 74 L142 80 L126 78 Z M156 74 L174 72 L174 78 L158 80 Z" fill={`rgba(150,255,190,${0.85 * ojos * latido})`} />
       <circle cx={135} cy={76} r={10} fill={`rgba(120,255,170,${0.25 * ojos})`} />
       <circle cx={165} cy={76} r={10} fill={`rgba(120,255,170,${0.25 * ojos})`} />
-      <path d="M150 82 L150 116 M134 122 L166 122" stroke="#4E565F" strokeWidth={3} />
+      <path d="M150 76 L144 104 L156 104 Z" fill="#6B747E" />
+      <rect x={134} y={114} width={32} height={5} rx={2} fill="#22262A" />
+      <path d="M126 88 L128 124 M174 88 L172 124" stroke="#5E6670" strokeWidth={3} strokeLinecap="round" />
       {[[120, 64], [180, 64], [122, 104], [178, 104]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r={2.6} fill="#C6CDD4" />)}
       {mano > 0 ? (() => {
         const codo: [number, number] = [214 + 36 * mano, 230 - 130 * mano];
         const palma = manoEncapuchado(mano);
         return (
           <g>
-            <line x1={204} y1={168} x2={codo[0]} y2={codo[1]} stroke="#141618" strokeWidth={34} strokeLinecap="round" />
+            <line x1={204} y1={168} x2={codo[0]} y2={codo[1]} stroke="#2A5230" strokeWidth={34} strokeLinecap="round" />
             <line x1={codo[0]} y1={codo[1]} x2={palma[0]} y2={palma[1]} stroke="#7F8892" strokeWidth={26} strokeLinecap="round" />
             <line x1={codo[0]} y1={codo[1]} x2={palma[0]} y2={palma[1]} stroke="#A4AEB8" strokeWidth={8} strokeLinecap="round" opacity={0.6} />
             <circle cx={palma[0]} cy={palma[1]} r={17} fill="#6B747E" />

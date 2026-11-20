@@ -2,7 +2,7 @@ import React from "react";
 import { AbsoluteFill, useCurrentFrame } from "remotion";
 import { useEscena } from "../comun/timeline";
 import { Plano } from "../stallone/escenario";
-import { D, F_CIFRA, interp, prog } from "./estilo";
+import { D, F_CITA, F_TEXTO, F_CIFRA, interp, prog } from "./estilo";
 import { SiluetaD, topDePie } from "./Personajes";
 import { COCHE_BASE, CocheDeportivo, CochePolicia, Look, Mazo } from "./props";
 import { Efecto, Rotulo, caida } from "./ui";
@@ -10,12 +10,26 @@ import { Efecto, Rotulo, caida } from "./ui";
 const SUELO_CARRETERA = 880;
 const MESA_Y = 760; // superficie de la mesa en el plano de titulares
 
-const Titular: React.FC<{ texto: string; ancho?: number }> = ({ texto, ancho = 760 }) => (
-  <div style={{ width: ancho, height: 150, background: "#F1ECE0", boxShadow: "0 6px 12px rgba(0,0,0,0.35)", padding: "14px 26px", position: "relative" }}>
-    <div style={{ fontFamily: F_CIFRA, fontWeight: 700, fontSize: 64, color: "#1C1C1C", lineHeight: 1, letterSpacing: 1 }}>{texto}</div>
-    {[0, 1, 2].map((i) => (
-      <div key={i} style={{ position: "absolute", left: 26 + i * 240, bottom: 16, width: 210, height: 34, background: "repeating-linear-gradient(#9A9488 0 4px, transparent 4px 9px)" }} />
+/** Portada de periódico (cabecera ficticia), con foto, fecha y columnas. */
+const Titular: React.FC<{ texto: string; fecha: string; ancho?: number }> = ({ texto, fecha, ancho = 640 }) => (
+  <div style={{ width: ancho, height: 420, background: "linear-gradient(100deg, #EFE9DA, #E4DCC8 60%, #EAE3D2)", boxShadow: "0 10px 18px rgba(0,0,0,0.4)", padding: "16px 24px", position: "relative", boxSizing: "border-box", overflow: "hidden" }}>
+    <div style={{ fontFamily: F_CITA, fontSize: 44, color: "#1A1A1A", textAlign: "center", lineHeight: 1 }}>La Gaceta de California</div>
+    <div style={{ display: "flex", justifyContent: "space-between", borderTop: "3px solid #1A1A1A", borderBottom: "1px solid #1A1A1A", marginTop: 8, padding: "3px 0", fontFamily: F_TEXTO, fontWeight: 600, fontSize: 14, color: "#333", letterSpacing: 1 }}>
+      <span>EDICIÓN DE LA MAÑANA</span>
+      <span>{fecha}</span>
+      <span>50 ¢</span>
+    </div>
+    <div style={{ fontFamily: F_CIFRA, fontWeight: 700, fontSize: 70, color: "#111", lineHeight: 1.05, marginTop: 10, textAlign: "center", letterSpacing: 1 }}>{texto}</div>
+    {/* foto en blanco y negro: silueta tras la reja */}
+    <div style={{ position: "absolute", left: 24, top: 200, width: 220, height: 196, background: "linear-gradient(#9A9A96, #6A6A66)", border: "2px solid #333", overflow: "hidden" }}>
+      <div style={{ position: "absolute", left: 70, top: 40, width: 80, height: 96, borderRadius: "50%", background: "#2A2A2A" }} />
+      <div style={{ position: "absolute", left: 30, top: 126, width: 160, height: 120, borderRadius: "70px 70px 0 0", background: "#2A2A2A" }} />
+      {[0, 1, 2, 3, 4, 5].map((k) => <div key={k} style={{ position: "absolute", left: 12 + k * 38, top: 0, width: 8, height: 196, background: "rgba(30,30,30,0.7)" }} />)}
+    </div>
+    {[0, 1, 2].map((col) => (
+      <div key={col} style={{ position: "absolute", left: 264 + col * 118, top: 200, width: 104, height: 196, background: "repeating-linear-gradient(#8A847A 0 3px, transparent 3px 9px)" }} />
     ))}
+    <div style={{ position: "absolute", left: ancho / 2 - 1, top: 0, width: 2, height: 420, background: "rgba(0,0,0,0.08)" }} />
   </div>
 );
 
@@ -39,9 +53,9 @@ export const Escena4: React.FC = () => {
 
   // titulares: caen con gravedad y se apilan (cada uno 10 px más alto que el anterior)
   const titulares = [
-    { t: "DETENIDO", en: c.controles - 6, x: 560, rot: -3 },
-    { t: "VIOLA LA CONDICIONAL", en: c.meses - 6, x: 600, rot: 2 },
-    { t: "OTRA VEZ", en: c.y1999 - 6, x: 580, rot: -1 },
+    { t: "DETENIDO", fecha: "JUNIO DE 1996", en: c.controles - 6, x: 520, rot: -4 },
+    { t: "VIOLA LA CONDICIONAL", fecha: "1997", en: c.meses - 6, x: 660, rot: 3 },
+    { t: "OTRA VEZ", fecha: "1999", en: c.y1999 - 6, x: 600, rot: -1 },
   ];
   // mazo: baja acelerando y toca el bloque
   const golpeEn = c.juez + 6;
@@ -151,12 +165,12 @@ export const Escena4: React.FC = () => {
         ))}
         <div style={{ position: "absolute", left: 0, right: 0, top: MESA_Y, height: 8, background: "rgba(0,0,0,0.25)" }} />
         {titulares.map((tt, i) => {
-          const reposo = MESA_Y - 150 - i * 12;
-          const y = caida(f, tt.en, -260, reposo, 14);
+          const reposo = MESA_Y - 414 + i * 8;
+          const y = caida(f, tt.en, -460, reposo, 14);
           if (f < tt.en) return null;
           return (
             <div key={tt.t} style={{ position: "absolute", left: tt.x, top: y, transform: `rotate(${tt.rot}deg)`, zIndex: i }}>
-              <Titular texto={tt.t} />
+              <Titular texto={tt.t} fecha={tt.fecha} />
             </div>
           );
         })}

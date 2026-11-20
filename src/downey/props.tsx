@@ -231,28 +231,31 @@ export const Armadura: React.FC<{ alto?: number; encendida?: number }> = ({ alto
       <rect x={56} y={498} width={108} height={22} rx={5} fill="#3A4048" />
       <rect x={104} y={300} width={12} height={198} fill="#4A5058" />
       {/* piernas */}
-      <path d="M80 300 L106 300 L102 470 L82 470 Z" fill="#8C96A0" />
-      <path d="M114 300 L140 300 L138 470 L118 470 Z" fill="#76808A" />
+      <path d="M80 300 L106 300 L102 470 L82 470 Z" fill="#B3202A" />
+      <path d="M114 300 L140 300 L138 470 L118 470 Z" fill="#8A1720" />
       <path d="M84 380 L102 380 M118 380 L136 380" stroke={luz} strokeWidth={3} />
       {/* torso facetado */}
-      <path d="M66 120 Q70 94 110 90 Q150 94 154 120 L146 250 L74 250 Z" fill="#A6B0BA" />
-      <path d="M110 90 Q150 94 154 120 L146 250 L110 250 Z" fill="#87919C" />
-      <path d="M78 120 L110 150 L142 120 M86 180 L110 200 L134 180 M82 230 L138 230" stroke="#5E6670" strokeWidth={4} fill="none" />
-      <path d="M96 142 L110 156 L124 142" stroke={luz} strokeWidth={4} fill="none" strokeLinecap="round" />
+      <path d="M66 120 Q70 94 110 90 Q150 94 154 120 L146 250 L74 250 Z" fill="#C8303A" />
+      <path d="M110 90 Q150 94 154 120 L146 250 L110 250 Z" fill="#9A1A24" />
+      <path d="M78 120 L110 150 L142 120 M86 180 L110 200 L134 180 M82 230 L138 230" stroke="#6E1218" strokeWidth={4} fill="none" />
+      <circle cx={110} cy={142} r={15} fill="#3A3F46" />
+      <circle cx={110} cy={142} r={11} fill={luz} />
       <path d="M92 196 L110 210 L128 196" stroke={luz} strokeWidth={3} fill="none" strokeLinecap="round" />
       {/* hombreras y brazos */}
-      <path d="M52 116 Q38 104 30 128 L40 150 L68 132 Z" fill="#9AA4AD" />
-      <path d="M168 116 Q182 104 190 128 L180 150 L152 132 Z" fill="#7F8892" />
-      <path d="M40 150 L36 262 L56 264 L64 150 Z" fill="#8C96A0" />
-      <path d="M180 150 L184 262 L164 264 L156 150 Z" fill="#76808A" />
+      <path d="M52 116 Q38 104 30 128 L40 150 L68 132 Z" fill="#E0B048" />
+      <path d="M168 116 Q182 104 190 128 L180 150 L152 132 Z" fill="#B88A2A" />
+      <path d="M40 150 L36 262 L56 264 L64 150 Z" fill="#B3202A" />
+      <path d="M180 150 L184 262 L164 264 L156 150 Z" fill="#8A1720" />
       <path d="M42 210 L58 210 M162 210 L178 210" stroke={luz} strokeWidth={3} />
-      <path d="M74 250 L146 250 L140 300 L80 300 Z" fill="#7F8892" />
+      <path d="M74 250 L146 250 L140 300 L80 300 Z" fill="#B88A2A" />
       {/* casco con visor */}
-      <path d="M80 60 Q80 20 110 18 Q140 20 140 60 Q140 88 110 94 Q80 88 80 60 Z" fill="#B0BAC4" />
-      <path d="M110 18 Q140 20 140 60 Q140 88 110 94 Z" fill="#8C96A0" />
-      <path d="M88 54 L132 54 L128 64 L92 64 Z" fill="#11161C" />
-      <path d="M90 58 L130 58" stroke={luz} strokeWidth={4} strokeLinecap="round" />
-      <path d="M96 78 L124 78" stroke="#5E6670" strokeWidth={3} />
+      <path d="M80 60 Q80 20 110 18 Q140 20 140 60 Q140 88 110 94 Q80 88 80 60 Z" fill="#B3202A" />
+      <path d="M110 18 Q140 20 140 60 Q140 88 110 94 Z" fill="#B3202A" />
+      <path d="M88 40 Q110 32 132 40 L132 72 L122 90 L98 90 L88 72 Z" fill="#E6B54A" />
+      <path d="M110 34 Q122 34 132 40 L132 72 L122 90 L110 90 Z" fill="#C4922E" />
+      <path d="M92 54 L107 57 L105 62 L94 61 Z M113 57 L128 54 L126 61 L115 62 Z" fill="#11161C" />
+      <path d="M92 54 L107 57 L105 62 L94 61 Z M113 57 L128 54 L126 61 L115 62 Z" fill={luz} />
+      <path d="M100 80 L120 80" stroke="#6A4A18" strokeWidth={3} />
       <path d="M84 34 Q96 22 112 22" stroke="rgba(255,255,255,0.6)" strokeWidth={4} fill="none" strokeLinecap="round" />
     </svg>
   );
@@ -262,14 +265,19 @@ export const Armadura: React.FC<{ alto?: number; encendida?: number }> = ({ alto
 export const Mascara: React.FC<{ ancho?: number; inclinacion?: number; ojos?: number }> = ({ ancho = 220, inclinacion = 0, ojos = 0 }) => (
   <svg viewBox="0 0 220 160" width={ancho} height={(ancho * 160) / 220} style={{ overflow: "visible" }}>
     <g transform={`rotate(${inclinacion} 110 90)`}>
-      <path d="M32 54 Q32 10 110 8 Q188 10 188 54 L184 112 Q160 150 110 154 Q60 150 36 112 Z" fill="#A2ACB5" />
-      <path d="M110 8 Q188 10 188 54 L184 112 Q160 150 110 154 Z" fill="#848E98" />
-      <path d="M40 56 Q110 40 180 56" stroke="#5E6670" strokeWidth={7} fill="none" />
-      <path d="M58 70 L96 74 L92 86 L58 82 Z M124 74 L162 70 L162 82 L128 86 Z" fill="#0B0D10" />
-      {ojos > 0 ? <path d="M58 70 L96 74 L92 86 L58 82 Z M124 74 L162 70 L162 82 L128 86 Z" fill={`rgba(140,255,180,${ojos})`} /> : null}
-      <path d="M110 86 L110 128 M84 134 L136 134" stroke="#4E565F" strokeWidth={4} strokeLinecap="round" />
-      {[[48, 46], [172, 46], [52, 108], [168, 108], [110, 20]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r={4} fill="#D2D8DE" stroke="#6B747E" strokeWidth={1.5} />)}
-      <path d="M52 30 Q82 14 120 14" stroke="rgba(255,255,255,0.5)" strokeWidth={5} fill="none" strokeLinecap="round" />
+      <path d="M34 50 Q34 8 110 6 Q186 8 186 50 L186 108 Q176 142 110 156 Q44 142 34 108 Z" fill="#A2ACB5" />
+      <path d="M110 6 Q186 8 186 50 L186 108 Q176 142 110 156 Z" fill="#848E98" />
+      {/* frente y cejas marcadas */}
+      <path d="M42 58 Q110 44 178 58 L174 66 Q110 54 46 66 Z" fill="#6B747E" />
+      <path d="M56 70 L96 72 L94 86 L58 84 Z M124 72 L164 70 L162 84 L126 86 Z" fill="#0B0D10" />
+      {ojos > 0 ? <path d="M56 70 L96 72 L94 86 L58 84 Z M124 72 L164 70 L162 84 L126 86 Z" fill={`rgba(140,255,180,${ojos})`} /> : null}
+      {/* nariz, boca en rendija y surcos de las mejillas */}
+      <path d="M110 72 L102 112 L118 112 Z" fill="#8E98A2" />
+      <path d="M110 72 L118 112 L110 112 Z" fill="#6B747E" />
+      <rect x={76} y={124} width={68} height={7} rx={3} fill="#2A2E33" />
+      <path d="M64 92 L66 140 M156 92 L154 140 M84 134 L86 150 M136 134 L134 150" stroke="#5E6670" strokeWidth={4} strokeLinecap="round" />
+      {[[46, 40], [174, 40], [44, 100], [176, 100], [110, 18], [60, 130], [160, 130]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r={4} fill="#D2D8DE" stroke="#6B747E" strokeWidth={1.5} />)}
+      <path d="M52 28 Q82 12 120 12" stroke="rgba(255,255,255,0.5)" strokeWidth={5} fill="none" strokeLinecap="round" />
     </g>
   </svg>
 );

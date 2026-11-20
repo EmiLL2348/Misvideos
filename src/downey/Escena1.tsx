@@ -5,7 +5,8 @@ import { Destello, Plano } from "../stallone/escenario";
 import { D, F_CIFRA, interp, prog } from "./estilo";
 import { HOMBRO_DER, HOMBRO_IZQ, Robert, resolverBrazo, topDePie } from "./Personajes";
 import { Look } from "./props";
-import { Efecto, Hud, Particulas } from "./ui";
+import { Efecto } from "./ui";
+import { CampoBatalla, DesiertoExplosion, Guantelete } from "./heroe";
 
 const SUELO = 900;
 const REJA_X = 560;
@@ -44,22 +45,23 @@ const Glitch: React.FC<{ en: number }> = ({ en }) => {
 export const Escena1: React.FC = () => {
   const f = useCurrentFrame();
   const { cue, dur } = useEscena("s1");
-  const c = { armadura: cue("armadura"), fue: cue("fue"), recluso: cue("recluso"), y1999: cue("1999"), actor: cue("actor"), prision: cue("prisión"), nueve: cue("nueve"), prota: cue("protagonizaba"), saga: cue("saga") };
+  const c = { universo: cue("universo"), hombre: cue("hombre"), chasquido: cue("chasquido"), antes: cue("antes"), recluso: cue("recluso"), celda: cue("celda"), california: cue("california"), heroe: cue("héroe"), cine: cue("cine"), historia: cue("historia") };
 
-  // A · el héroe de la armadura
-  const ALTO_H = 700;
-  const kh = ALTO_H / 460;
-  const brillo = prog(f, c.armadura - 4, 14) * (0.85 + 0.15 * Math.sin(f / 5));
+  // A · el guantelete en primer plano: el chasquido
+  const chasq = prog(f, c.chasquido - 2, 3);
+  const empuje = 1 + Math.min(f, c.chasquido) * 0.0012;
+  const GA = 1150;
+  const gk = GA / 560;
 
   // B · ficha policial: sostiene el cartel por los bordes
   const ALTO = 640;
   const k = ALTO / 460;
-  const corte = c.recluso - 2;
+  const corte = c.antes - 2;
   const bIzq = resolverBrazo(HOMBRO_IZQ[0], HOMBRO_IZQ[1], -1, 31, 232);
   const bDer = resolverBrazo(HOMBRO_DER[0], HOMBRO_DER[1], 1, 169, 232);
-  const flashes = [c.recluso + 6, c.y1999 + 2];
-  const cierre = interp(f, [c.prision - 6, c.prision + 10], [1920, REJA_X], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2) });
-  const transforma = prog(f, c.nueve + 4, 24);
+  const flashes = [c.recluso + 4, c.california];
+  const cierre = interp(f, [c.celda - 6, c.celda + 10], [1920, REJA_X], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2) });
+  const finB = c.heroe - 4;
 
   const cartel = (
     <g>
@@ -75,24 +77,26 @@ export const Escena1: React.FC = () => {
 
   return (
     <AbsoluteFill style={{ background: D.negro }}>
-      {/* A · el héroe de la armadura más famosa del cine */}
+      {/* A · gancho: el guantelete de las seis gemas y el chasquido */}
       <Plano desde={0} hasta={corte}>
-        <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 40%, #2C4A6E, #0E1622 70%)" }} />
-        {[-1, 1].map((s) => (
-          <div key={s} style={{ position: "absolute", left: 960 + s * 260 - 200, top: 0, width: 400, height: SUELO, background: "linear-gradient(rgba(140,210,255,0.28), rgba(140,210,255,0.02))", clipPath: s < 0 ? "polygon(0 0, 30% 0, 100% 100%, 60% 100%)" : "polygon(70% 0, 100% 0, 40% 100%, 0 100%)" }} />
-        ))}
-        <div style={{ position: "absolute", left: 0, right: 0, top: SUELO, bottom: 0, background: "linear-gradient(#2A3A50, #141C28)" }} />
-        <div style={{ position: "absolute", left: 960 - 300, top: SUELO - 20, width: 600, height: 40, borderRadius: "50%", background: "radial-gradient(rgba(140,210,255,0.35), transparent 70%)" }} />
-        <div style={{ position: "absolute", left: 960 - 100 * kh, top: topDePie(SUELO, ALTO_H) }}>
-          <Robert alto={ALTO_H} ropa="armadura" casco={1} brillo={brillo} brazoIzq={{ hombro: 16, codo: 8 }} brazoDer={{ hombro: 16, codo: 8 }} luz="#9FDcff" />
-        </div>
-        <Hud x={960} y={topDePie(SUELO, ALTO_H) + 52 * kh} r={150} desde={12} etiquetas={["ANALIZANDO…", f > c.fue ? "IDENTIDAD: RECLUSO" : "IDENTIDAD: ???"]} />
+        <CampoBatalla suelo={980} />
+        <AbsoluteFill style={{ transform: `scale(${empuje})` }}>
+          <div style={{ position: "absolute", left: 960 - 200 * gk, top: 520 - 300 * gk }}>
+            <Guantelete alto={GA} chasquido={chasq} carga={0.6 + 0.4 * prog(f, c.universo - 6, 20)} />
+          </div>
+        </AbsoluteFill>
+        {f >= c.chasquido ? (
+          <div style={{ position: "absolute", left: 960 - (f - c.chasquido) * 70, top: 420 - (f - c.chasquido) * 70, width: (f - c.chasquido) * 140, height: (f - c.chasquido) * 140, borderRadius: "50%", border: "14px solid rgba(255,240,210,0.9)", boxShadow: "0 0 80px 20px rgba(255,200,120,0.6)", opacity: Math.max(0, 1 - (f - c.chasquido) / 18) }} />
+        ) : null}
+        <Destello en={c.chasquido + 1} dur={16} color="#FFF6E6" />
       </Plano>
+      <Efecto archivo="chispas" en={0} vol={0.25} dur={60} />
+      <Efecto archivo="clac" en={c.chasquido} vol={0.6} dur={10} />
+      <Efecto archivo="flash" en={c.chasquido + 1} vol={0.5} dur={25} />
       <Glitch en={corte} />
-      <Efecto archivo="clac" en={corte - 2} vol={0.4} dur={10} />
 
       {/* B · ficha policial con regla de estatura */}
-      <Plano desde={corte} hasta={c.nueve} fundido={2}>
+      <Plano desde={corte} hasta={finB} fundido={2}>
         <AbsoluteFill style={{ background: "linear-gradient(#D9DDE2, #BFC5CC)" }} />
         {new Array(9).fill(0).map((_, i) => {
           const y = SUELO - 340 - i * 70;
@@ -124,64 +128,23 @@ export const Escena1: React.FC = () => {
             </g>
           ))}
         </svg>
-        <Efecto archivo="reja" en={c.prision + 10} vol={0.5} dur={50} />
+        <Efecto archivo="reja" en={c.celda + 10} vol={0.5} dur={50} />
       </Plano>
 
-      {/* C · match cut: los barrotes se convierten en las líneas de una pantalla de cine */}
-      <Plano desde={c.nueve} hasta={dur + 10} fundido={2}>
-        <AbsoluteFill style={{ background: "linear-gradient(#2E3646, #1C222E)" }} />
-        <div style={{ position: "absolute", left: 0, right: 0, top: SUELO, bottom: 0, background: "#232A36" }} />
-        <svg width={1920} height={1080} style={{ position: "absolute", inset: 0 }}>
-          {new Array(12).fill(0).map((_, i) => {
-            const w = 16 + transforma * 54;
-            const color = transforma < 0.5 ? "#3F4853" : `rgba(240,244,255,${0.4 + transforma * 0.6})`;
-            return <rect key={i} x={REJA_X + i * 70} y={150 + transforma * 20} width={w} height={SUELO - 150 - transforma * 260} fill={color} />;
-          })}
-        </svg>
-        <div style={{ position: "absolute", left: REJA_X - 60, top: 120, width: REJA_ANCHO + 120, height: SUELO - 230, boxShadow: `0 0 ${200 * transforma}px ${60 * transforma}px rgba(220,230,255,0.35)`, opacity: transforma }} />
-        {/* la película: el héroe de armadura en pantalla */}
-        {f >= c.prota - 2 ? (
-          <div style={{ position: "absolute", left: REJA_X, top: 170, width: 840, height: 490, overflow: "hidden", opacity: prog(f, c.prota - 2, 10) }}>
-            <AbsoluteFill style={{ background: "linear-gradient(#1B2A44, #3A5A86 70%, #E8A060)" }} />
-            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
-              <div key={i} style={{ position: "absolute", left: i * 90 - 20, bottom: 60, width: 70, height: 110 + ((i * 67) % 160), background: "#16202E" }} />
-            ))}
-            <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 62, background: "#101722" }} />
-            <div style={{ position: "absolute", left: 420 - (360 * 200) / 460 / 2, top: 490 - 62 - 360 * (452 / 460) + 0, transform: `scale(${1 + (f - c.prota) * 0.002})`, transformOrigin: "50% 100%" }}>
-              <Robert alto={360} ropa="armadura" casco={1} brillo={1} repulsor={prog(f, c.prota + 8, 10)} repulsorIzq={prog(f, c.prota + 8, 10)} brazoIzq={{ hombro: 80, codo: 6 }} brazoDer={{ hombro: 80, codo: 6 }} />
-            </div>
-            <AbsoluteFill style={{ background: `radial-gradient(circle at 50% 50%, rgba(160,225,255,${0.4 * prog(f, c.prota + 8, 10)}), transparent 50%)` }} />
-          </div>
-        ) : null}
-        {/* haz del proyector desde el fondo de la sala */}
-        <svg width={1920} height={1080} style={{ position: "absolute", inset: 0, opacity: transforma * 0.9 }}>
-          <defs>
-            <linearGradient id="haz1" x1="0" y1="1" x2="0" y2="0">
-              <stop offset="0" stopColor="rgba(220,235,255,0.28)" />
-              <stop offset="1" stopColor="rgba(220,235,255,0.04)" />
-            </linearGradient>
-          </defs>
-          <polygon points={`930,1080 990,1080 ${REJA_X + 840},660 ${REJA_X + 840},170 ${REJA_X},170 ${REJA_X},660`} fill="url(#haz1)" />
-        </svg>
-        {/* público: cabezas sobre los respaldos */}
-        {[0, 1, 3, 4, 6, 7].map((i) => (
-          <div key={`p${i}`} style={{ position: "absolute", left: 40 + i * 215 + 50, top: 830, width: 80, height: 96, borderRadius: "50% 50% 44% 44%", background: "#0C1016" }} />
-        ))}
-        {new Array(9).fill(0).map((_, i) => (
-          <div key={i} style={{ position: "absolute", left: 40 + i * 215, top: 900, width: 180, height: 180, borderRadius: "40px 40px 0 0", background: "#141922", boxShadow: "inset 0 6px 0 rgba(255,255,255,0.08)" }} />
-        ))}
-        <Destello en={c.prota} />
-        <Efecto archivo="flash" en={c.prota} vol={0.35} dur={20} />
-        <Particulas desde={c.prota} x={REJA_X} y={140} ancho={REJA_ANCHO} suelo={900} n={30} colores={["#FFFFFF", "#CFE4FF"]} tam={6} apagar />
-        {f >= c.saga - 6 ? (
-          <div style={{ position: "absolute", left: 0, right: 0, top: 300, textAlign: "center", opacity: prog(f, c.saga - 6, 16), transform: `scale(${0.92 + 0.08 * prog(f, c.saga - 6, 20)})` }}>
+      {/* C · el héroe: brazos abiertos y explosiones detrás */}
+      <Plano desde={finB} hasta={dur + 10} fundido={3}>
+        <DesiertoExplosion estalla={c.heroe + 8} />
+        <Efecto archivo="mazo" en={c.heroe + 8} vol={0.6} dur={30} />
+        <Efecto archivo="chispas" en={c.heroe + 10} vol={0.3} dur={40} />
+        {f >= c.historia - 6 ? (
+          <div style={{ position: "absolute", left: 0, right: 0, top: 36, textAlign: "center", opacity: prog(f, c.historia - 6, 16), transform: `scale(${0.92 + 0.08 * prog(f, c.historia - 6, 20)})` }}>
             <span
               style={{
                 fontFamily: F_CIFRA,
                 fontWeight: 700,
-                fontSize: 160,
+                fontSize: 130,
                 letterSpacing: 10,
-                backgroundImage: `linear-gradient(100deg, #AEB8C2 0%, #DDE3E8 ${30 + ((f - c.saga) * 3) % 80}%, #FFFFFF ${36 + ((f - c.saga) * 3) % 80}%, #DDE3E8 ${42 + ((f - c.saga) * 3) % 80}%, #AEB8C2 100%)`,
+                backgroundImage: `linear-gradient(100deg, #AEB8C2 0%, #DDE3E8 ${30 + ((f - c.historia) * 3) % 80}%, #FFFFFF ${36 + ((f - c.historia) * 3) % 80}%, #DDE3E8 ${42 + ((f - c.historia) * 3) % 80}%, #AEB8C2 100%)`,
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 color: "transparent",
