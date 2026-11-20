@@ -24,7 +24,7 @@ export const Escena4: React.FC = () => {
   const { cue, dur } = useEscena("s4");
   const c = {
     junio: cue("junio"),
-    cocaina: cue("cocaína"),
+    cocaina: cue("sustancias"),
     espiral: cue("espiral"),
     controles: cue("controles"),
     meses: cue("meses"),
@@ -76,6 +76,20 @@ export const Escena4: React.FC = () => {
         <div style={{ position: "absolute", left: 640, top: topDePie(SUELO_CARRETERA + 24, 420) }}>
           <SiluetaD alto={420} color="#1B2230" policia borde={rojo ? D.sirena : D.sirenaAzul} brazoIzq={{ hombro: 40, codo: -60 }} />
         </div>
+        {/* las luces de la sirena bañan toda la escena */}
+        <AbsoluteFill style={{ background: rojo ? "rgba(211,58,58,0.16)" : "rgba(58,107,211,0.18)", mixBlendMode: "screen" }} />
+        <svg width={1920} height={1080} style={{ position: "absolute", inset: 0 }}>
+          {[0, 1].map((i) => {
+            const ang = (f * 9 + i * 180) % 360;
+            return (
+              <polygon
+                key={i}
+                points={`1490,${SUELO_CARRETERA - 170} ${1490 + Math.cos((ang * Math.PI) / 180) * 1600},${SUELO_CARRETERA - 170 + Math.sin((ang * Math.PI) / 180) * 500 - 120} ${1490 + Math.cos(((ang + 12) * Math.PI) / 180) * 1600},${SUELO_CARRETERA - 170 + Math.sin(((ang + 12) * Math.PI) / 180) * 500 + 120}`}
+                fill={i ? "rgba(58,107,211,0.16)" : "rgba(211,58,58,0.16)"}
+              />
+            );
+          })}
+        </svg>
         <Rotulo texto="JUNIO · 1996" desde={c.junio - 4} hasta={c.cocaina} />
       </Plano>
 
@@ -91,12 +105,13 @@ export const Escena4: React.FC = () => {
         <div style={{ position: "absolute", left: 620, top: 300, width: 680, height: 300, borderRadius: 18, background: "rgba(235,240,245,0.55)", border: "4px solid rgba(255,255,255,0.8)", transform: `translateY(${(1 - prog(f, c.cocaina, 10)) * -6}px)` }}>
           <div style={{ position: "absolute", left: 0, right: 0, top: 0, height: 36, background: "#C8302C", borderRadius: "14px 14px 0 0", color: "#FFF", fontFamily: F_CIFRA, fontWeight: 700, fontSize: 26, letterSpacing: 6, textAlign: "center", lineHeight: "36px" }}>EVIDENCIA</div>
           <svg width={680} height={260} style={{ position: "absolute", left: 0, top: 36 }}>
-            <path d="M110 200 Q150 120 190 200 Z" fill="#F4F4F4" opacity={prog(f, c.cocaina + 4, 10)} />
-            <g opacity={prog(f, cue("heroína") - 4, 10)}>
-              <rect x={290} y={150} width={110} height={18} rx={6} fill="#D9DEE4" />
-              <rect x={400} y={156} width={36} height={6} fill="#AAB2BC" />
-              <rect x={260} y={154} width={30} height={10} fill="#AAB2BC" />
-            </g>
+            {/* bolsitas selladas genéricas (sin mostrar sustancias ni utensilios) */}
+            {[[90, 130], [200, 150], [320, 128]].map(([x, y], i) => (
+              <g key={i} opacity={prog(f, c.cocaina + i * 5, 10)}>
+                <rect x={x} y={y} width={90} height={64} rx={6} fill="rgba(255,255,255,0.55)" stroke="#C8CED6" strokeWidth={3} />
+                <rect x={x} y={y + 8} width={90} height={6} fill="#C8302C" />
+              </g>
+            ))}
             <g opacity={prog(f, cue("pistola") - 4, 10)}>
               <path d="M490 140 L620 140 L620 166 L540 166 L530 210 L500 210 L508 166 L490 166 Z" fill="#2E3238" />
             </g>

@@ -58,6 +58,8 @@ type PropsRobert = {
   objetoCentro?: React.ReactNode; // objeto sujeto con las dos manos (detrás de las manos, delante del torso)
   bombin?: boolean;
   bastonEnSuelo?: boolean;
+  gafas?: boolean; // gafas tintadas
+
   luz?: string; // luz de borde
   sombra?: boolean;
   semilla?: number;
@@ -77,6 +79,7 @@ export const Robert: React.FC<PropsRobert> = ({
   objetoCentro,
   bombin = false,
   bastonEnSuelo = false,
+  gafas = false,
   luz,
   sombra = true,
   semilla = 0,
@@ -116,8 +119,10 @@ export const Robert: React.FC<PropsRobert> = ({
       {frente ? (
         <>
           {/* pelo */}
-          <path d="M73 50 Q70 18 100 16 Q132 16 128 48 Q124 30 108 30 Q92 26 84 36 Q78 40 73 50 Z" fill={D.pelo} />
-          <path d="M84 24 Q96 14 112 20" stroke="#4A3528" strokeWidth={3} fill="none" opacity={0.6} />
+          <path d="M72 52 Q64 20 94 8 Q120 2 132 22 Q136 36 128 48 Q124 32 112 28 Q96 24 86 32 Q78 40 72 52 Z" fill={D.pelo} />
+          <path d="M84 20 Q100 8 122 16" stroke="#5A4234" strokeWidth={3} fill="none" opacity={0.7} />
+          <path d="M80 30 Q96 18 118 24" stroke="#5A4234" strokeWidth={2.5} fill="none" opacity={0.6} />
+          <path d="M74 44 Q76 34 84 28" stroke="#5A4234" strokeWidth={2.5} fill="none" opacity={0.5} />
           {/* cejas */}
           <path
             d={expresion === "decidido" || expresion === "serio" ? "M83 42 L96 45 M104 45 L117 42" : expresion === "triste" ? "M83 45 L96 41 M104 41 L117 45" : "M83 43 Q90 40 96 43 M104 43 Q110 40 117 43"}
@@ -144,10 +149,25 @@ export const Robert: React.FC<PropsRobert> = ({
               ) : null}
             </>
           )}
+          {gafas ? (
+            <g>
+              <rect x={79} y={44} width={19} height={14} rx={5} fill="rgba(150,80,40,0.55)" stroke="#2A2220" strokeWidth={2} />
+              <rect x={102} y={44} width={19} height={14} rx={5} fill="rgba(150,80,40,0.55)" stroke="#2A2220" strokeWidth={2} />
+              <path d="M98 50 L102 50 M79 49 L74 47 M121 49 L126 47" stroke="#2A2220" strokeWidth={2} />
+              <path d="M82 47 L88 46" stroke="rgba(255,255,255,0.6)" strokeWidth={2} strokeLinecap="round" />
+            </g>
+          ) : null}
           {/* nariz y boca */}
           <path d="M100 54 L97 66 L102 67" stroke={D.pielSombra} strokeWidth={2.4} fill="none" strokeLinecap="round" />
-          {perilla ? <path d="M89 72 Q100 69 111 72 L108 86 Q100 92 92 86 Z" fill={D.pelo} opacity={0.92} /> : null}
-          {perilla ? <path d="M88 70 Q100 66 112 70" stroke={D.pelo} strokeWidth={3} fill="none" /> : null}
+          {perilla ? (
+            <g fill={D.pelo}>
+              <path d="M85 71 Q100 63 115 71 L113 75 Q100 69 87 75 Z" />
+              <path d="M86 73 L89 73 L91 86 L88 86 Z" />
+              <path d="M111 73 L114 73 L112 86 L109 86 Z" />
+              <path d="M88 85 Q100 97 112 85 L110 91 Q100 101 90 91 Z" />
+              <ellipse cx={100} cy={81} rx={3.2} ry={3} />
+            </g>
+          ) : null}
           <path
             d={expresion === "sonrisa" ? "M92 74 Q100 80 108 74" : expresion === "triste" ? "M93 77 Q100 73 107 77" : "M93 75 L107 75"}
             stroke={perilla ? "#E9C9B4" : "#8A4A3A"}
@@ -419,3 +439,44 @@ export const resolverBrazo = (sx: number, sy: number, lado: number, tx: number, 
 /** Hombros de Robert/SiluetaD en el SVG. */
 export const HOMBRO_IZQ: [number, number] = [68, 112];
 export const HOMBRO_DER: [number, number] = [132, 112];
+
+/** Figura encapuchada con máscara de acero (original, capucha oscura, sin el diseño del cómic). */
+export const Encapuchado: React.FC<{ alto?: number; ojos?: number; borde?: string }> = ({ alto = 700, ojos = 1, borde = "#6BE09A" }) => {
+  const f = useCurrentFrame();
+  const latido = 0.75 + 0.25 * Math.sin(f / 6);
+  return (
+    <svg viewBox="0 0 300 460" width={(alto * 300) / 460} height={alto} style={{ overflow: "visible" }}>
+      <ellipse cx={150} cy={452} rx={110} ry={10} fill="rgba(0,0,0,0.35)" />
+      {/* capa abierta (detrás) */}
+      <path d="M150 70 Q40 100 22 452 L278 452 Q260 100 150 70 Z" fill="#141618" />
+      <path d="M26 440 Q30 300 56 190" stroke={borde} strokeWidth={4} fill="none" opacity={0.7} />
+      {/* armadura de acero */}
+      <path d="M96 150 L204 150 L196 300 L104 300 Z" fill="#7F8892" />
+      <path d="M150 150 L204 150 L196 300 L150 300 Z" fill="#6B747E" />
+      <path d="M108 190 L150 214 L192 190 M112 240 L188 240" stroke="#4E565F" strokeWidth={4} fill="none" />
+      <path d="M104 300 L196 300 L188 452 L160 452 L150 360 L140 452 L112 452 Z" fill="#2A2E33" />
+      {/* hombreras */}
+      <path d="M60 170 Q66 136 108 146 L104 196 Q74 200 60 170 Z" fill="#9AA4AD" />
+      <path d="M240 170 Q234 136 192 146 L196 196 Q226 200 240 170 Z" fill="#7F8892" />
+      {[[80, 164], [220, 164], [118, 170], [182, 170]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r={3} fill="#C6CDD4" />)}
+      {/* capa delantera a los lados */}
+      <path d="M100 150 Q70 260 60 452 L96 452 Q100 300 110 200 Z" fill="#1A1C1F" />
+      <path d="M200 150 Q230 260 240 452 L204 452 Q200 300 190 200 Z" fill="#101214" />
+      {/* gorjal de acero */}
+      <path d="M112 140 L188 140 L180 168 L120 168 Z" fill="#8C96A0" />
+      {/* capucha */}
+      <path d="M150 6 Q86 12 84 92 Q86 150 150 158 Q214 150 216 92 Q214 12 150 6 Z" fill="#1C1E21" />
+      <path d="M92 70 Q100 20 150 16" stroke={borde} strokeWidth={3} fill="none" opacity={0.6} />
+      {/* máscara */}
+      <path d="M114 58 Q114 36 150 34 Q186 36 186 58 L184 112 Q170 138 150 140 Q130 138 116 112 Z" fill="#9AA4AD" />
+      <path d="M150 34 Q186 36 186 58 L184 112 Q170 138 150 140 Z" fill="#7F8892" />
+      <path d="M118 62 Q150 54 182 62" stroke="#5E6670" strokeWidth={5} fill="none" />
+      <path d="M126 72 L144 74 L142 80 L126 78 Z M156 74 L174 72 L174 78 L158 80 Z" fill="#0B0D10" />
+      <path d="M126 72 L144 74 L142 80 L126 78 Z M156 74 L174 72 L174 78 L158 80 Z" fill={`rgba(150,255,190,${0.85 * ojos * latido})`} />
+      <circle cx={135} cy={76} r={10} fill={`rgba(120,255,170,${0.25 * ojos})`} />
+      <circle cx={165} cy={76} r={10} fill={`rgba(120,255,170,${0.25 * ojos})`} />
+      <path d="M150 82 L150 116 M134 122 L166 122" stroke="#4E565F" strokeWidth={3} />
+      {[[120, 64], [180, 64], [122, 104], [178, 104]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r={2.6} fill="#C6CDD4" />)}
+    </svg>
+  );
+};

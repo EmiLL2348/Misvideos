@@ -66,6 +66,7 @@ export const Escena9: React.FC = () => {
             </div>
           </div>
         ) : null}
+        <Particulas desde={c.m585 + 14} x={560} y={300} ancho={800} suelo={SUELO} n={70} colores={["#F2D27A", "#E8B64A", "#FFF4C8"]} tam={12} />
         {f >= c.m50 - 6 ? (
           <div style={{ position: "absolute", left: 0, right: 0, top: 640, display: "flex", justifyContent: "center", opacity: prog(f, c.m50 - 6, 12) }}>
             <div style={{ padding: "8px 30px", background: D.dorado, borderRadius: 14, fontFamily: F_CIFRA, fontWeight: 700, fontSize: 56, color: "#1C1C1C", letterSpacing: 2 }}>$50.000.000 · UNA SOLA PELÍCULA</div>
@@ -97,9 +98,16 @@ export const Escena9: React.FC = () => {
       <Plano desde={c.y2024} hasta={dur + 10}>
         <AbsoluteFill style={{ background: "repeating-linear-gradient(90deg, #7A1820 0 60px, #9A242C 60px 100px, #6A141C 100px 140px)" }} />
         <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 45%, rgba(255,236,200,0.45), rgba(0,0,0,0.25) 75%)" }} />
+        <svg width={1920} height={1080} style={{ position: "absolute", inset: 0 }}>
+          {[0, 1, 2, 3].map((i) => {
+            const a = Math.sin((f - c.y2024) / 25 + i * 1.6) * 0.5;
+            const x0 = 200 + i * 500;
+            return <polygon key={i} points={`${x0},0 ${x0 + 40},0 ${960 + Math.sin(a) * 900 + 140},${SUELO} ${960 + Math.sin(a) * 900 - 140},${SUELO}`} fill="rgba(255,244,214,0.13)" />;
+          })}
+        </svg>
         <div style={{ position: "absolute", left: 0, right: 0, top: SUELO - 60, bottom: 0, background: "linear-gradient(#5A3A2A, #3A2618)" }} />
         <div style={{ position: "absolute", left: 960 - 100 * k, top: topDePie(SUELO - 60, ALTO) }}>
-          <Robert alto={ALTO} ropa="esmoquin" expresion="sonrisa" brazoIzq={POSE.sostener.izq} brazoDer={POSE.sostener.der} objetoCentro={<g transform="translate(0 12)"><TrofeoSVG alto={110} /></g>} luz="#FFF4E2" />
+          <Robert alto={ALTO} ropa="esmoquin" expresion="sonrisa" gafas brazoIzq={POSE.sostener.izq} brazoDer={POSE.sostener.der} objetoCentro={<g transform="translate(0 12)"><TrofeoSVG alto={110} /></g>} luz="#FFF4E2" />
         </div>
         <Particulas desde={c.oscar} x={200} y={-40} ancho={1520} suelo={SUELO - 60} n={90} colores={["#F2B45A", "#FFF4E2", "#E8B64A", "#7FB6E0"]} />
         {/* primera fila del público (capa delantera) */}

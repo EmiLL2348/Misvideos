@@ -5,7 +5,7 @@ import { Destello, Plano } from "../stallone/escenario";
 import { D, F_CIFRA, interp, prog, rebote } from "./estilo";
 import { Robert, topDePie } from "./Personajes";
 import { Look } from "./props";
-import { Efecto, Rotulo } from "./ui";
+import { Efecto, Particulas, Rotulo } from "./ui";
 
 const SUELO = 880;
 const ROBERT_ALTO = 600;
@@ -68,7 +68,10 @@ export const Escena1: React.FC = () => {
           ))}
         </AbsoluteFill>
         {numero.split("").map((_, i) => (
-          <Efecto key={i} archivo="grabado" en={tGrabado(i)} vol={0.35} dur={10} />
+          <React.Fragment key={i}>
+            <Particulas desde={tGrabado(i)} x={520 + i * 150} y={440} ancho={60} suelo={760} n={14} colores={["#FFE08A", "#FFFFFF", "#FFB43A"]} tam={7} apagar />
+            <Efecto archivo="grabado" en={tGrabado(i)} vol={0.35} dur={10} />
+          </React.Fragment>
         ))}
       </Plano>
 
@@ -113,7 +116,21 @@ export const Escena1: React.FC = () => {
         <Efecto archivo="flash" en={c.prota} vol={0.35} dur={20} />
         {f >= c.saga - 6 ? (
           <div style={{ position: "absolute", left: 0, right: 0, top: 300, textAlign: "center", opacity: prog(f, c.saga - 6, 16), transform: `scale(${0.92 + 0.08 * prog(f, c.saga - 6, 20)})` }}>
-            <span style={{ fontFamily: F_CIFRA, fontWeight: 700, fontSize: 150, color: "#1A1F28", letterSpacing: 10, textShadow: "0 0 30px rgba(255,255,255,0.6)" }}>RECLUSO P50522</span>
+            <span
+              style={{
+                fontFamily: F_CIFRA,
+                fontWeight: 700,
+                fontSize: 160,
+                letterSpacing: 10,
+                backgroundImage: `linear-gradient(100deg, #AEB8C2 0%, #DDE3E8 ${30 + ((f - c.saga) * 3) % 80}%, #FFFFFF ${36 + ((f - c.saga) * 3) % 80}%, #DDE3E8 ${42 + ((f - c.saga) * 3) % 80}%, #AEB8C2 100%)`,
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                color: "transparent",
+                filter: "drop-shadow(0 4px 2px rgba(0,0,0,0.9)) drop-shadow(0 8px 22px rgba(0,0,0,0.7))",
+              }}
+            >
+              RECLUSO P50522
+            </span>
           </div>
         ) : null}
       </Plano>

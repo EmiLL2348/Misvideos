@@ -13,7 +13,7 @@ const SUELO_PISO = 900;
 export const Escena2: React.FC = () => {
   const f = useCurrentFrame();
   const { cue, dur } = useEscena("s2");
-  const c = { y1965: cue("1965"), hijo: cue("hijo"), drogas: cue("drogas"), ocho: cue("ocho") };
+  const c = { y1965: cue("1965"), hijo: cue("hijo"), drogas: cue("excesos"), ocho: cue("niño") };
   const cam = { x: f * 0.9, y: 0, zoom: 1 + Math.min(0.06, f * 0.0004) };
   const frio = interp(f, [c.drogas - 10, c.drogas + 60], [0, 1]);
   const anchoTaxi = 420;

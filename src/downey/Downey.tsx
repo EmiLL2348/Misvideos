@@ -40,14 +40,32 @@ const cueAbs = (tl: Timeline, id: string, pal: string) => {
 const SIN_VOZ = 1;
 const BAJO_VOZ = 0.25;
 
+/** Destello de luz cálido que barre la pantalla en cada corte de escena. */
 const Fundidos: React.FC<{ tl: Timeline }> = ({ tl }) => {
   const f = useCurrentFrame();
   let o = 0;
+  let x = 0;
   for (const e of tl.escenas.slice(1)) {
-    const d = Math.abs(f - e.inicioF);
-    if (d < 7) o = Math.max(o, 1 - d / 7);
+    const d = f - e.inicioF;
+    if (Math.abs(d) < 10) {
+      o = Math.max(o, 1 - Math.abs(d) / 10);
+      x = (d + 10) / 20;
+    }
   }
-  return o > 0 ? <AbsoluteFill style={{ background: "#000", opacity: o * 0.85, zIndex: 60 }} /> : null;
+  if (o <= 0) return null;
+  return (
+    <AbsoluteFill style={{ zIndex: 60, pointerEvents: "none" }}>
+      <AbsoluteFill style={{ background: `radial-gradient(ellipse at ${20 + x * 60}% 50%, rgba(255,244,226,${0.9 * o}) 0%, rgba(242,180,90,${0.55 * o}) 30%, rgba(0,0,0,${0.35 * o}) 75%)` }} />
+      <div style={{ position: "absolute", left: `${-30 + x * 130}%`, top: 0, width: "40%", height: "100%", background: `linear-gradient(90deg, transparent, rgba(255,250,235,${0.7 * o}), transparent)`, transform: "skewX(-18deg)" }} />
+    </AbsoluteFill>
+  );
+};
+
+/** Acercamiento lento de cámara durante cada escena (máximo 4 % extra, regla de 8 %). */
+const Empuje: React.FC<{ dur: number; children: React.ReactNode }> = ({ dur, children }) => {
+  const f = useCurrentFrame();
+  const z = 1 + 0.04 * Math.min(1, f / Math.max(1, dur));
+  return <AbsoluteFill style={{ transform: `scale(${z})`, transformOrigin: "50% 45%" }}>{children}</AbsoluteFill>;
 };
 
 export const Downey: React.FC<DowneyProps> = ({ manifiesto, subtitulos, pista }) => {
@@ -99,7 +117,9 @@ export const Downey: React.FC<DowneyProps> = ({ manifiesto, subtitulos, pista })
             const Comp = ESCENAS[e.id];
             return (
               <Sequence key={e.id} from={e.inicioF} durationInFrames={e.durF} name={`${e.id} · ${e.titulo}`}>
-                <Comp />
+                <Empuje dur={e.durF}>
+                  <Comp />
+                </Empuje>
                 {e.archivo && conVoz ? (
                   <Sequence from={e.vozF} durationInFrames={e.vozDurF + 2} name="voz" layout="none">
                     <Audio src={staticFile(e.archivo)} />

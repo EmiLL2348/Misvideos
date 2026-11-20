@@ -219,37 +219,57 @@ export const Mazo: React.FC<{ golpe: number; ancho?: number }> = ({ golpe, ancho
   );
 };
 
-/** Armadura GENÉRICA de acero gris sobre soporte (sin rojo, sin dorado, sin luz en el pecho). Base en y=520. */
+/** Armadura GENÉRICA de alta tecnología (acero pulido, luces azules; sin rojo, sin dorado, sin círculo en el pecho). Base en y=520. */
 export const ARMADURA_BASE = 520;
-export const Armadura: React.FC<{ alto?: number }> = ({ alto = 520 }) => (
-  <svg viewBox="0 0 220 520" width={(alto * 220) / 520} height={alto} style={{ overflow: "visible" }}>
-    {sombra(110, 520, 90, 9, 0.35)}
-    <rect x={60} y={500} width={100} height={20} rx={4} fill="#4A5058" />
-    <rect x={104} y={300} width={12} height={200} fill="#5A6068" />
-    <path d="M70 120 Q72 96 110 92 Q148 96 150 120 L146 250 L74 250 Z" fill="#9AA4AD" />
-    <path d="M110 92 Q148 96 150 120 L146 250 L110 250 Z" fill="#7F8892" />
-    <path d="M84 140 L136 140 M82 180 L138 180 M80 220 L140 220" stroke="#6B747E" strokeWidth={4} />
-    <path d="M60 122 Q40 128 40 170 L44 260 L62 262 L70 160 Z" fill="#8A949D" />
-    <path d="M160 122 Q180 128 180 170 L176 260 L158 262 L150 160 Z" fill="#7F8892" />
-    <path d="M76 250 L144 250 L140 300 L80 300 Z" fill="#8A949D" />
-    <ellipse cx={110} cy={58} rx={30} ry={36} fill="#A6AFB8" />
-    <path d="M110 22 Q140 26 140 58 Q138 90 110 94 Z" fill="#8A949D" />
-    <rect x={88} y={52} width={44} height={6} rx={3} fill="#2A2F35" />
-    <path d="M96 76 L124 76" stroke="#6B747E" strokeWidth={3} />
-  </svg>
-);
+export const Armadura: React.FC<{ alto?: number; encendida?: number }> = ({ alto = 520, encendida = 0 }) => {
+  const f = useCurrentFrame();
+  const g = encendida * (0.85 + 0.15 * Math.sin(f / 5));
+  const luz = `rgba(140,220,255,${0.25 + 0.75 * g})`;
+  return (
+    <svg viewBox="0 0 220 520" width={(alto * 220) / 520} height={alto} style={{ overflow: "visible", filter: encendida > 0 ? `drop-shadow(0 0 ${14 * g}px rgba(120,210,255,0.8))` : undefined }}>
+      {sombra(110, 520, 90, 9, 0.35)}
+      <rect x={56} y={498} width={108} height={22} rx={5} fill="#3A4048" />
+      <rect x={104} y={300} width={12} height={198} fill="#4A5058" />
+      {/* piernas */}
+      <path d="M80 300 L106 300 L102 470 L82 470 Z" fill="#8C96A0" />
+      <path d="M114 300 L140 300 L138 470 L118 470 Z" fill="#76808A" />
+      <path d="M84 380 L102 380 M118 380 L136 380" stroke={luz} strokeWidth={3} />
+      {/* torso facetado */}
+      <path d="M66 120 Q70 94 110 90 Q150 94 154 120 L146 250 L74 250 Z" fill="#A6B0BA" />
+      <path d="M110 90 Q150 94 154 120 L146 250 L110 250 Z" fill="#87919C" />
+      <path d="M78 120 L110 150 L142 120 M86 180 L110 200 L134 180 M82 230 L138 230" stroke="#5E6670" strokeWidth={4} fill="none" />
+      <path d="M96 142 L110 156 L124 142" stroke={luz} strokeWidth={4} fill="none" strokeLinecap="round" />
+      <path d="M92 196 L110 210 L128 196" stroke={luz} strokeWidth={3} fill="none" strokeLinecap="round" />
+      {/* hombreras y brazos */}
+      <path d="M52 116 Q38 104 30 128 L40 150 L68 132 Z" fill="#9AA4AD" />
+      <path d="M168 116 Q182 104 190 128 L180 150 L152 132 Z" fill="#7F8892" />
+      <path d="M40 150 L36 262 L56 264 L64 150 Z" fill="#8C96A0" />
+      <path d="M180 150 L184 262 L164 264 L156 150 Z" fill="#76808A" />
+      <path d="M42 210 L58 210 M162 210 L178 210" stroke={luz} strokeWidth={3} />
+      <path d="M74 250 L146 250 L140 300 L80 300 Z" fill="#7F8892" />
+      {/* casco con visor */}
+      <path d="M80 60 Q80 20 110 18 Q140 20 140 60 Q140 88 110 94 Q80 88 80 60 Z" fill="#B0BAC4" />
+      <path d="M110 18 Q140 20 140 60 Q140 88 110 94 Z" fill="#8C96A0" />
+      <path d="M88 54 L132 54 L128 64 L92 64 Z" fill="#11161C" />
+      <path d="M90 58 L130 58" stroke={luz} strokeWidth={4} strokeLinecap="round" />
+      <path d="M96 78 L124 78" stroke="#5E6670" strokeWidth={3} />
+      <path d="M84 34 Q96 22 112 22" stroke="rgba(255,255,255,0.6)" strokeWidth={4} fill="none" strokeLinecap="round" />
+    </svg>
+  );
+};
 
-/** Máscara metálica LISA y genérica, tumbada sobre una mesa. Base en y=60. */
-export const Mascara: React.FC<{ ancho?: number; inclinacion?: number }> = ({ ancho = 220, inclinacion = 0 }) => (
+/** Máscara de acero forjado con remaches, tumbada sobre una mesa. Base en y=60. */
+export const Mascara: React.FC<{ ancho?: number; inclinacion?: number; ojos?: number }> = ({ ancho = 220, inclinacion = 0, ojos = 0 }) => (
   <svg viewBox="0 0 220 160" width={ancho} height={(ancho * 160) / 220} style={{ overflow: "visible" }}>
     <g transform={`rotate(${inclinacion} 110 90)`}>
-      <path d="M30 70 Q30 10 110 8 Q190 10 190 70 Q186 130 110 150 Q34 130 30 70 Z" fill="#9AA4AD" />
-      <path d="M110 8 Q190 10 190 70 Q186 130 110 150 Z" fill="#7F8892" />
-      <path d="M58 64 Q76 56 94 66 Q76 72 58 64 Z" fill="#0B0D10" />
-      <path d="M126 66 Q144 56 162 64 Q144 72 126 66 Z" fill="#0B0D10" />
-      <path d="M110 70 L110 112" stroke="#6B747E" strokeWidth={3} />
-      <path d="M86 122 L134 122" stroke="#0B0D10" strokeWidth={4} strokeLinecap="round" />
-      <path d="M50 40 Q80 18 120 18" stroke="rgba(255,255,255,0.45)" strokeWidth={5} fill="none" strokeLinecap="round" />
+      <path d="M32 54 Q32 10 110 8 Q188 10 188 54 L184 112 Q160 150 110 154 Q60 150 36 112 Z" fill="#A2ACB5" />
+      <path d="M110 8 Q188 10 188 54 L184 112 Q160 150 110 154 Z" fill="#848E98" />
+      <path d="M40 56 Q110 40 180 56" stroke="#5E6670" strokeWidth={7} fill="none" />
+      <path d="M58 70 L96 74 L92 86 L58 82 Z M124 74 L162 70 L162 82 L128 86 Z" fill="#0B0D10" />
+      {ojos > 0 ? <path d="M58 70 L96 74 L92 86 L58 82 Z M124 74 L162 70 L162 82 L128 86 Z" fill={`rgba(140,255,180,${ojos})`} /> : null}
+      <path d="M110 86 L110 128 M84 134 L136 134" stroke="#4E565F" strokeWidth={4} strokeLinecap="round" />
+      {[[48, 46], [172, 46], [52, 108], [168, 108], [110, 20]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r={4} fill="#D2D8DE" stroke="#6B747E" strokeWidth={1.5} />)}
+      <path d="M52 30 Q82 14 120 14" stroke="rgba(255,255,255,0.5)" strokeWidth={5} fill="none" strokeLinecap="round" />
     </g>
   </svg>
 );

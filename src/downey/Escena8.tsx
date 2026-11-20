@@ -110,11 +110,15 @@ export const Escena8: React.FC = () => {
         <div style={{ position: "absolute", left: 0, right: 0, top: SUELO, height: 5, background: "rgba(0,0,0,0.3)" }} />
         <div style={{ position: "absolute", left: 600, top: 0, width: 900, height: SUELO, background: "linear-gradient(rgba(255,245,220,0.25), rgba(255,245,220,0.05))", clipPath: "polygon(40% 0, 60% 0, 100% 100%, 0 100%)" }} />
         <div style={{ position: "absolute", left: ax, top: aTop }}>
-          <Armadura alto={AA} />
+          <Armadura alto={AA} encendida={prog(f, c.riesgo - 4, 18)} />
         </div>
         <div style={{ position: "absolute", left: rx, top: rTop }}>
           <Robert alto={RA} ropa="taller" expresion="decidido" brazoDer={brazoPecho} luz="#FFF4E2" />
         </div>
+        {/* haz de luz que barre la armadura y fogonazo al encenderse */}
+        <div style={{ position: "absolute", left: ax - 120 + ((f - c.anos) * 6) % 600, top: aTop - 40, width: 60, height: AA + 40, background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)", transform: "skewX(-14deg)" }} />
+        <AbsoluteFill style={{ background: `radial-gradient(circle at ${(ax + 110 * ak) / 19.2}% ${(aTop + 60 * ak) / 10.8}%, rgba(160,220,255,${0.55 * Math.max(0, 1 - Math.abs(f - c.riesgo) / 12)}), transparent 45%)` }} />
+        <Efecto archivo="flash" en={c.riesgo} vol={0.3} dur={20} />
         <Particulas desde={c.anos + 4} x={ax + 150} y={aTop + 300 * ak} ancho={60} suelo={SUELO} n={50} colores={["#FFE08A", "#FFB43A", "#FFF6D0"]} tam={8} apagar />
         <Efecto archivo="chispas" en={c.anos + 4} vol={0.25} dur={40} />
       </Plano>

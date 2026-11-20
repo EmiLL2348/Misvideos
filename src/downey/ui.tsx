@@ -65,6 +65,7 @@ export const Rotulo: React.FC<{ texto: string; desde: number; hasta?: number; x?
       }}
     >
       {texto}
+      <div style={{ height: 5, marginTop: 6, width: `${Math.min(1, prog(f, desde + 6, 20)) * 100}%`, maxWidth: centro ? undefined : texto.length * tam * 0.55, marginLeft: centro ? "auto" : 0, marginRight: centro ? "auto" : 0, background: D.amanecer, boxShadow: `0 0 12px ${D.amanecer}` }} />
     </div>
   );
 };
