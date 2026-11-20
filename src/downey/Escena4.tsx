@@ -121,8 +121,34 @@ export const Escena4: React.FC = () => {
 
       {/* C · titulares que caen y se apilan sobre la mesa */}
       <Plano desde={c.espiral} hasta={c.juez}>
-        <AbsoluteFill style={{ background: "linear-gradient(#5A6270, #3E4552)" }} />
+        <AbsoluteFill style={{ background: "linear-gradient(#3A4252, #2A303C)" }} />
+        {/* ventana nocturna con lluvia y luces de la ciudad */}
+        <div style={{ position: "absolute", left: 1260, top: 90, width: 520, height: 420, background: "linear-gradient(#0E1626, #1E2C46)", border: "14px solid #4A3A2E", overflow: "hidden" }}>
+          {new Array(14).fill(0).map((_, i) => (
+            <div key={i} style={{ position: "absolute", left: i * 40, bottom: 0, width: 32, height: 80 + ((i * 47) % 150), background: "#0A1018" }}>
+              {new Array(6).fill(0).map((__, j) => (
+                <div key={j} style={{ position: "absolute", left: 8 + (j % 2) * 12, top: 12 + Math.floor(j / 2) * 22, width: 6, height: 8, background: (i + j) % 3 ? "rgba(255,210,120,0.8)" : "transparent" }} />
+              ))}
+            </div>
+          ))}
+          {new Array(30).fill(0).map((_, i) => (
+            <div key={`l${i}`} style={{ position: "absolute", left: (i * 53) % 520, top: ((i * 71 + f * 22) % 480) - 60, width: 2, height: 40, background: "rgba(190,210,240,0.45)", transform: "rotate(12deg)" }} />
+          ))}
+          <div style={{ position: "absolute", left: 246, top: 0, width: 14, height: 420, background: "#4A3A2E" }} />
+        </div>
+        {/* lámpara de escritorio que ilumina la pila */}
+        <div style={{ position: "absolute", left: 260, top: MESA_Y - 330, width: 16, height: 330, background: "#2A2A2E" }} />
+        <div style={{ position: "absolute", left: 210, top: MESA_Y - 12, width: 120, height: 12, borderRadius: 6, background: "#2A2A2E" }} />
+        <div style={{ position: "absolute", left: 230, top: MESA_Y - 380, width: 200, height: 80, background: "#2A2A2E", clipPath: "polygon(20% 0, 70% 0, 100% 100%, 0 100%)" }} />
+        <div style={{ position: "absolute", left: 230, top: MESA_Y - 300, width: 900, height: 300, background: "linear-gradient(rgba(255,226,160,0.28), rgba(255,226,160,0.05))", clipPath: "polygon(0 0, 22% 0, 100% 100%, 0 100%)" }} />
         <div style={{ position: "absolute", left: 0, right: 0, top: MESA_Y, bottom: 0, background: "linear-gradient(#7A5A40, #5E4430)" }} />
+        {/* taza de café con vapor */}
+        <div style={{ position: "absolute", left: 1500, top: MESA_Y - 90, width: 90, height: 90, background: "#E8E2D6", borderRadius: "0 0 22px 22px" }} />
+        <div style={{ position: "absolute", left: 1580, top: MESA_Y - 74, width: 34, height: 44, border: "10px solid #E8E2D6", borderLeft: "none", borderRadius: "0 20px 20px 0" }} />
+        <div style={{ position: "absolute", left: 1490, top: MESA_Y - 6, width: 110, height: 12, borderRadius: "50%", background: "rgba(0,0,0,0.35)" }} />
+        {[0, 1, 2].map((i) => (
+          <div key={`v${i}`} style={{ position: "absolute", left: 1530 + Math.sin(f / 10 + i * 2) * 10, top: MESA_Y - 130 - ((f * 1.2 + i * 30) % 90), width: 20, height: 30, borderRadius: "50%", background: "rgba(255,255,255,0.12)" }} />
+        ))}
         <div style={{ position: "absolute", left: 0, right: 0, top: MESA_Y, height: 8, background: "rgba(0,0,0,0.25)" }} />
         {titulares.map((tt, i) => {
           const reposo = MESA_Y - 150 - i * 12;
@@ -142,6 +168,18 @@ export const Escena4: React.FC = () => {
       {/* D · el mazo golpea la mesa (contacto real y vibración) */}
       <Plano desde={c.juez} hasta={dur + 10}>
         <AbsoluteFill style={{ background: "linear-gradient(#4A3A30, #2E241E)", transform: `translate(${vibra * 0.6}px, ${vibra}px)` }}>
+          {/* sala del tribunal: paneles de madera, estrado y balanza de la justicia */}
+          {new Array(8).fill(0).map((_, i) => (
+            <div key={i} style={{ position: "absolute", left: i * 250, top: 380, width: 230, height: 440, background: "linear-gradient(#5A4232, #46342A)", border: "6px solid #3A2A20" }} />
+          ))}
+          <div style={{ position: "absolute", left: 0, right: 0, top: 360, height: 26, background: "#6E5440" }} />
+          <svg width={240} height={240} viewBox="0 0 240 240" style={{ position: "absolute", left: 1610, top: 110, opacity: 0.85 }}>
+            <path d="M120 30 L120 200 M70 210 L170 210 M40 70 L200 70" stroke="#C8A24A" strokeWidth={8} strokeLinecap="round" fill="none" />
+            <path d="M40 70 L20 130 M40 70 L60 130 M200 70 L180 130 M200 70 L220 130" stroke="#C8A24A" strokeWidth={3} />
+            <path d="M14 130 Q40 160 66 130 Z M174 130 Q200 160 226 130 Z" fill="#C8A24A" />
+            <circle cx={120} cy={26} r={10} fill="#C8A24A" />
+          </svg>
+          <div style={{ position: "absolute", left: 0, right: 0, top: 0, height: 360, background: "radial-gradient(ellipse at 50% 0%, rgba(255,220,160,0.25), transparent 70%)" }} />
           <div style={{ position: "absolute", left: 0, right: 0, top: 820, bottom: 0, background: "linear-gradient(#6E4A32, #4E3424)" }} />
           <div style={{ position: "absolute", left: 0, right: 0, top: 820, height: 8, background: "rgba(0,0,0,0.3)" }} />
           <div style={{ position: "absolute", left: 600, top: 820 - 150 * (720 / 360) }}>

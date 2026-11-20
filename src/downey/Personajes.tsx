@@ -63,6 +63,7 @@ type PropsRobert = {
   casco?: number; // 0..1 casco de la armadura (baja y se cierra)
   brillo?: number; // 0..1 luces de la armadura (ojos y líneas)
   repulsor?: number; // 0..1 palma derecha iluminada
+  repulsorIzq?: number; // 0..1 palma izquierda iluminada
 
   luz?: string; // luz de borde
   sombra?: boolean;
@@ -87,6 +88,7 @@ export const Robert: React.FC<PropsRobert> = ({
   casco = 0,
   brillo = 0,
   repulsor = 0,
+  repulsorIzq = 0,
   luz,
   sombra = true,
   semilla = 0,
@@ -107,6 +109,22 @@ export const Robert: React.FC<PropsRobert> = ({
     const [bx, by] = dir(lado, b.hombro + b.codo);
     const hx = ex + bx * 78;
     const hy = ey + by * 78;
+    if (ropa === "armadura") {
+      const gx = ex + bx * 44;
+      const gy = ey + by * 44;
+      return { seg: (
+        <g>
+          <line x1={sx} y1={sy} x2={ex} y2={ey} stroke="#7E8892" strokeWidth={25} strokeLinecap="round" />
+          <line x1={sx} y1={sy} x2={ex} y2={ey} stroke="#A4AEB8" strokeWidth={9} strokeLinecap="round" opacity={0.6} />
+          <line x1={ex} y1={ey} x2={hx} y2={hy} stroke="#7E8892" strokeWidth={22} strokeLinecap="round" />
+          {/* guantelete: antebrazo más ancho con franja de luz */}
+          <line x1={gx} y1={gy} x2={hx - bx * 6} y2={hy - by * 6} stroke="#68727C" strokeWidth={29} strokeLinecap="round" />
+          <line x1={gx} y1={gy} x2={hx - bx * 10} y2={hy - by * 10} stroke={`rgba(140,220,255,${0.35 + 0.65 * brillo})`} strokeWidth={4} strokeLinecap="round" />
+          <circle cx={ex} cy={ey} r={13} fill="#5E6670" />
+          <circle cx={ex} cy={ey} r={6} fill="#A4AEB8" />
+        </g>
+      ), hx, hy };
+    }
     return { seg: (
       <g>
         <line x1={sx} y1={sy} x2={ex} y2={ey} stroke={manga} strokeWidth={21} strokeLinecap="round" />
@@ -193,19 +211,28 @@ export const Robert: React.FC<PropsRobert> = ({
         </>
       ) : null}
       {casco > 0 ? (
-        <g transform={`translate(0 ${(1 - casco) * -70})`} opacity={Math.min(1, casco * 2)}>
-          <path d="M70 52 Q70 14 100 12 Q130 14 130 52 Q130 84 100 90 Q70 84 70 52 Z" fill="#A6B0BA" />
-          <path d="M100 12 Q130 14 130 52 Q130 84 100 90 Z" fill="#848E98" />
+        <g transform={`translate(0 ${(1 - casco) * -80})`} opacity={Math.min(1, casco * 2)}>
+          {/* casco completo: cubre pelo y barba */}
+          <path d="M64 54 Q62 4 100 2 Q138 4 136 54 Q136 92 100 100 Q64 92 64 54 Z" fill="#8A949E" />
+          <path d="M100 2 Q138 4 136 54 Q136 92 100 100 Z" fill="#6E7882" />
           {frente ? (
             <>
-              <path d="M80 46 L96 50 L94 56 L80 54 Z M104 50 L120 46 L120 54 L106 56 Z" fill="#0E141A" />
-              <path d="M80 46 L96 50 L94 56 L80 54 Z M104 50 L120 46 L120 54 L106 56 Z" fill={`rgba(170,235,255,${brillo})`} />
-              <circle cx={88} cy={51} r={9} fill={`rgba(140,220,255,${0.3 * brillo})`} />
-              <circle cx={112} cy={51} r={9} fill={`rgba(140,220,255,${0.3 * brillo})`} />
-              <path d="M100 58 L100 80 M88 76 L112 76" stroke="#5E6670" strokeWidth={2.5} />
+              {/* placa facial angulosa */}
+              <path d="M76 34 Q100 26 124 34 L124 70 L112 92 L88 92 L76 70 Z" fill="#B4BEC8" />
+              <path d="M100 28 Q114 28 124 34 L124 70 L112 92 L100 92 Z" fill="#949EA8" />
+              <path d="M76 34 Q100 26 124 34" stroke="#5E6670" strokeWidth={3} fill="none" />
+              {/* ojos: rendijas en ángulo */}
+              <path d="M80 46 L97 50 L95 56 L82 54 Z M103 50 L120 46 L118 54 L105 56 Z" fill="#0E141A" />
+              <path d="M80 46 L97 50 L95 56 L82 54 Z M103 50 L120 46 L118 54 L105 56 Z" fill={`rgba(190,240,255,${brillo})`} />
+              <ellipse cx={89} cy={51} rx={14} ry={8} fill={`rgba(140,220,255,${0.35 * brillo})`} />
+              <ellipse cx={111} cy={51} rx={14} ry={8} fill={`rgba(140,220,255,${0.35 * brillo})`} />
+              {/* juntas de mejillas y mandíbula, rejilla de la boca */}
+              <path d="M78 62 L90 72 L88 90 M122 62 L110 72 L112 90" stroke="#5E6670" strokeWidth={2.5} fill="none" />
+              <path d="M93 80 L107 80 M94 85 L106 85" stroke="#4E565F" strokeWidth={2.5} strokeLinecap="round" />
+              <path d="M100 30 L100 42" stroke="#5E6670" strokeWidth={2.5} />
             </>
           ) : null}
-          <path d="M78 30 Q90 18 106 18" stroke="rgba(255,255,255,0.55)" strokeWidth={4} fill="none" strokeLinecap="round" />
+          <path d="M72 30 Q84 10 106 8" stroke="rgba(255,255,255,0.55)" strokeWidth={4} fill="none" strokeLinecap="round" />
         </g>
       ) : null}
     </g>
@@ -240,12 +267,28 @@ export const Robert: React.FC<PropsRobert> = ({
       {espalda ? <path d="M100 100 L100 236" stroke={R.torsoSombra} strokeWidth={3} /> : null}
       {ropa === "armadura" ? (
         <g>
-          <path d="M72 120 L100 140 L128 120 M76 172 L100 188 L124 172 M74 214 L126 214" stroke="#5E6670" strokeWidth={3} fill="none" />
-          {!espalda ? <path d="M88 132 L100 142 L112 132 M90 178 L100 186 L110 178" stroke={`rgba(140,220,255,${0.3 + 0.7 * brillo})`} strokeWidth={3.5} fill="none" strokeLinecap="round" /> : null}
-          <path d="M78 104 Q100 98 122 104" stroke="#C6CDD4" strokeWidth={3} fill="none" opacity={0.7} />
+          {/* pectorales y abdomen por placas */}
+          <path d="M70 112 Q72 102 98 102 L98 150 Q80 156 70 146 Z" fill="#B0BAC4" />
+          <path d="M130 112 Q128 102 102 102 L102 150 Q120 156 130 146 Z" fill="#8E98A2" />
+          {[164, 184, 204].map((y) => (
+            <g key={y}>
+              <rect x={80} y={y} width={18} height={16} rx={3} fill="#A0AAB4" />
+              <rect x={102} y={y} width={18} height={16} rx={3} fill="#848E98" />
+            </g>
+          ))}
+          <rect x={70} y={224} width={60} height={14} rx={3} fill="#5E6670" />
+          {!espalda ? (
+            <g>
+              {/* núcleo de energía hexagonal (no circular) */}
+              <path d="M100 116 L110 122 L110 134 L100 140 L90 134 L90 122 Z" fill="#2A3440" />
+              <path d="M100 119 L107 123.5 L107 132.5 L100 137 L93 132.5 L93 123.5 Z" fill={`rgba(190,240,255,${0.45 + 0.55 * brillo})`} />
+              <circle cx={100} cy={128} r={22} fill={`rgba(140,220,255,${0.25 * brillo})`} />
+              <path d="M84 150 L100 158 L116 150" stroke={`rgba(140,220,255,${0.3 + 0.7 * brillo})`} strokeWidth={3} fill="none" strokeLinecap="round" />
+              <rect x={96} y={227} width={8} height={8} fill={`rgba(140,220,255,${0.3 + 0.7 * brillo})`} />
+            </g>
+          ) : null}
         </g>
       ) : null}
-      {luz ? <path d="M68 116 Q66 180 70 238" stroke={luz} strokeWidth={4} fill="none" opacity={0.85} /> : null}
     </g>
   );
 
@@ -257,6 +300,16 @@ export const Robert: React.FC<PropsRobert> = ({
       <path d="M100 244 L100 300" stroke="rgba(0,0,0,0.25)" strokeWidth={2} />
       <path d="M78 438 Q78 452 96 452 L104 452 L104 438 Z" fill={R.zapato} />
       <path d="M100 438 L100 452 L118 452 Q126 452 124 438 Z" fill={R.zapato} />
+      {ropa === "armadura" ? (
+        <g>
+          <path d="M76 250 L98 250 L100 296 L78 296 Z M102 250 L124 250 L124 296 L104 296 Z" fill="#A0AAB4" opacity={0.7} />
+          <ellipse cx={90} cy={318} rx={13} ry={11} fill="#5E6670" />
+          <ellipse cx={113} cy={318} rx={13} ry={11} fill="#5E6670" />
+          <path d="M84 340 L96 340 L96 420 L86 420 Z M106 340 L118 340 L117 420 L107 420 Z" fill="#9AA4AE" opacity={0.7} />
+          <path d="M91 350 L91 410 M112 350 L112 410" stroke={`rgba(140,220,255,${0.3 + 0.7 * brillo})`} strokeWidth={3} strokeLinecap="round" />
+          <path d="M74 428 L104 428 L104 452 L76 452 Q70 452 72 440 Z M100 428 L128 428 Q130 452 122 452 L100 452 Z" fill="#56606A" />
+        </g>
+      ) : null}
     </g>
   );
   const piernasSentado = (
@@ -278,11 +331,17 @@ export const Robert: React.FC<PropsRobert> = ({
 
   const piernasSuelo = (
     <g>
-      <path d="M60 236 Q100 226 140 236 L150 256 Q100 266 50 256 Z" fill={R.pantalon} />
-      <path d="M40 250 Q70 236 104 252 Q74 266 44 262 Z" fill={R.pantalon} />
-      <path d="M160 250 Q130 236 96 252 Q126 266 156 262 Z" fill={R.pantalon} />
-      <ellipse cx={46} cy={256} rx={14} ry={7} fill={R.zapato} />
-      <ellipse cx={154} cy={256} rx={14} ry={7} fill={R.zapato} />
+      {/* piernas cruzadas: muslos hacia las rodillas, espinillas cruzadas delante */}
+      <path d="M66 232 Q100 224 134 232 L138 252 Q100 260 62 252 Z" fill={R.pantalon} />
+      <line x1={78} y1={240} x2={30} y2={250} stroke={R.pantalon} strokeWidth={30} strokeLinecap="round" />
+      <line x1={122} y1={240} x2={170} y2={250} stroke={R.pantalon} strokeWidth={30} strokeLinecap="round" />
+      <line x1={30} y1={252} x2={112} y2={258} stroke={R.pantalon} strokeWidth={24} strokeLinecap="round" />
+      <line x1={170} y1={252} x2={88} y2={258} stroke={R.pantalon} strokeWidth={24} strokeLinecap="round" />
+      <path d="M40 250 L104 256" stroke="rgba(0,0,0,0.2)" strokeWidth={3} />
+      <ellipse cx={30} cy={246} rx={12} ry={7} fill="rgba(255,255,255,0.15)" />
+      <ellipse cx={170} cy={246} rx={12} ry={7} fill="rgba(255,255,255,0.15)" />
+      <ellipse cx={118} cy={258} rx={14} ry={8} fill={R.zapato} />
+      <ellipse cx={82} cy={258} rx={14} ry={8} fill={R.zapato} />
     </g>
   );
 
@@ -316,7 +375,6 @@ export const Robert: React.FC<PropsRobert> = ({
           <circle cx={lejano.hx} cy={lejano.hy} r={9} fill={D.pielSombra} />
           {pierna(s, R.pantalon)}
           <path d="M80 112 Q86 98 104 96 Q122 98 124 112 L122 240 L80 240 Z" fill={R.torso} />
-          {luz ? <path d="M82 116 Q80 180 82 238" stroke={luz} strokeWidth={4} fill="none" opacity={0.85} /> : null}
           <rect x={92} y={76} width={18} height={24} rx={6} fill={D.pielSombra} />
           <ellipse cx={104} cy={52} rx={24} ry={31} fill={D.piel} />
           <path d="M126 50 L134 60 L126 64 Z" fill={D.piel} />
@@ -354,8 +412,21 @@ export const Robert: React.FC<PropsRobert> = ({
         {bD.seg}
         {objetoCentro ? <g transform="translate(100 196)">{objetoCentro}</g> : null}
         {objetoDer ? <g transform={`translate(${bD.hx} ${bD.hy})`}>{objetoDer}</g> : null}
-        <circle cx={bI.hx} cy={bI.hy} r={9} fill={ropa === "armadura" ? "#8C96A0" : D.piel} />
-        <circle cx={bD.hx} cy={bD.hy} r={9} fill={ropa === "armadura" ? "#8C96A0" : D.piel} />
+        <circle cx={bI.hx} cy={bI.hy} r={ropa === "armadura" ? 13 : 9} fill={ropa === "armadura" ? "#6E7882" : D.piel} />
+        <circle cx={bD.hx} cy={bD.hy} r={ropa === "armadura" ? 13 : 9} fill={ropa === "armadura" ? "#6E7882" : D.piel} />
+        {ropa === "armadura" ? (
+          <>
+            <ellipse cx={68} cy={114} rx={22} ry={16} fill="#A4AEB8" />
+            <ellipse cx={132} cy={114} rx={22} ry={16} fill="#848E98" />
+            <path d="M50 110 Q68 96 86 110 M114 110 Q132 96 150 110" stroke="#5E6670" strokeWidth={2.5} fill="none" />
+          </>
+        ) : null}
+        {repulsorIzq > 0 ? (
+          <g>
+            <circle cx={bI.hx} cy={bI.hy} r={60 * repulsorIzq} fill="rgba(140,220,255,0.35)" />
+            <circle cx={bI.hx} cy={bI.hy} r={22 * repulsorIzq} fill="rgba(225,250,255,0.95)" />
+          </g>
+        ) : null}
         {repulsor > 0 ? (
           <g>
             <circle cx={bD.hx} cy={bD.hy} r={60 * repulsor} fill="rgba(140,220,255,0.35)" />
@@ -448,7 +519,6 @@ export const SiluetaD: React.FC<{
         </g>
       ) : null}
       {carpeta ? <rect x={bD.hx - 30} y={bD.hy - 50} width={44} height={58} rx={4} fill={color} /> : null}
-      {borde ? <path d="M126 30 Q132 60 122 82 M134 112 L130 240" stroke={borde} strokeWidth={4} fill="none" opacity={0.9} /> : null}
     </svg>
   );
 };
@@ -477,7 +547,12 @@ export const HOMBRO_IZQ: [number, number] = [68, 112];
 export const HOMBRO_DER: [number, number] = [132, 112];
 
 /** Figura encapuchada con máscara de acero (original, capucha oscura, sin el diseño del cómic). */
-export const Encapuchado: React.FC<{ alto?: number; ojos?: number; borde?: string }> = ({ alto = 700, ojos = 1, borde = "#6BE09A" }) => {
+/** Mano del encapuchado levantada (0..1): punto de la palma en el SVG de 300×460. */
+export const manoEncapuchado = (m: number): [number, number] => {
+  const codo: [number, number] = [214 + 36 * m, 230 - 130 * m];
+  return [codo[0] + 6 + 6 * m, codo[1] + 70 - 140 * m];
+};
+export const Encapuchado: React.FC<{ alto?: number; ojos?: number; borde?: string; mano?: number }> = ({ alto = 700, ojos = 1, mano = 0 }) => {
   const f = useCurrentFrame();
   const latido = 0.75 + 0.25 * Math.sin(f / 6);
   return (
@@ -485,7 +560,6 @@ export const Encapuchado: React.FC<{ alto?: number; ojos?: number; borde?: strin
       <ellipse cx={150} cy={452} rx={110} ry={10} fill="rgba(0,0,0,0.35)" />
       {/* capa abierta (detrás) */}
       <path d="M150 70 Q40 100 22 452 L278 452 Q260 100 150 70 Z" fill="#141618" />
-      <path d="M26 440 Q30 300 56 190" stroke={borde} strokeWidth={4} fill="none" opacity={0.7} />
       {/* armadura de acero */}
       <path d="M96 150 L204 150 L196 300 L104 300 Z" fill="#7F8892" />
       <path d="M150 150 L204 150 L196 300 L150 300 Z" fill="#6B747E" />
@@ -502,7 +576,6 @@ export const Encapuchado: React.FC<{ alto?: number; ojos?: number; borde?: strin
       <path d="M112 140 L188 140 L180 168 L120 168 Z" fill="#8C96A0" />
       {/* capucha */}
       <path d="M150 6 Q86 12 84 92 Q86 150 150 158 Q214 150 216 92 Q214 12 150 6 Z" fill="#1C1E21" />
-      <path d="M92 70 Q100 20 150 16" stroke={borde} strokeWidth={3} fill="none" opacity={0.6} />
       {/* máscara */}
       <path d="M114 58 Q114 36 150 34 Q186 36 186 58 L184 112 Q170 138 150 140 Q130 138 116 112 Z" fill="#9AA4AD" />
       <path d="M150 34 Q186 36 186 58 L184 112 Q170 138 150 140 Z" fill="#7F8892" />
@@ -513,6 +586,20 @@ export const Encapuchado: React.FC<{ alto?: number; ojos?: number; borde?: strin
       <circle cx={165} cy={76} r={10} fill={`rgba(120,255,170,${0.25 * ojos})`} />
       <path d="M150 82 L150 116 M134 122 L166 122" stroke="#4E565F" strokeWidth={3} />
       {[[120, 64], [180, 64], [122, 104], [178, 104]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r={2.6} fill="#C6CDD4" />)}
+      {mano > 0 ? (() => {
+        const codo: [number, number] = [214 + 36 * mano, 230 - 130 * mano];
+        const palma = manoEncapuchado(mano);
+        return (
+          <g>
+            <line x1={204} y1={168} x2={codo[0]} y2={codo[1]} stroke="#141618" strokeWidth={34} strokeLinecap="round" />
+            <line x1={codo[0]} y1={codo[1]} x2={palma[0]} y2={palma[1]} stroke="#7F8892" strokeWidth={26} strokeLinecap="round" />
+            <line x1={codo[0]} y1={codo[1]} x2={palma[0]} y2={palma[1]} stroke="#A4AEB8" strokeWidth={8} strokeLinecap="round" opacity={0.6} />
+            <circle cx={palma[0]} cy={palma[1]} r={17} fill="#6B747E" />
+            <circle cx={palma[0]} cy={palma[1]} r={40 * mano} fill={`rgba(120,255,170,${0.35 * mano * ojos})`} />
+            <circle cx={palma[0]} cy={palma[1]} r={14 * mano} fill={`rgba(210,255,225,${0.9 * mano * ojos})`} />
+          </g>
+        );
+      })() : null}
     </svg>
   );
 };

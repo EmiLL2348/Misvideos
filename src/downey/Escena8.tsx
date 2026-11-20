@@ -44,8 +44,27 @@ export const Escena8: React.FC = () => {
   const casco = prog(f, T + 34, 12);
   const brilloTraje = prog(f, T + 44, 10);
   const reposo = { hombro: 6, codo: 4 };
-  const brazoFinal = f < T - 14 ? brazoPecho : f < T + 50 ? mezclar(brazoPecho, reposo, prog(f, T - 14, 14)) : mezclar(reposo, { hombro: 92, codo: -8 }, prog(f, T + 50, 14));
-  const repulsor = prog(f, T + 60, 10);
+  // abre los brazos, cargan las dos palmas y estalla la onda de energía
+  const abiertos = { hombro: 80, codo: 6 };
+  const abre = prog(f, T + 48, 10);
+  const brazoFinal = f < T - 14 ? brazoPecho : f < T + 48 ? mezclar(brazoPecho, reposo, prog(f, T - 14, 14)) : mezclar(reposo, abiertos, abre);
+  const brazoIzqFinal = mezclar(reposo, abiertos, abre);
+  const repulsor = prog(f, T + 54, 10);
+  const E = T + 64;
+  const tE = f - E;
+  const pecho2: [number, number] = [rx + 100 * rk, rTop + 128 * rk];
+  const temblor = tE >= 0 && tE < 12 ? Math.sin(tE * 2.6) * (12 - tE) * 0.9 : 0;
+  const escombros = new Array(22).fill(0).map((_, i) => {
+    const lado = i % 2 === 0 ? 1 : -1;
+    const vx = lado * (6 + ((i * 37) % 11));
+    const vy = 10 + ((i * 53) % 9);
+    const g = 0.9;
+    const tam = 10 + ((i * 29) % 14);
+    const y0 = SUELO - 30 - ((i * 17) % 120);
+    const tAterriza = (vy + Math.sqrt(vy * vy + 2 * g * (SUELO - tam - y0))) / g;
+    const t = Math.max(0, Math.min(tE, tAterriza));
+    return { x: pecho2[0] + vx * t, y: Math.min(SUELO - tam, y0 - vy * t + 0.5 * g * t * t), tam, rot: t * vx * 3 };
+  });
 
   return (
     <AbsoluteFill style={{ background: D.negro }}>
@@ -107,6 +126,7 @@ export const Escena8: React.FC = () => {
 
       {/* C · taller: armadura GENÉRICA de acero gris; mano sobre el pecho; chispas con gravedad */}
       <Plano desde={c.anos} hasta={dur + 10}>
+        <AbsoluteFill style={{ transform: `translate(${temblor * 0.7}px, ${temblor}px)` }}>
         <AbsoluteFill style={{ background: "linear-gradient(#6E7480, #4E545E)" }} />
         {/* estanterías y herramientas */}
         {[180, 360, 540].map((y) => (
@@ -122,12 +142,12 @@ export const Escena8: React.FC = () => {
           <Armadura alto={AA} encendida={prog(f, c.riesgo - 4, 18)} />
         </div>
         <div style={{ position: "absolute", left: rx, top: rTop, opacity: escaneo >= 1 ? 0 : 1 }}>
-          <Robert alto={RA} ropa="taller" expresion="decidido" brazoDer={brazoFinal} luz="#FFF4E2" />
+          <Robert alto={RA} ropa="taller" expresion="decidido" brazoDer={brazoFinal} brazoIzq={brazoIzqFinal} />
         </div>
         {escaneo > 0 ? (
           <>
             <div style={{ position: "absolute", left: rx, top: rTop, clipPath: `inset(${(1 - escaneo) * 100}% -200% -5% -200%)` }}>
-              <Robert alto={RA} ropa="armadura" casco={casco} brillo={brilloTraje} repulsor={repulsor} brazoDer={brazoFinal} luz="#9FDCFF" />
+              <Robert alto={RA} ropa="armadura" casco={casco} brillo={brilloTraje} repulsor={repulsor} repulsorIzq={repulsor} brazoDer={brazoFinal} brazoIzq={brazoIzqFinal} />
             </div>
             {escaneo < 1 ? <div style={{ position: "absolute", left: rx - 60, top: rTop + (1 - escaneo) * RA * 0.98, width: (200 * RA) / 460 + 120, height: 6, background: "#BFF0FF", boxShadow: "0 0 30px 10px rgba(140,220,255,0.8)" }} /> : null}
           </>
@@ -144,15 +164,30 @@ export const Escena8: React.FC = () => {
             })
           : null}
         <Hud x={rx + 100 * rk} y={rTop + 60 * rk} r={130} desde={T + 46} etiquetas={["SISTEMAS: OK", "ENERGÍA 100%"]} />
-        <AbsoluteFill style={{ background: `rgba(200,240,255,${Math.max(0, 1 - Math.abs(f - (T + 62)) / 8) * 0.7})` }} />
+        {/* onda expansiva: anillo en el suelo, anillo en el aire, rayos y escombros con gravedad */}
+        {tE >= 0 ? (
+          <>
+            <div style={{ position: "absolute", left: pecho2[0] - tE * 90, top: SUELO - tE * 9, width: tE * 180, height: tE * 18, borderRadius: "50%", border: "6px solid rgba(190,240,255,0.9)", boxShadow: "0 0 40px rgba(140,220,255,0.8)", opacity: Math.max(0, 1 - tE / 26) }} />
+            <div style={{ position: "absolute", left: pecho2[0] - tE * 60, top: pecho2[1] - tE * 60, width: tE * 120, height: tE * 120, borderRadius: "50%", border: "10px solid rgba(220,250,255,0.85)", boxShadow: "0 0 60px 10px rgba(140,220,255,0.6)", opacity: Math.max(0, 1 - tE / 20) }} />
+            <AbsoluteFill style={{ background: `conic-gradient(from ${tE * 2}deg at ${pecho2[0] / 19.2}% ${pecho2[1] / 10.8}%, ${new Array(16).fill(0).map((_, i) => `rgba(200,240,255,${i % 2 ? 0 : 0.35}) ${i * 22.5}deg ${(i + 1) * 22.5}deg`).join(", ")})`, opacity: Math.max(0, 1 - tE / 30), mixBlendMode: "screen" }} />
+            {escombros.map((e, i) => (
+              <div key={i} style={{ position: "absolute", left: e.x, top: e.y, width: e.tam, height: e.tam * 0.7, background: i % 3 ? "#4A505A" : "#6E7480", transform: `rotate(${e.rot}deg)`, boxShadow: "0 0 6px rgba(140,220,255,0.4)" }} />
+            ))}
+            <div style={{ position: "absolute", left: pecho2[0] - 500, top: SUELO - 16, width: 1000, height: 32, borderRadius: "50%", background: `rgba(140,220,255,${0.4 * Math.max(0, 1 - tE / 40)})`, filter: "blur(8px)" }} />
+          </>
+        ) : null}
+        <Particulas desde={E} x={pecho2[0] - 200} y={pecho2[1]} ancho={400} suelo={SUELO} n={60} colores={["#CFF4FF", "#8CDCFF", "#FFFFFF"]} tam={7} apagar />
+        <AbsoluteFill style={{ background: `rgba(220,248,255,${Math.max(0, 1 - Math.abs(f - E) / 6) * 0.85})` }} />
         <Efecto archivo="chispas" en={T} vol={0.3} dur={40} />
-        <Efecto archivo="flash" en={T + 60} vol={0.4} dur={20} />
+        <Efecto archivo="flash" en={E} vol={0.5} dur={20} />
+        <Efecto archivo="mazo" en={E} vol={0.45} dur={25} />
         {/* haz de luz que barre la armadura y fogonazo al encenderse */}
-        <div style={{ position: "absolute", left: ax - 120 + ((f - c.anos) * 6) % 600, top: aTop - 40, width: 60, height: AA + 40, background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)", transform: "skewX(-14deg)" }} />
+        <div style={{ opacity: 1 - disolver, position: "absolute", left: ax - 120 + ((f - c.anos) * 6) % 600, top: aTop - 40, width: 60, height: AA + 40, background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)", transform: "skewX(-14deg)" }} />
         <AbsoluteFill style={{ background: `radial-gradient(circle at ${(ax + 110 * ak) / 19.2}% ${(aTop + 60 * ak) / 10.8}%, rgba(160,220,255,${0.55 * Math.max(0, 1 - Math.abs(f - c.riesgo) / 12)}), transparent 45%)` }} />
         <Efecto archivo="flash" en={c.riesgo} vol={0.3} dur={20} />
         <Particulas desde={c.anos + 4} x={ax + 150} y={aTop + 300 * ak} ancho={60} suelo={SUELO} n={50} colores={["#FFE08A", "#FFB43A", "#FFF6D0"]} tam={8} apagar />
         <Efecto archivo="chispas" en={c.anos + 4} vol={0.25} dur={40} />
+        </AbsoluteFill>
       </Plano>
       <Look />
     </AbsoluteFill>

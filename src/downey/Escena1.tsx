@@ -139,6 +139,34 @@ export const Escena1: React.FC = () => {
           })}
         </svg>
         <div style={{ position: "absolute", left: REJA_X - 60, top: 120, width: REJA_ANCHO + 120, height: SUELO - 230, boxShadow: `0 0 ${200 * transforma}px ${60 * transforma}px rgba(220,230,255,0.35)`, opacity: transforma }} />
+        {/* la película: el héroe de armadura en pantalla */}
+        {f >= c.prota - 2 ? (
+          <div style={{ position: "absolute", left: REJA_X, top: 170, width: 840, height: 490, overflow: "hidden", opacity: prog(f, c.prota - 2, 10) }}>
+            <AbsoluteFill style={{ background: "linear-gradient(#1B2A44, #3A5A86 70%, #E8A060)" }} />
+            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
+              <div key={i} style={{ position: "absolute", left: i * 90 - 20, bottom: 60, width: 70, height: 110 + ((i * 67) % 160), background: "#16202E" }} />
+            ))}
+            <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 62, background: "#101722" }} />
+            <div style={{ position: "absolute", left: 420 - (360 * 200) / 460 / 2, top: 490 - 62 - 360 * (452 / 460) + 0, transform: `scale(${1 + (f - c.prota) * 0.002})`, transformOrigin: "50% 100%" }}>
+              <Robert alto={360} ropa="armadura" casco={1} brillo={1} repulsor={prog(f, c.prota + 8, 10)} repulsorIzq={prog(f, c.prota + 8, 10)} brazoIzq={{ hombro: 80, codo: 6 }} brazoDer={{ hombro: 80, codo: 6 }} />
+            </div>
+            <AbsoluteFill style={{ background: `radial-gradient(circle at 50% 50%, rgba(160,225,255,${0.4 * prog(f, c.prota + 8, 10)}), transparent 50%)` }} />
+          </div>
+        ) : null}
+        {/* haz del proyector desde el fondo de la sala */}
+        <svg width={1920} height={1080} style={{ position: "absolute", inset: 0, opacity: transforma * 0.9 }}>
+          <defs>
+            <linearGradient id="haz1" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0" stopColor="rgba(220,235,255,0.28)" />
+              <stop offset="1" stopColor="rgba(220,235,255,0.04)" />
+            </linearGradient>
+          </defs>
+          <polygon points={`930,1080 990,1080 ${REJA_X + 840},660 ${REJA_X + 840},170 ${REJA_X},170 ${REJA_X},660`} fill="url(#haz1)" />
+        </svg>
+        {/* público: cabezas sobre los respaldos */}
+        {[0, 1, 3, 4, 6, 7].map((i) => (
+          <div key={`p${i}`} style={{ position: "absolute", left: 40 + i * 215 + 50, top: 830, width: 80, height: 96, borderRadius: "50% 50% 44% 44%", background: "#0C1016" }} />
+        ))}
         {new Array(9).fill(0).map((_, i) => (
           <div key={i} style={{ position: "absolute", left: 40 + i * 215, top: 900, width: 180, height: 180, borderRadius: "40px 40px 0 0", background: "#141922", boxShadow: "inset 0 6px 0 rgba(255,255,255,0.08)" }} />
         ))}
