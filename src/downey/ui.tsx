@@ -205,3 +205,31 @@ export const PantallaFinal: React.FC<{ desde: number; boton: number }> = ({ desd
     </AbsoluteFill>
   );
 };
+
+/** Interfaz tecnológica (HUD) genérica: arcos que giran, retícula y etiquetas. */
+export const Hud: React.FC<{ x: number; y: number; r?: number; etiquetas?: string[]; desde?: number; color?: string }> = ({ x, y, r = 260, etiquetas = [], desde = 0, color = "#8CDCFF" }) => {
+  const f = useCurrentFrame();
+  if (f < desde) return null;
+  const p = prog(f, desde, 16);
+  const g = (f - desde) * 1.6;
+  return (
+    <AbsoluteFill style={{ pointerEvents: "none", opacity: p, zIndex: 25 }}>
+      <svg width={1920} height={1080} style={{ position: "absolute", inset: 0 }}>
+        <g transform={`translate(${x} ${y}) scale(${0.85 + 0.15 * p})`} stroke={color} fill="none">
+          <circle r={r} strokeWidth={2} opacity={0.5} strokeDasharray="4 10" />
+          <circle r={r * 0.78} strokeWidth={6} opacity={0.75} strokeDasharray={`${r * 1.2} ${r * 0.6}`} transform={`rotate(${g})`} />
+          <circle r={r * 0.62} strokeWidth={3} opacity={0.6} strokeDasharray={`${r * 0.5} ${r * 0.25}`} transform={`rotate(${-g * 1.4})`} />
+          {[0, 90, 180, 270].map((a) => (
+            <line key={a} x1={0} y1={-r * 1.08} x2={0} y2={-r * 0.92} strokeWidth={4} transform={`rotate(${a})`} />
+          ))}
+          <path d={`M${-r * 0.2} 0 L${-r * 0.06} 0 M${r * 0.06} 0 L${r * 0.2} 0 M0 ${-r * 0.2} L0 ${-r * 0.06} M0 ${r * 0.06} L0 ${r * 0.2}`} strokeWidth={3} />
+        </g>
+      </svg>
+      {etiquetas.map((t, i) => (
+        <div key={t} style={{ position: "absolute", left: x + r + 30, top: y - r * 0.6 + i * 70, fontFamily: F_CIFRA, fontWeight: 700, fontSize: 48, color, letterSpacing: 3, textShadow: `0 0 14px ${color}`, opacity: prog(f, desde + 10 + i * 12, 10) }}>
+          {t}
+        </div>
+      ))}
+    </AbsoluteFill>
+  );
+};

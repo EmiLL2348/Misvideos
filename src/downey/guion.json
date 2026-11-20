@@ -11,8 +11,8 @@
     {
       "id": "s1",
       "titulo": "Gancho",
-      "texto": "1999. Un actor nominado al Óscar entra en una prisión de California como el recluso P50522. Nueve años después, protagoniza la película que levantó la mayor saga de superhéroes del cine.",
-      "textoVoz": "1999. Un actor nominado al Óscar entra en una prisión de California como el recluso P, cinco, cero, cinco, dos, dos. Nueve años después, protagoniza la película que levantó la mayor saga de superhéroes del cine.",
+      "texto": "Antes de ser el héroe de la armadura más famosa del cine… fue el recluso P50522. En 1999, un actor nominado al Óscar entró en una prisión de California. Nueve años después, protagonizaba la película que levantó la mayor saga de superhéroes.",
+      "textoVoz": "Antes de ser el héroe de la armadura más famosa del cine… fue el recluso P, cinco, cero, cinco, dos, dos. En 1999, un actor nominado al Óscar entró en una prisión de California. Nueve años después, protagonizaba la película que levantó la mayor saga de superhéroes.",
       "salidaExtra": 0.6
     },
     {
@@ -53,8 +53,8 @@
     {
       "id": "s8",
       "titulo": "El héroe que nadie quería",
-      "texto": "Pero seguía siendo «el actor problemático». Cuando el director Jon Favreau le propuso para una película de un héroe con armadura, el estudio se negó. Favreau insistió, consiguió una prueba… y Robert la bordó. Años después, el jefe del estudio admitiría que contratarle fue el mayor riesgo que habían corrido.",
-      "salidaExtra": 0.6
+      "texto": "Pero seguía siendo «el actor problemático». Cuando el director Jon Favreau le propuso para una película de un héroe con armadura, el estudio se negó. Favreau insistió, consiguió una prueba… y Robert la bordó. Años después, el jefe del estudio admitiría que contratarle fue el mayor riesgo que habían corrido. Y les salió perfecto.",
+      "salidaExtra": 3.6
     },
     {
       "id": "s9",

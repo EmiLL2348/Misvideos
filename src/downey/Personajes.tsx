@@ -23,7 +23,7 @@ export const AMPLITUD_PASO = 22;
 export const AVANCE_POR_RADIAN = (2 * PIERNA * Math.sin((AMPLITUD_PASO * Math.PI) / 180)) / Math.PI;
 
 export type Expresion = "neutral" | "serio" | "triste" | "decidido" | "sonrisa";
-export type Ropa = "preso" | "traje" | "esmoquin" | "epoca" | "casual" | "taller" | "nino";
+export type Ropa = "preso" | "traje" | "esmoquin" | "epoca" | "casual" | "taller" | "nino" | "armadura";
 export type Brazo = { hombro: number; codo: number };
 export const POSE = {
   reposo: { izq: { hombro: 6, codo: 4 }, der: { hombro: 6, codo: 4 } },
@@ -40,6 +40,7 @@ const ROPA: Record<Ropa, { torso: string; torsoSombra: string; manga: string; pa
   casual: { torso: "#3B4A5E", torsoSombra: "#2E3B4C", manga: "#3B4A5E", pantalon: "#2F4A6E", zapato: "#2A2420", cuello: "#E6E1D6" },
   taller: { torso: "#6E7378", torsoSombra: "#5A5F64", manga: "#6E7378", pantalon: "#2F4A6E", zapato: "#2A2420" },
   nino: { torso: "#C8673A", torsoSombra: "#A9552F", manga: "#C8673A", pantalon: "#3E5A7A", zapato: "#2A2420" },
+  armadura: { torso: "#9AA4AE", torsoSombra: "#737D88", manga: "#8C96A0", pantalon: "#828C96", zapato: "#56606A" },
 };
 
 const rad = (g: number) => (g * Math.PI) / 180;
@@ -59,6 +60,9 @@ type PropsRobert = {
   bombin?: boolean;
   bastonEnSuelo?: boolean;
   gafas?: boolean; // gafas tintadas
+  casco?: number; // 0..1 casco de la armadura (baja y se cierra)
+  brillo?: number; // 0..1 luces de la armadura (ojos y líneas)
+  repulsor?: number; // 0..1 palma derecha iluminada
 
   luz?: string; // luz de borde
   sombra?: boolean;
@@ -80,6 +84,9 @@ export const Robert: React.FC<PropsRobert> = ({
   bombin = false,
   bastonEnSuelo = false,
   gafas = false,
+  casco = 0,
+  brillo = 0,
+  repulsor = 0,
   luz,
   sombra = true,
   semilla = 0,
@@ -185,6 +192,22 @@ export const Robert: React.FC<PropsRobert> = ({
           <path d="M76 24 Q76 -2 100 -2 Q124 -2 124 24 Z" fill="#1A1A1E" />
         </>
       ) : null}
+      {casco > 0 ? (
+        <g transform={`translate(0 ${(1 - casco) * -70})`} opacity={Math.min(1, casco * 2)}>
+          <path d="M70 52 Q70 14 100 12 Q130 14 130 52 Q130 84 100 90 Q70 84 70 52 Z" fill="#A6B0BA" />
+          <path d="M100 12 Q130 14 130 52 Q130 84 100 90 Z" fill="#848E98" />
+          {frente ? (
+            <>
+              <path d="M80 46 L96 50 L94 56 L80 54 Z M104 50 L120 46 L120 54 L106 56 Z" fill="#0E141A" />
+              <path d="M80 46 L96 50 L94 56 L80 54 Z M104 50 L120 46 L120 54 L106 56 Z" fill={`rgba(170,235,255,${brillo})`} />
+              <circle cx={88} cy={51} r={9} fill={`rgba(140,220,255,${0.3 * brillo})`} />
+              <circle cx={112} cy={51} r={9} fill={`rgba(140,220,255,${0.3 * brillo})`} />
+              <path d="M100 58 L100 80 M88 76 L112 76" stroke="#5E6670" strokeWidth={2.5} />
+            </>
+          ) : null}
+          <path d="M78 30 Q90 18 106 18" stroke="rgba(255,255,255,0.55)" strokeWidth={4} fill="none" strokeLinecap="round" />
+        </g>
+      ) : null}
     </g>
   );
 
@@ -215,6 +238,13 @@ export const Robert: React.FC<PropsRobert> = ({
       {!espalda && ropa === "casual" ? <path d="M86 100 L100 132 L114 100" fill="#E6E1D6" /> : null}
       {!espalda && ropa === "nino" ? [140, 170, 200].map((y) => <rect key={y} x={70} y={y} width={60} height={10} fill="#E9D3A4" opacity={0.7} />) : null}
       {espalda ? <path d="M100 100 L100 236" stroke={R.torsoSombra} strokeWidth={3} /> : null}
+      {ropa === "armadura" ? (
+        <g>
+          <path d="M72 120 L100 140 L128 120 M76 172 L100 188 L124 172 M74 214 L126 214" stroke="#5E6670" strokeWidth={3} fill="none" />
+          {!espalda ? <path d="M88 132 L100 142 L112 132 M90 178 L100 186 L110 178" stroke={`rgba(140,220,255,${0.3 + 0.7 * brillo})`} strokeWidth={3.5} fill="none" strokeLinecap="round" /> : null}
+          <path d="M78 104 Q100 98 122 104" stroke="#C6CDD4" strokeWidth={3} fill="none" opacity={0.7} />
+        </g>
+      ) : null}
       {luz ? <path d="M68 116 Q66 180 70 238" stroke={luz} strokeWidth={4} fill="none" opacity={0.85} /> : null}
     </g>
   );
@@ -324,8 +354,14 @@ export const Robert: React.FC<PropsRobert> = ({
         {bD.seg}
         {objetoCentro ? <g transform="translate(100 196)">{objetoCentro}</g> : null}
         {objetoDer ? <g transform={`translate(${bD.hx} ${bD.hy})`}>{objetoDer}</g> : null}
-        <circle cx={bI.hx} cy={bI.hy} r={9} fill={D.piel} />
-        <circle cx={bD.hx} cy={bD.hy} r={9} fill={D.piel} />
+        <circle cx={bI.hx} cy={bI.hy} r={9} fill={ropa === "armadura" ? "#8C96A0" : D.piel} />
+        <circle cx={bD.hx} cy={bD.hy} r={9} fill={ropa === "armadura" ? "#8C96A0" : D.piel} />
+        {repulsor > 0 ? (
+          <g>
+            <circle cx={bD.hx} cy={bD.hy} r={60 * repulsor} fill="rgba(140,220,255,0.35)" />
+            <circle cx={bD.hx} cy={bD.hy} r={22 * repulsor} fill="rgba(225,250,255,0.95)" />
+          </g>
+        ) : null}
         <g transform={escalaNino ? "translate(100 98) scale(1.32) translate(-100 -98)" : undefined}>{cabeza(!espalda)}</g>
       </g>
     );

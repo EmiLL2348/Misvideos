@@ -5,7 +5,7 @@ import { Plano } from "../stallone/escenario";
 import { D, interp, prog } from "./estilo";
 import { HOMBRO_DER, Robert, SiluetaD, mezclar, resolverBrazo, topDePie } from "./Personajes";
 import { ARMADURA_BASE, Armadura, CamaraTripode, Look } from "./props";
-import { Efecto, Particulas } from "./ui";
+import { Efecto, Hud, Particulas } from "./ui";
 
 const SUELO = 920;
 const MESA_Y = 640;
@@ -13,7 +13,7 @@ const MESA_Y = 640;
 export const Escena8: React.FC = () => {
   const f = useCurrentFrame();
   const { cue, dur } = useEscena("s8");
-  const c = { problematico: cue("problemático"), favreau: cue("favreau"), nego: cue("negó"), insistio: cue("insistió"), prueba: cue("prueba"), bordo: cue("bordó"), anos: cue("años"), riesgo: cue("riesgo") };
+  const c = { problematico: cue("problemático"), favreau: cue("favreau"), nego: cue("negó"), insistio: cue("insistió"), prueba: cue("prueba"), bordo: cue("bordó"), anos: cue("años"), riesgo: cue("riesgo"), salio: cue("salió") };
 
   // A · el director golpea la mesa con la palma: la mano llega exactamente a la superficie
   const DA = 640;
@@ -37,6 +37,15 @@ export const Escena8: React.FC = () => {
   const pecho: [number, number] = [ax + 110 * ak, aTop + 170 * ak];
   const alcanza = prog(f, c.anos + 6, 20);
   const brazoPecho = mezclar({ hombro: 6, codo: 4 }, resolverBrazo(HOMBRO_DER[0], HOMBRO_DER[1], 1, (pecho[0] - rx) / rk, (pecho[1] - rTop) / rk, false), alcanza);
+  // se pone la armadura: se deshace en luz, escaneo de pies a cabeza, casco y palma iluminada
+  const T = c.salio - 6;
+  const disolver = prog(f, T - 14, 18);
+  const escaneo = prog(f, T, 36);
+  const casco = prog(f, T + 34, 12);
+  const brilloTraje = prog(f, T + 44, 10);
+  const reposo = { hombro: 6, codo: 4 };
+  const brazoFinal = f < T - 14 ? brazoPecho : f < T + 50 ? mezclar(brazoPecho, reposo, prog(f, T - 14, 14)) : mezclar(reposo, { hombro: 92, codo: -8 }, prog(f, T + 50, 14));
+  const repulsor = prog(f, T + 60, 10);
 
   return (
     <AbsoluteFill style={{ background: D.negro }}>
@@ -109,12 +118,35 @@ export const Escena8: React.FC = () => {
         <div style={{ position: "absolute", left: 0, right: 0, top: SUELO, bottom: 0, background: "linear-gradient(#5E646E, #474C55)" }} />
         <div style={{ position: "absolute", left: 0, right: 0, top: SUELO, height: 5, background: "rgba(0,0,0,0.3)" }} />
         <div style={{ position: "absolute", left: 600, top: 0, width: 900, height: SUELO, background: "linear-gradient(rgba(255,245,220,0.25), rgba(255,245,220,0.05))", clipPath: "polygon(40% 0, 60% 0, 100% 100%, 0 100%)" }} />
-        <div style={{ position: "absolute", left: ax, top: aTop }}>
+        <div style={{ position: "absolute", left: ax, top: aTop, opacity: 1 - disolver }}>
           <Armadura alto={AA} encendida={prog(f, c.riesgo - 4, 18)} />
         </div>
-        <div style={{ position: "absolute", left: rx, top: rTop }}>
-          <Robert alto={RA} ropa="taller" expresion="decidido" brazoDer={brazoPecho} luz="#FFF4E2" />
+        <div style={{ position: "absolute", left: rx, top: rTop, opacity: escaneo >= 1 ? 0 : 1 }}>
+          <Robert alto={RA} ropa="taller" expresion="decidido" brazoDer={brazoFinal} luz="#FFF4E2" />
         </div>
+        {escaneo > 0 ? (
+          <>
+            <div style={{ position: "absolute", left: rx, top: rTop, clipPath: `inset(${(1 - escaneo) * 100}% -200% -5% -200%)` }}>
+              <Robert alto={RA} ropa="armadura" casco={casco} brillo={brilloTraje} repulsor={repulsor} brazoDer={brazoFinal} luz="#9FDCFF" />
+            </div>
+            {escaneo < 1 ? <div style={{ position: "absolute", left: rx - 60, top: rTop + (1 - escaneo) * RA * 0.98, width: (200 * RA) / 460 + 120, height: 6, background: "#BFF0FF", boxShadow: "0 0 30px 10px rgba(140,220,255,0.8)" }} /> : null}
+          </>
+        ) : null}
+        {/* partículas de luz que van del soporte a Robert */}
+        {disolver > 0 && escaneo < 1
+          ? new Array(26).fill(0).map((_, i) => {
+              const t = Math.min(1, Math.max(0, (f - (T - 14) - i * 0.8) / 24));
+              const sx = ax + 110 * ak + Math.sin(i) * 60;
+              const sy = aTop + (i / 26) * AA;
+              const ex = rx + 100 * rk;
+              const ey = rTop + (0.2 + (i / 26) * 0.75) * RA;
+              return <div key={i} style={{ position: "absolute", left: sx + (ex - sx) * t, top: sy + (ey - sy) * t - Math.sin(t * Math.PI) * 60, width: 8, height: 8, borderRadius: 4, background: "#CFF4FF", boxShadow: "0 0 10px #8CDCFF", opacity: t > 0 && t < 1 ? 1 : 0 }} />;
+            })
+          : null}
+        <Hud x={rx + 100 * rk} y={rTop + 60 * rk} r={130} desde={T + 46} etiquetas={["SISTEMAS: OK", "ENERGÍA 100%"]} />
+        <AbsoluteFill style={{ background: `rgba(200,240,255,${Math.max(0, 1 - Math.abs(f - (T + 62)) / 8) * 0.7})` }} />
+        <Efecto archivo="chispas" en={T} vol={0.3} dur={40} />
+        <Efecto archivo="flash" en={T + 60} vol={0.4} dur={20} />
         {/* haz de luz que barre la armadura y fogonazo al encenderse */}
         <div style={{ position: "absolute", left: ax - 120 + ((f - c.anos) * 6) % 600, top: aTop - 40, width: 60, height: AA + 40, background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)", transform: "skewX(-14deg)" }} />
         <AbsoluteFill style={{ background: `radial-gradient(circle at ${(ax + 110 * ak) / 19.2}% ${(aTop + 60 * ak) / 10.8}%, rgba(160,220,255,${0.55 * Math.max(0, 1 - Math.abs(f - c.riesgo) / 12)}), transparent 45%)` }} />
