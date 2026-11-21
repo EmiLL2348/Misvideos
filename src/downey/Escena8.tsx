@@ -32,7 +32,7 @@ export const Escena8: React.FC = () => {
   const aTop = SUELO - ARMADURA_BASE * ak;
   const RA = 600;
   const rk = RA / 460;
-  const rx = 840;
+  const rx = 905;
   const rTop = topDePie(SUELO, RA);
   const pecho: [number, number] = [ax + 70 * ak, aTop + 170 * ak];
   const alcanza = prog(f, c.anos + 6, 20);
@@ -182,7 +182,6 @@ export const Escena8: React.FC = () => {
         <Efecto archivo="flash" en={E} vol={0.5} dur={20} />
         <Efecto archivo="mazo" en={E} vol={0.45} dur={25} />
         {/* haz de luz que barre la armadura y fogonazo al encenderse */}
-        <div style={{ opacity: 1 - disolver, position: "absolute", left: ax - 120 + ((f - c.anos) * 6) % 600, top: aTop - 40, width: 60, height: AA + 40, background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)", transform: "skewX(-14deg)" }} />
         <AbsoluteFill style={{ background: `radial-gradient(circle at ${(ax + 110 * ak) / 19.2}% ${(aTop + 60 * ak) / 10.8}%, rgba(160,220,255,${0.55 * Math.max(0, 1 - Math.abs(f - c.riesgo) / 12)}), transparent 45%)` }} />
         <Efecto archivo="flash" en={c.riesgo} vol={0.3} dur={20} />
         <Particulas desde={c.anos + 4} x={ax + 150} y={aTop + 300 * ak} ancho={60} suelo={SUELO} n={50} colores={["#FFE08A", "#FFB43A", "#FFF6D0"]} tam={8} apagar />

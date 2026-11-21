@@ -3,7 +3,7 @@ import { AbsoluteFill, useCurrentFrame } from "remotion";
 import { useEscena } from "../comun/timeline";
 import { Plano } from "../stallone/escenario";
 import { D, F_CIFRA, interp, prog } from "./estilo";
-import { Encapuchado, manoEncapuchado, HOMBRO_DER, HOMBRO_IZQ, Robert, resolverBrazo, topDePie } from "./Personajes";
+import { Encapuchado, manoEncapuchado, HOMBRO_DER, HOMBRO_IZQ, Robert, resolverBrazo, topDePie, mezclar } from "./Personajes";
 import { Look, Mascara } from "./props";
 import { Cita, Efecto, PantallaFinal, Particulas } from "./ui";
 
@@ -22,16 +22,16 @@ export const Escena10: React.FC = () => {
   // máscara: reposa en la mesa y luego sube entre sus manos
   const MW = 240;
   const mk = MW / 220;
-  const reposo: [number, number] = [1040, MESA - 120 * mk];
-  const alto: [number, number] = [rx + 100 * k - MW / 2, rTop - 150 * mk];
+  const reposo: [number, number] = [rx + 100 * k - MW / 2, MESA - 120 * mk];
+  const alto: [number, number] = [rx + 100 * k - MW / 2, rTop + 52 * k - 80 * mk];
   const sube = interp(f, [c.saga - 4, c.doom - 6], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2) });
   const coger = prog(f, c.saga - 28, 20);
   const mPos: [number, number] = [reposo[0] + (alto[0] - reposo[0]) * sube, reposo[1] + (alto[1] - reposo[1]) * sube];
   const bordeIzq: [number, number] = [mPos[0] + 26 * mk, mPos[1] + 80 * mk];
   const bordeDer: [number, number] = [mPos[0] + 194 * mk, mPos[1] + 80 * mk];
   const local = (p: [number, number]): [number, number] => [(p[0] - rx) / k, (p[1] - rTop) / k];
-  const bIzq = coger > 0 ? resolverBrazo(HOMBRO_IZQ[0], HOMBRO_IZQ[1], -1, ...local(bordeIzq)) : { hombro: 6, codo: 4 };
-  const bDer = coger > 0 ? resolverBrazo(HOMBRO_DER[0], HOMBRO_DER[1], 1, ...local(bordeDer)) : { hombro: 6, codo: 4 };
+  const bIzq = mezclar({ hombro: 6, codo: 4 }, resolverBrazo(HOMBRO_IZQ[0], HOMBRO_IZQ[1], -1, ...local(bordeIzq)), coger);
+  const bDer = mezclar({ hombro: 6, codo: 4 }, resolverBrazo(HOMBRO_DER[0], HOMBRO_DER[1], 1, ...local(bordeDer)), coger);
   const orbita = Math.sin((f / dur) * Math.PI) * 40;
   // trono: levanta la mano y detiene un rayo
   const manoV = prog(f, c.doom + 14, 14);
@@ -50,22 +50,23 @@ export const Escena10: React.FC = () => {
           {/* muro de piedra */}
           <AbsoluteFill style={{ backgroundImage: "repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0 3px, transparent 3px 90px), repeating-linear-gradient(90deg, rgba(0,0,0,0.12) 0 3px, transparent 3px 180px)", opacity: 0.8 }} />
           <div style={{ position: "absolute", left: 0, right: 0, top: SUELO, bottom: 0, background: "linear-gradient(#24392C, #142219)" }} />
+          {/* Robert detrás de la mesa, de frente: coge la máscara y se la acerca a la cara */}
+          <div style={{ position: "absolute", left: rx, top: rTop }}>
+            <Robert alto={ALTO} vista="frente" ropa="traje" expresion="serio" brazoIzq={bIzq} brazoDer={bDer} />
+          </div>
           {/* mesa de piedra (patas en el suelo) */}
-          <div style={{ position: "absolute", left: 860, top: MESA, width: 640, height: 40, background: "linear-gradient(#8A948E, #6A746E)", borderRadius: 6 }} />
-          {[900, 1400].map((x) => (
+          <div style={{ position: "absolute", left: 700, top: MESA, width: 640, height: 40, background: "linear-gradient(#8A948E, #6A746E)", borderRadius: 6 }} />
+          {[740, 1240].map((x) => (
             <div key={x} style={{ position: "absolute", left: x, top: MESA + 40, width: 60, height: SUELO - MESA - 40, background: "#5E6862" }} />
           ))}
-          <div style={{ position: "absolute", left: 860, top: SUELO - 10, width: 640, height: 20, borderRadius: "50%", background: "rgba(0,0,0,0.35)" }} />
+          <div style={{ position: "absolute", left: 700, top: SUELO - 10, width: 640, height: 20, borderRadius: "50%", background: "rgba(0,0,0,0.35)" }} />
           {/* sombra de la máscara sobre la mesa mientras reposa */}
           <div style={{ position: "absolute", left: reposo[0] + 20, top: MESA - 8, width: MW - 40, height: 16, borderRadius: "50%", background: "rgba(0,0,0,0.4)", opacity: 1 - sube }} />
-          <div style={{ position: "absolute", left: rx, top: rTop }}>
-            <Robert alto={ALTO} vista="espalda" ropa="traje" brazoIzq={bIzq} brazoDer={bDer} />
-          </div>
           {/* máscara metálica lisa y genérica, con las manos delante */}
           <div style={{ position: "absolute", left: mPos[0], top: mPos[1] }}>
             <Mascara ancho={MW} inclinacion={(1 - sube) * 70} ojos={sube * 0.8} />
           </div>
-          {coger > 0 ? (
+          {coger >= 1 ? (
             <svg width={1920} height={1080} style={{ position: "absolute", inset: 0 }}>
               <circle cx={bordeIzq[0]} cy={bordeIzq[1]} r={9 * k} fill={D.piel} />
               <circle cx={bordeDer[0]} cy={bordeDer[1]} r={9 * k} fill={D.piel} />
