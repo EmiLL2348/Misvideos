@@ -91,7 +91,7 @@ export const Escena1: React.FC = () => {
         {f >= c.chasquido ? (
           <div style={{ position: "absolute", left: 960 - (f - c.chasquido) * 70, top: 420 - (f - c.chasquido) * 70, width: (f - c.chasquido) * 140, height: (f - c.chasquido) * 140, borderRadius: "50%", border: "14px solid rgba(255,240,210,0.9)", boxShadow: "0 0 80px 20px rgba(255,200,120,0.6)", opacity: Math.max(0, 1 - (f - c.chasquido) / 18) }} />
         ) : null}
-        <Destello en={c.chasquido + 1} dur={16} color="#FFF6E6" />
+        <Destello en={c.chasquido + 12} dur={12} color="#FFF6E6" />
       </Plano>
       <Efecto archivo="chispas" en={0} vol={0.25} dur={60} />
       <Efecto archivo="clac" en={c.chasquido} vol={0.6} dur={10} />
