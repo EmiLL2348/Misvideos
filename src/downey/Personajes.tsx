@@ -10,8 +10,8 @@ import { D, lerp } from "./estilo";
  */
 export const PIE = 452;
 /** Brazo (hombro→codo) y antebrazo con mano, en unidades del SVG 200×460. */
-export const L_BRAZO = 74;
-export const L_ANTEBRAZO = 70;
+export const L_BRAZO = 66;
+export const L_ANTEBRAZO = 63;
 export const CADERA = 236;
 export const PIE_SENTADO = 384;
 export const PIE_SUELO = 262; // sentado en el suelo con las piernas cruzadas
@@ -103,6 +103,7 @@ export const Robert: React.FC<PropsRobert> = ({
   const respira = Math.sin(f / 16 + semilla) * 0.8;
   const perilla = edad === "adulto";
   const ancho = (alto * 200) / 460;
+  const largoT = ropa === "nino" || ropa === "armadura" || vista === "sentado" || vista === "suelo" ? 240 : 262;
 
   /* ---------- brazos (dos segmentos), mano encima del objeto ---------- */
   const brazo = (sx: number, sy: number, lado: number, b: Brazo, manga: string) => {
@@ -246,8 +247,8 @@ export const Robert: React.FC<PropsRobert> = ({
   /* ---------- torso ---------- */
   const torso = (espalda: boolean) => (
     <g>
-      <path d="M66 112 Q68 98 100 96 Q132 98 134 112 L130 240 L70 240 Z" fill={R.torso} />
-      <path d="M100 98 Q132 98 134 112 L130 240 L104 240 Z" fill={R.torsoSombra} opacity={0.6} />
+      <path d={`M66 112 Q68 98 100 96 Q132 98 134 112 L131 ${largoT} L69 ${largoT} Z`} fill={R.torso} />
+      <path d={`M100 98 Q132 98 134 112 L131 ${largoT} L104 ${largoT} Z`} fill={R.torsoSombra} opacity={0.6} />
       {!espalda && R.cuello ? <path d="M90 98 L100 124 L110 98 Z" fill={R.cuello} /> : null}
       {!espalda && ropa === "traje" ? <path d="M100 124 L97 170 L100 176 L103 170 Z" fill="#7A2A2A" /> : null}
       {!espalda && ropa === "esmoquin" ? <path d="M92 104 L100 108 L108 104 L108 112 L100 108 L92 112 Z" fill="#0A0A0A" /> : null}
@@ -375,7 +376,7 @@ export const Robert: React.FC<PropsRobert> = ({
           {lejano.seg}
           <circle cx={lejano.hx} cy={lejano.hy} r={9} fill={D.pielSombra} />
           {pierna(s, R.pantalon)}
-          <path d="M80 112 Q86 98 104 96 Q122 98 124 112 L122 240 L80 240 Z" fill={R.torso} />
+          <path d={`M80 112 Q86 98 104 96 Q122 98 124 112 L122 ${largoT} L80 ${largoT} Z`} fill={R.torso} />
           <rect x={92} y={76} width={18} height={24} rx={6} fill={D.pielSombra} />
           <ellipse cx={104} cy={52} rx={24} ry={31} fill={D.piel} />
           <path d="M126 50 L134 60 L126 64 Z" fill={D.piel} />
@@ -493,7 +494,7 @@ export const SiluetaD: React.FC<{
       {sombra ? <ellipse cx={100} cy={PIE} rx={50 * anchoT} ry={8} fill="rgba(0,0,0,0.3)" /> : null}
       <g transform={`translate(100 0) scale(${anchoT} 1) translate(-100 0)`}>
         {tipo === "mujer" ? (
-          <path d="M72 230 L128 230 L140 440 L60 440 Z" fill={color} />
+          <path d="M72 230 L128 230 L140 452 L60 452 Z" fill={color} />
         ) : (
           <path d="M72 236 L128 236 L126 446 L103 446 L100 300 L97 446 L74 446 Z" fill={color} />
         )}

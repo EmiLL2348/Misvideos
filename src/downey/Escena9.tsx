@@ -3,7 +3,7 @@ import { AbsoluteFill, useCurrentFrame } from "remotion";
 import { useEscena } from "../comun/timeline";
 import { Edificios, Plano } from "../stallone/escenario";
 import { D, F_CIFRA, prog } from "./estilo";
-import { L_ANTEBRAZO, L_BRAZO, POSE, Robert, SiluetaD, topDePie } from "./Personajes";
+import { L_ANTEBRAZO, L_BRAZO, POSE, Robert, SiluetaD, topDePie, resolverBrazo } from "./Personajes";
 import { CampoBatalla, Guantelete } from "./heroe";
 import { Destello } from "../stallone/escenario";
 import { Carpeta, Look, Mesa, TrofeoSVG } from "./props";
@@ -30,7 +30,7 @@ const Marquesina: React.FC<{ f: number }> = ({ f }) => {
         return <div key={i} style={{ position: "absolute", left: x, top: y, width: 18, height: 18, borderRadius: 9, background: lit ? "#FFF3C8" : "#5A4A3A", boxShadow: lit ? "0 0 14px 4px rgba(255,220,150,0.8)" : "none" }} />;
       })}
       <div style={{ position: "absolute", left: 50, right: 50, top: 46, bottom: 46, background: "#F4EEDE", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <span style={{ fontFamily: F_CIFRA, fontWeight: 700, fontSize: 92, color: "#1C1C1C", letterSpacing: 8 }}>ESTRENO · MAYO 2008</span>
+        <span style={{ fontFamily: F_CIFRA, fontWeight: 700, fontSize: 92, color: "#1C1C1C", letterSpacing: 8 }}>IRON MAN · MAYO 2008</span>
       </div>
     </div>
   );
@@ -98,10 +98,9 @@ export const Escena9: React.FC = () => {
           <Mesa ancho={1320} alto={SUELO - MESA} color="#4A3424" tablero="#6A4A34" />
         </div>
         <div style={{ position: "absolute", left: 750, top: MESA - 420 * 0.62 + 6 }}>
-          <Carpeta ancho={420} color="#E6DCC4" etiqueta="ESTADO DE CALIFORNIA" />
-        </div>
-        <div style={{ position: "absolute", left: 790, top: MESA - 170 }}>
-          <Sello texto="INDULTO · 2015" en={c.indulto} color="#2E6A3A" tam={64} />
+          <Carpeta ancho={420} color="#E6DCC4" etiqueta="ESTADO DE CALIFORNIA">
+            <Sello texto="INDULTO · 2015" en={c.indulto} color="#2E6A3A" tam={44} />
+          </Carpeta>
         </div>
         <Efecto archivo="sello" en={c.indulto} vol={0.5} dur={15} />
         <Rotulo texto="2015" desde={c.y2015} hasta={c.y2019} />
@@ -147,7 +146,7 @@ export const Escena9: React.FC = () => {
         </svg>
         <div style={{ position: "absolute", left: 0, right: 0, top: SUELO - 60, bottom: 0, background: "linear-gradient(#5A3A2A, #3A2618)" }} />
         <div style={{ position: "absolute", left: 960 - 100 * k, top: topDePie(SUELO - 60, ALTO) }}>
-          <Robert alto={ALTO} ropa="esmoquin" expresion="sonrisa" gafas brazoIzq={POSE.sostener.izq} brazoDer={POSE.sostener.der} objetoCentro={<g transform="translate(0 12)"><TrofeoSVG alto={110} /></g>} luz="#FFF4E2" />
+          <Robert alto={ALTO} ropa="esmoquin" expresion="sonrisa" gafas brazoIzq={resolverBrazo(68, 112, -1, 84, 222)} brazoDer={resolverBrazo(132, 112, 1, 116, 222)} objetoCentro={<g transform="translate(0 12)"><TrofeoSVG alto={110} /></g>} luz="#FFF4E2" />
         </div>
         <Particulas desde={c.oscar} x={200} y={-40} ancho={1520} suelo={SUELO - 60} n={90} colores={["#F2B45A", "#FFF4E2", "#E8B64A", "#7FB6E0"]} />
         {/* primera fila del público (capa delantera) */}

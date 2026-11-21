@@ -86,8 +86,8 @@ export const Escena7: React.FC = () => {
           </>
         ) : (
           <AbsoluteFill style={{ background: "linear-gradient(#4A5670, #2E3648)" }}>
-            <div style={{ position: "absolute", left: 960 - 100 * (2000 / 460), top: -120, transform: `scale(${1 + (f - c.clara) * 0.0006})`, transformOrigin: "50% 20%" }}>
-              <Robert alto={2000} ropa="casual" expresion="decidido" luz="#FFE2B0" sombra={false} />
+            <div style={{ position: "absolute", left: 960 - 100 * (1800 / 460), top: 170, transform: `scale(${1 + (f - c.clara) * 0.0006})`, transformOrigin: "50% 20%" }}>
+              <Robert alto={1800} ropa="casual" expresion="decidido" luz="#FFE2B0" sombra={false} />
             </div>
           </AbsoluteFill>
         )}

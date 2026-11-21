@@ -49,16 +49,19 @@ const mezclaP = (a: [number, number][], b: [number, number][], t: number): [numb
 export const Guantelete: React.FC<{ alto?: number; chasquido?: number; carga?: number; semilla?: number }> = ({ alto = 900, chasquido = 0, carga = 1, semilla = 0 }) => {
   const f = useCurrentFrame();
   const t = chasquido;
+  // antes: el corazón se dobla hacia el pulgar y las yemas se tocan sobre los nudillos;
+  // después: el corazón baja de golpe contra la palma y el pulgar sale disparado hacia arriba.
   const corazon = mezclaP(
-    [[182, 236], [170, 176], [150, 160]],
-    [[182, 236], [184, 214], [186, 204]],
+    [[182, 236], [176, 196], [160, 182]],
+    [[182, 236], [182, 246], [182, 252]],
     t,
   );
   const pulgar = mezclaP(
-    [[132, 330], [96, 262], [146, 166]],
-    [[132, 330], [86, 254], [64, 176]],
+    [[130, 330], [104, 262], [150, 190]],
+    [[130, 330], [96, 250], [96, 168]],
     t,
   );
+  const contacto: [number, number] = [155, 186];
   // arcos de energía que recorren el guantelete
   const arcos = carga > 0
     ? new Array(5).fill(0).map((_, i) => {
@@ -96,7 +99,7 @@ export const Guantelete: React.FC<{ alto?: number; chasquido?: number; carga?: n
       <rect x={134} y={388} width={132} height={20} rx={6} fill={ORO} />
       {/* dedos (detrás del dorso) */}
       <Dedo p={[[146, 240], [140, 158], [136, 86]]} ancho={34} />
-      <Dedo p={corazon} ancho={36} />
+      {t < 0.5 ? <Dedo p={corazon} ancho={36} /> : null}
       <Dedo p={[[220, 240], [226, 152], [230, 90]]} ancho={34} />
       <Dedo p={[[256, 248], [266, 180], [272, 128]]} ancho={28} />
       <Dedo p={pulgar} ancho={38} />
@@ -108,6 +111,31 @@ export const Guantelete: React.FC<{ alto?: number; chasquido?: number; carga?: n
       <path d="M128 300 L150 300 M250 300 L272 300" stroke="#5A1015" strokeWidth={3} />
       {/* rasguños de batalla */}
       <path d="M160 384 L188 350 M232 248 L252 276 M168 420 L180 410" stroke="rgba(30,10,10,0.55)" strokeWidth={3} strokeLinecap="round" />
+      {/* corazón ya doblado: se ve el nudillo sobre el dorso */}
+      {t >= 0.5 ? (
+        <g>
+          <ellipse cx={182} cy={236} rx={22} ry={18} fill={ROJO_OSC} />
+          <ellipse cx={182} cy={232} rx={18} ry={14} fill={ROJO} />
+        </g>
+      ) : null}
+      {/* chispa del chasquido y trazos de movimiento */}
+      {t > 0 && t < 1.01 ? (
+        <g opacity={Math.min(1, t * 3)}>
+          <path d="M150 184 Q172 214 184 246" stroke="rgba(255,255,255,0.9)" strokeWidth={6} fill="none" strokeLinecap="round" />
+          <path d="M140 196 Q160 226 172 252" stroke="rgba(255,255,255,0.6)" strokeWidth={4} fill="none" strokeLinecap="round" />
+          <path d="M112 236 Q100 200 98 170" stroke="rgba(255,255,255,0.7)" strokeWidth={5} fill="none" strokeLinecap="round" />
+        </g>
+      ) : null}
+      {t > 0.3 ? (
+        <g transform={`translate(${contacto[0]} ${contacto[1]}) scale(${0.6 + 0.8 * t})`}>
+          {new Array(8).fill(0).map((_, i) => (
+            <path key={i} d="M0 -8 L4 -40 L0 -70 L-4 -40 Z" fill="#FFF6D8" transform={`rotate(${i * 45})`} opacity={0.9} />
+          ))}
+          <circle r={14} fill="#FFFFFF" />
+        </g>
+      ) : t === 0 ? (
+        <circle cx={contacto[0]} cy={contacto[1]} r={10 + 3 * Math.sin(f / 2)} fill="rgba(255,240,200,0.8)" />
+      ) : null}
       {/* gemas */}
       <Gema x={146} y={236} r={11} color={GEMAS[0]} luz={carga} />
       <Gema x={184} y={236} r={11} color={GEMAS[1]} luz={carga} />
@@ -158,7 +186,7 @@ export const CampoBatalla: React.FC<{ suelo?: number }> = ({ suelo = 900 }) => {
  * Desierto con montañas nevadas; Robert de traje y gafas, brazos abiertos,
  * y detrás estallan dos grandes columnas de polvo y fuego.
  */
-export const DesiertoExplosion: React.FC<{ estalla: number; alto?: number }> = ({ estalla, alto = 760 }) => {
+export const DesiertoExplosion: React.FC<{ estalla: number; alto?: number }> = ({ estalla, alto = 600 }) => {
   const f = useCurrentFrame();
   const SUELO = 960;
   const k = alto / 460;

@@ -32,9 +32,9 @@ export const Escena8: React.FC = () => {
   const aTop = SUELO - ARMADURA_BASE * ak;
   const RA = 600;
   const rk = RA / 460;
-  const rx = 700;
+  const rx = 840;
   const rTop = topDePie(SUELO, RA);
-  const pecho: [number, number] = [ax + 110 * ak, aTop + 170 * ak];
+  const pecho: [number, number] = [ax + 70 * ak, aTop + 170 * ak];
   const alcanza = prog(f, c.anos + 6, 20);
   const brazoPecho = mezclar({ hombro: 6, codo: 4 }, resolverBrazo(HOMBRO_DER[0], HOMBRO_DER[1], 1, (pecho[0] - rx) / rk, (pecho[1] - rTop) / rk, false), alcanza);
   // se pone la armadura: se deshace en luz, escaneo de pies a cabeza, casco y palma iluminada

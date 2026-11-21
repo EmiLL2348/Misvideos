@@ -11,8 +11,8 @@
     {
       "id": "s1",
       "titulo": "Gancho",
-      "texto": "Este hombre salvó el universo con un chasquido. Pero años antes… fue el recluso P50522. ¿Cómo se pasa de una celda en California a ser el héroe más famoso del cine? Esta es su historia.",
-      "textoVoz": "Este hombre salvó el universo con un chasquido. Pero años antes… fue el recluso P, cinco, cero, cinco, dos, dos. ¿Cómo se pasa de una celda en California a ser el héroe más famoso del cine? Esta es su historia.",
+      "texto": "Este hombre salvó el universo con un chasquido. Pero antes de ser leyenda, Robert Downey Jr. fue el recluso P50522. ¿Cómo pasó de una celda en California a ser Iron Man, el héroe más famoso del cine? Esta es su historia.",
+      "textoVoz": "Este hombre salvó el universo con un chasquido. Pero antes de ser leyenda, Róbert Dáuni Júnior fue el recluso P, cinco, cero, cinco, dos, dos. ¿Cómo pasó de una celda en California a ser Áiron Man, el héroe más famoso del cine? Esta es su historia.",
       "salidaExtra": 1.2
     },
     {
@@ -53,14 +53,16 @@
     {
       "id": "s8",
       "titulo": "El héroe que nadie quería",
-      "texto": "Pero seguía siendo «el actor problemático». Cuando el director Jon Favreau le propuso para una película de un héroe con armadura, el estudio se negó. Favreau insistió, consiguió una prueba… y Robert la bordó. Años después, el jefe del estudio admitiría que contratarle fue el mayor riesgo que habían corrido. Y les salió perfecto.",
-      "salidaExtra": 3.6
+      "texto": "Pero seguía siendo «el actor problemático». Cuando el director Jon Favreau le propuso para Iron Man, la película de un héroe con armadura, el estudio se negó. Favreau insistió, consiguió una prueba… y Robert la bordó. Años después, el jefe del estudio admitiría que contratarle fue el mayor riesgo que habían corrido. Y les salió perfecto.",
+      "salidaExtra": 3.6,
+      "textoVoz": "Pero seguía siendo «el actor problemático». Cuando el director Jon Favreau le propuso para Áiron Man, la película de un héroe con armadura, el estudio se negó. Favreau insistió, consiguió una prueba… y Robert la bordó. Años después, el jefe del estudio admitiría que contratarle fue el mayor riesgo que habían corrido. Y les salió perfecto."
     },
     {
       "id": "s9",
       "titulo": "La cima",
-      "texto": "La película se estrenó en mayo de 2008 y recaudó unos 585 millones de dólares. El hombre al que nadie quería asegurar llegó a cobrar unos 50 millones por una sola película. En 2015, el gobernador de California le indultó. En 2019 se despidió del héroe con el chasquido más famoso del cine. Y en 2024 ganó, por fin, el Óscar. A su mujer le dijo: «Me devolviste a la vida».",
-      "salidaExtra": 1.0
+      "texto": "Iron Man se estrenó en mayo de 2008 y recaudó unos 585 millones de dólares. El hombre al que nadie quería asegurar llegó a cobrar unos 50 millones por una sola película. En 2015, el gobernador de California le indultó. En 2019 se despidió del héroe con el chasquido más famoso del cine. Y en 2024 ganó, por fin, el Óscar. A su mujer le dijo: «Me devolviste a la vida».",
+      "salidaExtra": 1.0,
+      "textoVoz": "Áiron Man se estrenó en mayo de 2008 y recaudó unos 585 millones de dólares. El hombre al que nadie quería asegurar llegó a cobrar unos 50 millones por una sola película. En 2015, el gobernador de California le indultó. En 2019 se despidió del héroe con el chasquido más famoso del cine. Y en 2024 ganó, por fin, el Óscar. A su mujer le dijo: «Me devolviste a la vida»."
     },
     {
       "id": "s10",

@@ -237,9 +237,19 @@ export const Armadura: React.FC<{ alto?: number; encendida?: number }> = ({ alto
       {/* torso facetado */}
       <path d="M66 120 Q70 94 110 90 Q150 94 154 120 L146 250 L74 250 Z" fill="#C8303A" />
       <path d="M110 90 Q150 94 154 120 L146 250 L110 250 Z" fill="#9A1A24" />
-      <path d="M78 120 L110 150 L142 120 M86 180 L110 200 L134 180 M82 230 L138 230" stroke="#6E1218" strokeWidth={4} fill="none" />
-      <circle cx={110} cy={142} r={15} fill="#3A3F46" />
-      <circle cx={110} cy={142} r={11} fill={luz} />
+      <path d="M86 180 L110 200 L134 180 M82 230 L138 230" stroke="#6E1218" strokeWidth={4} fill="none" />
+      <circle cx={110} cy={142} r={16} fill="#3A3F46" />
+      <circle cx={110} cy={142} r={12} fill={luz} />
+      <circle cx={110} cy={142} r={7} fill="none" stroke="rgba(120,200,240,0.9)" strokeWidth={2} />
+      <circle cx={110} cy={142} r={24 + 6 * g} fill={`rgba(160,225,255,${0.25 * g})`} />
+      {g > 0.1 ? [0, 1, 2].map((i) => {
+        const a = f / 9 + i * 2.1;
+        const r = 26 + 4 * Math.sin(f / 5 + i);
+        const x = 110 + Math.cos(a) * r;
+        const y = 142 + Math.sin(a) * r;
+        const t = 3 + 2 * Math.sin(f / 3 + i);
+        return <path key={i} d={`M${x} ${y - t * 2} L${x + t * 0.5} ${y - t * 0.5} L${x + t * 2} ${y} L${x + t * 0.5} ${y + t * 0.5} L${x} ${y + t * 2} L${x - t * 0.5} ${y + t * 0.5} L${x - t * 2} ${y} L${x - t * 0.5} ${y - t * 0.5} Z`} fill="rgba(235,250,255,0.95)" opacity={g} />;
+      }) : null}
       <path d="M92 196 L110 210 L128 196" stroke={luz} strokeWidth={3} fill="none" strokeLinecap="round" />
       {/* hombreras y brazos */}
       <path d="M52 116 Q38 104 30 128 L40 150 L68 132 Z" fill="#E0B048" />
@@ -283,10 +293,11 @@ export const Mascara: React.FC<{ ancho?: number; inclinacion?: number; ojos?: nu
 );
 
 /** Carpeta oficial vista en perspectiva sobre una mesa. */
-export const Carpeta: React.FC<{ ancho?: number; color?: string; etiqueta?: string }> = ({ ancho = 420, color = "#D8C49A", etiqueta }) => (
+export const Carpeta: React.FC<{ ancho?: number; color?: string; etiqueta?: string; children?: React.ReactNode }> = ({ ancho = 420, color = "#D8C49A", etiqueta, children }) => (
   <div style={{ width: ancho, height: ancho * 0.62, background: color, borderRadius: 8, transform: "perspective(900px) rotateX(48deg)", transformOrigin: "50% 100%", boxShadow: "0 18px 24px rgba(0,0,0,0.35)", position: "relative" }}>
     <div style={{ position: "absolute", top: -18, left: 30, width: ancho * 0.3, height: 26, background: color, borderRadius: "8px 8px 0 0" }} />
     {etiqueta ? <div style={{ position: "absolute", left: 30, top: 30, fontFamily: "sans-serif", fontWeight: 700, fontSize: ancho * 0.06, color: "#5A4A30" }}>{etiqueta}</div> : null}
+    {children ? <div style={{ position: "absolute", left: 0, right: 0, top: ancho * 0.2, display: "flex", justifyContent: "center" }}>{children}</div> : null}
   </div>
 );
 

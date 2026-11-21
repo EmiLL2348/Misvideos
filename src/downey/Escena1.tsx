@@ -65,7 +65,10 @@ export const Escena1: React.FC = () => {
 
   const cartel = (
     <g>
-      <rect x={-75} y={-10} width={150} height={84} rx={4} fill="#14171C" stroke="#C9CDD2" strokeWidth={2} />
+      <rect x={-75} y={-34} width={150} height={108} rx={4} fill="#14171C" stroke="#C9CDD2" strokeWidth={2} />
+      <text x={0} y={-14} textAnchor="middle" fontFamily={F_CIFRA} fontWeight={500} fontSize={14} fill="#C9CDD2" letterSpacing={1}>
+        DOWNEY JR., ROBERT
+      </text>
       <text x={0} y={34} textAnchor="middle" fontFamily={F_CIFRA} fontWeight={700} fontSize={36} fill="#F4F2EC" letterSpacing={2}>
         P50522
       </text>
@@ -151,8 +154,9 @@ export const Escena1: React.FC = () => {
                 filter: "drop-shadow(0 4px 2px rgba(0,0,0,0.9)) drop-shadow(0 8px 22px rgba(0,0,0,0.7))",
               }}
             >
-              RECLUSO P50522
+              ROBERT DOWNEY JR.
             </span>
+            <div style={{ fontFamily: F_CIFRA, fontWeight: 700, fontSize: 64, color: "#F2D27A", letterSpacing: 12, marginTop: 6, textShadow: "0 4px 12px rgba(0,0,0,0.8)" }}>RECLUSO P50522</div>
           </div>
         ) : null}
       </Plano>

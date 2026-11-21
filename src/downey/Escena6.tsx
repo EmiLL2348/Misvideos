@@ -3,7 +3,7 @@ import { AbsoluteFill, useCurrentFrame } from "remotion";
 import { useEscena } from "../comun/timeline";
 import { Plano } from "../stallone/escenario";
 import { D, interp, prog } from "./estilo";
-import { POSE, Robert, topDePie } from "./Personajes";
+import { POSE, Robert, topDePie, resolverBrazo } from "./Personajes";
 import { Carpeta, Foco, Look, Mesa, TrofeoSVG } from "./props";
 import { Efecto, Sello } from "./ui";
 
@@ -41,8 +41,8 @@ export const Escena6: React.FC = () => {
             alto={ALTO}
             ropa="traje"
             expresion={f > c.despidieron ? "triste" : "sonrisa"}
-            brazoIzq={POSE.sostener.izq}
-            brazoDer={POSE.sostener.der}
+            brazoIzq={resolverBrazo(68, 112, -1, 84, 222)}
+            brazoDer={resolverBrazo(132, 112, 1, 116, 222)}
             objetoCentro={<g transform="translate(0 12)"><TrofeoSVG alto={110} /></g>}
             luz="#FFF4E2"
           />
@@ -69,10 +69,9 @@ export const Escena6: React.FC = () => {
           <Mesa ancho={1200} alto={320} color="#3E2E22" tablero="#5A4232" />
         </div>
         <div style={{ position: "absolute", left: 750, top: 760 - 260 * 0.62 + 6 }}>
-          <Carpeta ancho={420} etiqueta="SEGURO DE RODAJE" />
-        </div>
-        <div style={{ position: "absolute", left: 790, top: 640 }}>
-          <Sello texto="NO ASEGURABLE" en={c.contratarle} />
+          <Carpeta ancho={420} etiqueta="SEGURO DE RODAJE">
+            <Sello texto="NO ASEGURABLE" en={c.contratarle} tam={44} />
+          </Carpeta>
         </div>
         {puertas.map((_, i) => (
           <Efecto key={i} archivo="puerta" en={c.ninguna + i * 10 + 7} vol={0.4} dur={20} />

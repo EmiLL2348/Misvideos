@@ -19,7 +19,7 @@ const Titular: React.FC<{ texto: string; fecha: string; ancho?: number }> = ({ t
       <span>{fecha}</span>
       <span>50 ¢</span>
     </div>
-    <div style={{ fontFamily: F_CIFRA, fontWeight: 700, fontSize: 70, color: "#111", lineHeight: 1.05, marginTop: 10, textAlign: "center", letterSpacing: 1 }}>{texto}</div>
+    <div style={{ fontFamily: F_CIFRA, fontWeight: 700, fontSize: texto.length > 12 ? 50 : 70, color: "#111", lineHeight: 1.05, marginTop: texto.length > 12 ? 22 : 10, textAlign: "center", letterSpacing: 1, whiteSpace: "nowrap" }}>{texto}</div>
     {/* foto en blanco y negro: silueta tras la reja */}
     <div style={{ position: "absolute", left: 24, top: 200, width: 220, height: 196, background: "linear-gradient(#9A9A96, #6A6A66)", border: "2px solid #333", overflow: "hidden" }}>
       <div style={{ position: "absolute", left: 70, top: 40, width: 80, height: 96, borderRadius: "50%", background: "#2A2A2A" }} />
