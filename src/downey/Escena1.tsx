@@ -85,7 +85,7 @@ export const Escena1: React.FC = () => {
         <CampoBatalla suelo={980} />
         <AbsoluteFill style={{ transform: `scale(${empuje})` }}>
           <div style={{ position: "absolute", left: 960 - 200 * gk, top: 520 - 300 * gk }}>
-            <Guantelete alto={GA} chasquido={chasq} relaja={prog(f, c.chasquido + 4, 10)} carga={0.6 + 0.4 * prog(f, c.universo - 6, 20)} />
+            <Guantelete prepara={prog(f, c.chasquido - 16, 10)} alto={GA} chasquido={chasq} relaja={prog(f, c.chasquido + 3, 9)} carga={0.6 + 0.4 * prog(f, c.universo - 6, 20)} />
           </div>
         </AbsoluteFill>
         {f >= c.chasquido ? (

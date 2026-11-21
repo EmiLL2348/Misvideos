@@ -126,7 +126,7 @@ export const Escena9: React.FC = () => {
       <Plano desde={c.chasquido - 10} hasta={c.chasquido + 14} fundido={2}>
         <CampoBatalla suelo={980} />
         <div style={{ position: "absolute", left: 960 - 200 * (1150 / 560), top: 520 - 300 * (1150 / 560), transform: `scale(${1 + (f - c.chasquido + 10) * 0.002})`, transformOrigin: "50% 50%" }}>
-          <Guantelete alto={1150} chasquido={prog(f, c.chasquido - 2, 3)} relaja={prog(f, c.chasquido + 4, 10)} carga={1} semilla={7} />
+          <Guantelete prepara={prog(f, c.chasquido - 16, 10)} alto={1150} chasquido={prog(f, c.chasquido - 2, 3)} relaja={prog(f, c.chasquido + 3, 9)} carga={1} semilla={7} />
         </div>
         <Destello en={c.chasquido + 1} dur={14} color="#FFF6E6" />
       </Plano>

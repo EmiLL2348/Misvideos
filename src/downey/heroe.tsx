@@ -46,22 +46,20 @@ const mezclaP = (a: [number, number][], b: [number, number][], t: number): [numb
  * chasquido 0 = pulgar y corazón juntos; 1 = el corazón golpea la palma y el pulgar sale.
  * Lienzo 400×560 (el antebrazo sale por abajo del encuadre).
  */
-export const Guantelete: React.FC<{ alto?: number; chasquido?: number; relaja?: number; carga?: number; semilla?: number }> = ({ alto = 900, chasquido = 0, relaja = 0, carga = 1, semilla = 0 }) => {
+export const Guantelete: React.FC<{ alto?: number; prepara?: number; chasquido?: number; relaja?: number; carga?: number; semilla?: number }> = ({ alto = 900, prepara = 1, chasquido = 0, relaja = 0, carga = 1, semilla = 0 }) => {
   const f = useCurrentFrame();
   const t = chasquido;
-  // antes: el corazón se dobla hacia el pulgar y las yemas se tocan sobre los nudillos;
-  // después: el corazón baja de golpe contra la palma y el pulgar sale disparado hacia arriba.
-  const corazon = mezclaP(
-    [[182, 236], [176, 196], [160, 182]],
-    [[182, 236], [182, 246], [182, 252]],
-    t,
-  );
-  const pulgar = mezclaP(
-    [[130, 330], [104, 262], [150, 190]],
-    [[130, 330], [96, 250], [96, 168]],
-    t,
-  );
-  const contacto: [number, number] = [155, 186];
+  // 1) prepara: el corazón se dobla hasta tocar la yema del pulgar;
+  // 2) chasquido: el corazón resbala y sale disparado hacia un lado (siempre visible) y el pulgar se abre;
+  // 3) relaja: el corazón vuelve a su posición estirada, como los demás dedos.
+  const recto: [number, number][] = [[182, 236], [184, 164], [186, 104]];
+  const pre: [number, number][] = [[182, 236], [172, 188], [156, 176]];
+  const lado: [number, number][] = [[182, 236], [204, 198], [226, 190]];
+  const corazon = t <= 0 ? mezclaP(recto, pre, prepara) : t < 1 ? mezclaP(pre, lado, t) : mezclaP(lado, recto, relaja);
+  const pulgarAbierto: [number, number][] = [[130, 330], [96, 250], [96, 168]];
+  const pulgarPre: [number, number][] = [[130, 330], [104, 262], [152, 188]];
+  const pulgar = t <= 0 ? mezclaP(pulgarAbierto, pulgarPre, prepara) : mezclaP(pulgarPre, pulgarAbierto, t);
+  const contacto: [number, number] = [156, 180];
   // arcos de energía que recorren el guantelete
   const arcos = carga > 0
     ? new Array(5).fill(0).map((_, i) => {
@@ -99,9 +97,10 @@ export const Guantelete: React.FC<{ alto?: number; chasquido?: number; relaja?: 
       <rect x={134} y={388} width={132} height={20} rx={6} fill={ORO} />
       {/* dedos (detrás del dorso) */}
       <Dedo p={[[146, 240], [140, 158], [136, 86]]} ancho={34} />
-      {t < 0.5 ? <Dedo p={corazon} ancho={36} /> : relaja > 0 ? <Dedo p={mezclaP([[182, 236], [182, 226], [182, 216]], [[182, 236], [184, 166], [186, 112]], relaja)} ancho={36} /> : null}
       <Dedo p={[[220, 240], [226, 152], [230, 90]]} ancho={34} />
       <Dedo p={[[256, 248], [266, 180], [272, 128]]} ancho={28} />
+      {/* el corazón va delante del anular para que se vea al salir hacia el lado */}
+      <Dedo p={corazon} ancho={36} />
       <Dedo p={pulgar} ancho={38} />
       {/* dorso */}
       <path d="M128 392 L272 392 L282 262 Q282 236 258 232 L142 232 Q118 236 118 262 Z" fill={ROJO} />
@@ -111,23 +110,16 @@ export const Guantelete: React.FC<{ alto?: number; chasquido?: number; relaja?: 
       <path d="M128 300 L150 300 M250 300 L272 300" stroke="#5A1015" strokeWidth={3} />
       {/* rasguños de batalla */}
       <path d="M160 384 L188 350 M232 248 L252 276 M168 420 L180 410" stroke="rgba(30,10,10,0.55)" strokeWidth={3} strokeLinecap="round" />
-      {/* corazón ya doblado: se ve el nudillo sobre el dorso */}
-      {t >= 0.5 && relaja < 0.4 ? (
-        <g>
-          <ellipse cx={182} cy={236} rx={22} ry={18} fill={ROJO_OSC} />
-          <ellipse cx={182} cy={232} rx={18} ry={14} fill={ROJO} />
-        </g>
-      ) : null}
       {/* chispa del chasquido y trazos de movimiento */}
       {t > 0 && relaja < 1 ? (
         <g opacity={Math.min(1, t * 3) * (1 - relaja)}>
-          <path d="M150 184 Q172 214 184 246" stroke="rgba(255,255,255,0.9)" strokeWidth={6} fill="none" strokeLinecap="round" />
-          <path d="M140 196 Q160 226 172 252" stroke="rgba(255,255,255,0.6)" strokeWidth={4} fill="none" strokeLinecap="round" />
+          <path d="M160 168 Q196 160 232 178" stroke="rgba(255,255,255,0.9)" strokeWidth={6} fill="none" strokeLinecap="round" />
+          <path d="M166 184 Q196 178 222 194" stroke="rgba(255,255,255,0.6)" strokeWidth={4} fill="none" strokeLinecap="round" />
           <path d="M112 236 Q100 200 98 170" stroke="rgba(255,255,255,0.7)" strokeWidth={5} fill="none" strokeLinecap="round" />
         </g>
       ) : null}
       {t > 0.3 ? (
-        <g transform={`translate(${contacto[0]} ${contacto[1]}) scale(${0.6 + 0.8 * t})`} opacity={1 - relaja}>
+        <g transform={`translate(${contacto[0]} ${contacto[1]}) scale(${0.5 + 0.5 * t})`} opacity={Math.max(0, 1 - relaja * 2)}>
           {new Array(8).fill(0).map((_, i) => (
             <path key={i} d="M0 -8 L4 -40 L0 -70 L-4 -40 Z" fill="#FFF6D8" transform={`rotate(${i * 45})`} opacity={0.9} />
           ))}
